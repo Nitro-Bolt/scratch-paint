@@ -1,4 +1,4 @@
-Modified version of scratch-paint for NitroBolt
+Modified version of `scratch-paint` for NitroBolt
 
 ## Building
 
@@ -15,9 +15,9 @@ For more information, see https://docs.turbowarp.org/development/getting-started
 
 ## License
 
-Nitro-Bolt/scratch-paint is licensed under the GNU General Public License version 3.0. See LICENSE for more information.
+`Nitro-Bolt/scratch-paint` is licensed under the GNU General Public License version 3.0. See LICENSE for more information.
 
-The original scratch-paint that this is based on uses the following license:
+The original `scratch-paint` that this is based on uses the following license:
 
 ```
 Copyright (c) 2016, Massachusetts Institute of Technology
