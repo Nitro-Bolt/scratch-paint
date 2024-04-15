@@ -22,6 +22,7 @@ import {hideLabel} from '../../lib/hide-label';
 import styles from './mode-tools.css';
 
 import copyIcon from '!../../tw-recolor/build!./icons/copy.svg';
+import cutIcon from '!../../tw-recolor/build!./icons/cut.svg';
 import pasteIcon from '!../../tw-recolor/build!./icons/paste.svg';
 import deleteIcon from '!../../tw-recolor/build!./icons/delete.svg';
 
@@ -58,6 +59,11 @@ const ModeToolsComponent = props => {
             defaultMessage: 'Copy',
             description: 'Label for the copy button',
             id: 'paint.modeTools.copy'
+        },
+        cut: {
+            defaultMessage: 'Cut',
+            description: 'Label for the cut button',
+            id: 'paint.modeTools.cut'
         },
         paste: {
             defaultMessage: 'Paste',
@@ -211,6 +217,12 @@ const ModeToolsComponent = props => {
                         onClick={props.onCopyToClipboard}
                     />
                     <LabeledIconButton
+                            hideLabel={hideLabel(props.intl.locale)}
+                            imgSrc={cutIcon}
+                            title={props.intl.formatMessage(messages.cut)}
+                            onClick={props.onCutToClipboard}
+                        />
+                    <LabeledIconButton
                         disabled={!(props.clipboardItems.length > 0)}
                         hideLabel={hideLabel(props.intl.locale)}
                         imgSrc={pasteIcon}
@@ -324,6 +336,7 @@ ModeToolsComponent.propTypes = {
     onBitEraserSliderChange: PropTypes.func.isRequired,
     onBrushSliderChange: PropTypes.func.isRequired,
     onCopyToClipboard: PropTypes.func.isRequired,
+    onCutToClipboard: PropTypes.func.isRequired,
     onCurvePoints: PropTypes.func.isRequired,
     onDelete: PropTypes.func.isRequired,
     onEraserSliderChange: PropTypes.func,

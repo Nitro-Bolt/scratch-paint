@@ -215,6 +215,7 @@ class ModeTools extends React.Component {
                 hasSelectedUncurvedPoints={this.hasSelectedUncurvedPoints()}
                 hasSelectedUnpointedPoints={this.hasSelectedUnpointedPoints()}
                 onCopyToClipboard={this.props.onCopyToClipboard}
+                onCutToClipboard={this.props.onCutToClipboard}
                 onCurvePoints={this.handleCurvePoints}
                 onDelete={this.handleDelete}
                 onFlipHorizontal={this.handleFlipHorizontal}
@@ -233,6 +234,7 @@ ModeTools.propTypes = {
     format: PropTypes.oneOf(Object.keys(Formats)),
     mode: PropTypes.oneOf(Object.keys(Modes)),
     onCopyToClipboard: PropTypes.func.isRequired,
+    onCutToClipboard: PropTypes.func.isRequired,
     onManageFonts: PropTypes.func,
     onPasteFromClipboard: PropTypes.func.isRequired,
     onUpdateImage: PropTypes.func.isRequired,

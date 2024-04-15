@@ -6,6 +6,7 @@ import omit from 'lodash.omit';
 import {connect} from 'react-redux';
 
 import {
+    deleteSelection,
     clearSelection,
     getAllRootItems,
     getSelectedLeafItems,
@@ -24,6 +25,7 @@ const CopyPasteHOC = function (WrappedComponent) {
             super(props);
             bindAll(this, [
                 'handleCopy',
+                'handleCut',
                 'handlePaste'
             ]);
         }
@@ -57,6 +59,42 @@ const CopyPasteHOC = function (WrappedComponent) {
                 clipboardItems.push(jsonItem);
             }
             this.props.setClipboardItems(clipboardItems);
+        }
+        handleCut () {
+            let selectedItems = [];
+            if (this.props.mode === Modes.RESHAPE) {
+                const leafItems = getSelectedLeafItems();
+                // Copy root of compound paths
+                for (const item of leafItems) {
+                    if (item.parent && item.parent instanceof paper.CompoundPath) {
+                        selectedItems.push(item.parent);
+                    } else {
+                        selectedItems.push(item);
+                    }
+                }
+            } else {
+                selectedItems = getSelectedRootItems();
+            }
+            if (selectedItems.length === 0) {
+                if (isBitmap(this.props.format)) {
+                    const raster = getTrimmedRaster(false /* shouldInsert */);
+                    if (!raster) return;
+                    selectedItems.push(raster);
+                } else {
+                    selectedItems = getAllRootItems();
+                }
+            }
+            const clipboardItems = [];
+            for (let i = 0; i < selectedItems.length; i++) {
+                const jsonItem = selectedItems[i].exportJSON({asString: false});
+                clipboardItems.push(jsonItem);
+            }
+            this.props.setClipboardItems(clipboardItems);
+
+            // Now we delete the copied item
+            if (deleteSelection(this.props.mode, this.props.onUpdateImage)) {
+                clearSelection(this.props.clearSelectedItems);
+            }
         }
         handlePaste () {
             clearSelection(this.props.clearSelectedItems);
@@ -100,6 +138,7 @@ const CopyPasteHOC = function (WrappedComponent) {
             return (
                 <WrappedComponent
                     onCopyToClipboard={this.handleCopy}
+                    onCutToClipboard={this.handleCut}
                     onPasteFromClipboard={this.handlePaste}
                     {...componentProps}
                 />
