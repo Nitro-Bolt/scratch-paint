@@ -43,6 +43,7 @@ class RectTool extends paper.Tool {
         this.onKeyDown = nudgeTool.onKeyDown;
 
         this.rect = null;
+        this.rectRadius = 16;
         this.colorState = null;
         this.isBoundingBoxMode = null;
         this.active = false;
@@ -59,6 +60,9 @@ class RectTool extends paper.Tool {
                 hitResult.item.selected, // Allow hits on bounding box and selected only
             tolerance: RectTool.TOLERANCE / paper.view.zoom
         };
+    }
+    setRectRadius (rectRadius) {
+        this.rectRadius = rectRadius;
     }
     /**
      * Should be called if the selection changes to update the bounds of the bounding box.
@@ -100,7 +104,7 @@ class RectTool extends paper.Tool {
             rect.size = squareDimensions.size.abs();
         }
 
-        this.rect = new paper.Path.Rectangle(rect);
+        this.rect = new paper.Path.Rectangle(rect, this.rectRadius);
         if (event.modifiers.alt) {
             this.rect.position = event.downPoint;
         } else if (event.modifiers.shift) {

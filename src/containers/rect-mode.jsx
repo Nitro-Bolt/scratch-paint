@@ -13,6 +13,7 @@ import {changeStrokeColor, clearStrokeGradient} from '../reducers/stroke-style';
 import {changeMode} from '../reducers/modes';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {setCursor} from '../reducers/cursor';
+import {changeRectRadius} from '../reducers/rect-mode';
 
 import {clearSelection, getSelectedLeafItems} from '../helper/selection';
 import RectTool from '../helper/tools/rect-tool';
@@ -39,7 +40,9 @@ class RectMode extends React.Component {
         if (this.tool && nextProps.selectedItems !== this.props.selectedItems) {
             this.tool.onSelectionChanged(nextProps.selectedItems);
         }
-
+        if (this.tool && nextProps.rectRadius !== this.props.rectRadius) {
+            this.tool.setRectRadius(nextProps.rectRadius);
+        }
         if (nextProps.isRectModeActive && !this.props.isRectModeActive) {
             this.activateTool();
         } else if (!nextProps.isRectModeActive && this.props.isRectModeActive) {
@@ -65,6 +68,7 @@ class RectMode extends React.Component {
             this.props.onUpdateImage
         );
         this.tool.setColorState(this.props.colorState);
+        this.tool.setRectRadius(this.props.rectRadius);
         this.tool.activate();
     }
     validateColorState () { // TODO move to shared class
@@ -143,11 +147,14 @@ RectMode.propTypes = {
     onUpdateImage: PropTypes.func.isRequired,
     selectedItems: PropTypes.arrayOf(PropTypes.instanceOf(paper.Item)),
     setCursor: PropTypes.func.isRequired,
-    setSelectedItems: PropTypes.func.isRequired
+    setSelectedItems: PropTypes.func.isRequired,
+    rectRadius: PropTypes.number,
+    onChangeRectRadius: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
     colorState: state.scratchPaint.color,
+    rectRadius: state.scratchPaint.rectMode.rectRadius,
     isRectModeActive: state.scratchPaint.mode === Modes.RECT,
     selectedItems: state.scratchPaint.selectedItems
 });
@@ -175,6 +182,9 @@ const mapDispatchToProps = dispatch => ({
     },
     onChangeStrokeColor: strokeColor => {
         dispatch(changeStrokeColor(strokeColor));
+    },
+    onChangeRectRadius: rectRadius => {
+        dispatch(changeRectRadius(rectRadius));
     }
 });
 
