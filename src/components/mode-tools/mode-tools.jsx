@@ -354,7 +354,7 @@ const ModeToolsComponent = props => {
                     onSubmit={changeFunction}
                 />
             </div>
-        )
+        );
     default:
         // Leave empty for now, if mode not supported
         return (
