@@ -35,6 +35,7 @@ import curvedPointIcon from '!../../tw-recolor/build!./icons/curved-point.svg';
 import eraserIcon from '../eraser-mode/eraser.svg';
 import flipHorizontalIcon from '!../../tw-recolor/build!./icons/flip-horizontal.svg';
 import flipVerticalIcon from '!../../tw-recolor/build!./icons/flip-vertical.svg';
+import centerIcon from '!../../tw-recolor/build!./icons/center.svg';
 import straightPointIcon from '!../../tw-recolor/build!./icons/straight-point.svg';
 import roundRectIcon from '../rounded-rect-mode/rounded-rectangle.svg';
 import bitOvalIcon from '../bit-oval-mode/oval.svg';
@@ -101,6 +102,11 @@ const ModeToolsComponent = props => {
             defaultMessage: 'Flip Vertical',
             description: 'Label for the button to flip the image vertically',
             id: 'paint.modeTools.flipVertical'
+        },
+        center: {
+            defaultMessage: 'Center',
+            description: 'Label for the button that moves the selected objects to the center of the canvas',
+            id: 'paint.modeTools.center'
         },
         filled: {
             defaultMessage: 'Filled',
@@ -258,6 +264,12 @@ const ModeToolsComponent = props => {
                         title={props.intl.formatMessage(messages.flipVertical)}
                         onClick={props.onFlipVertical}
                     />
+                    <LabeledIconButton
+                        hideLabel={props.intl.locale !== 'en'}
+                        imgSrc={centerIcon}
+                        title={props.intl.formatMessage(messages.center)}
+                        onClick={props.onCenterSelection}
+                    />
                 </InputGroup>
             </div>
         );
@@ -375,6 +387,7 @@ ModeToolsComponent.propTypes = {
     onFillShapes: PropTypes.func.isRequired,
     onFlipHorizontal: PropTypes.func.isRequired,
     onFlipVertical: PropTypes.func.isRequired,
+    onCenterSelection: PropTypes.func.isRequired,
     onManageFonts: PropTypes.func,
     onOutlineShapes: PropTypes.func.isRequired,
     onPasteFromClipboard: PropTypes.func.isRequired,

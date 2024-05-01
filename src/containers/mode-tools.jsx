@@ -18,6 +18,7 @@ import {
 import {HANDLE_RATIO, ensureClockwise} from '../helper/math';
 import {getRaster} from '../helper/layer';
 import {flipBitmapHorizontal, flipBitmapVertical, selectAllBitmap} from '../helper/bitmap';
+import {ungroupItems} from '../helper/group';
 import Formats, {isBitmap} from '../lib/format';
 import Modes from '../lib/modes';
 
@@ -32,6 +33,7 @@ class ModeTools extends React.Component {
             'handleCurvePoints',
             'handleFlipHorizontal',
             'handleFlipVertical',
+            'handleCenterSelection',
             'handleDelete',
             'handlePasteFromClipboard',
             'handlePointPoints'
@@ -190,6 +192,20 @@ class ModeTools extends React.Component {
             this._handleFlip(1, -1, selectedItems);
         }
     }
+    handleCenterSelection () {
+        let _selectedItems = getSelectedRootItems();
+        if (_selectedItems.length === 0) {
+            if (isBitmap(this.props.format)) {
+                return;
+            }
+            _selectedItems = getAllRootItems();
+        }
+        const selectedItems = _selectedItems;
+        const group = new paper.Group(selectedItems);
+        group.position = new paper.Point(this.props.width, this.props.height);
+        ungroupItems([group]);
+        this.props.onUpdateImage();
+    }
     handlePasteFromClipboard () {
         if (this.props.onPasteFromClipboard()) {
             this.props.onUpdateImage();
@@ -220,6 +236,7 @@ class ModeTools extends React.Component {
                 onDelete={this.handleDelete}
                 onFlipHorizontal={this.handleFlipHorizontal}
                 onFlipVertical={this.handleFlipVertical}
+                onCenterSelection={this.handleCenterSelection}
                 onManageFonts={this.props.onManageFonts}
                 onPasteFromClipboard={this.handlePasteFromClipboard}
                 onPointPoints={this.handlePointPoints}
@@ -237,6 +254,8 @@ ModeTools.propTypes = {
     onCutToClipboard: PropTypes.func.isRequired,
     onManageFonts: PropTypes.func,
     onPasteFromClipboard: PropTypes.func.isRequired,
+    width: PropTypes.number,
+    height: PropTypes.number,
     onUpdateImage: PropTypes.func.isRequired,
     // Listen on selected items to update hasSelectedPoints
     selectedItems:
