@@ -18,6 +18,7 @@ import Box from '../box/box.jsx';
 import Button from '../button/button.jsx';
 import ButtonGroup from '../button-group/button-group.jsx';
 import BrushMode from '../../containers/brush-mode.jsx';
+import PenMode from '../../containers/pen-mode.jsx';
 import EraserMode from '../../containers/eraser-mode.jsx';
 import FillColorIndicatorComponent from '../../containers/fill-color-indicator.jsx';
 import FillMode from '../../containers/fill-mode.jsx';
@@ -149,6 +150,9 @@ const PaintEditorComponent = props => (
                         onUpdateImage={props.onUpdateImage}
                     />
                     <BrushMode
+                        onUpdateImage={props.onUpdateImage}
+                    />
+                    <PenMode
                         onUpdateImage={props.onUpdateImage}
                     />
                     <EraserMode
