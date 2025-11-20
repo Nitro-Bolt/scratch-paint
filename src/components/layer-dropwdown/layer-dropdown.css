@@ -1,0 +1,44 @@
+@import "../../css/colors.css";
+@import "../../css/units.css";
+@import "../../css/filters.css";
+
+.dropdown {
+    display: flex;
+    margin: auto;
+    font-size: calc(3 * $grid-unit);
+    font-weight: bold;
+    color: $text-primary;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: calc(2 * $grid-unit);
+}
+
+.mod-menu-item {
+    display: flex;
+    margin: 0 -$grid-unit;
+    min-width: 6.25rem;
+    padding: calc(2 * $grid-unit);
+    padding-left: calc(3 * $grid-unit);
+    padding-right: calc(3 * $grid-unit);
+    width: 8.5rem;
+    cursor: pointer;
+    transition: 0.1s ease;
+    align-items: center;
+    overflow-wrap: anywhere;
+}
+
+.mod-menu-item:hover {
+    background: $looks-secondary;
+    color: white;
+}
+
+.mod-context-menu {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden auto;
+    max-height: 36vh;
+}
+
+.mod-unselect {
+    user-select: none;
+}

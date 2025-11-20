@@ -34,6 +34,7 @@ import SelectMode from '../../containers/select-mode.jsx';
 import StrokeColorIndicatorComponent from '../../containers/stroke-color-indicator.jsx';
 import StrokeWidthIndicatorComponent from '../../containers/stroke-width-indicator.jsx';
 import TextMode from '../../containers/text-mode.jsx';
+import LayersManager from '../../containers/paint-editor-layers-manager.jsx'
 
 import Formats, {isBitmap, isVector} from '../../lib/format';
 import styles from './paint-editor.css';
@@ -174,6 +175,16 @@ const PaintEditorComponent = props => (
                     <RectMode
                         onUpdateImage={props.onUpdateImage}
                     />
+                    <Box style={{
+                        borderTop: '1px dashed var(--paint-ui-pane-border, #D9D9D9)',
+                        width: '100%',
+                        paddingTop: '1.25rem',
+                        marginTop: '0.5rem'
+                    }}>
+                        <LayersManager
+                            activeLayer={paper.project.activeLayer}
+                        />
+                    </Box>
                 </div>
             ) : null}
 
@@ -259,20 +270,20 @@ const PaintEditorComponent = props => (
                                 {props.intl.formatMessage(messages.bitmap)}
                             </span>
                         </Button> :
-                        isBitmap(props.format) ?
-                            <Button
-                                className={styles.bitmapButton}
-                                onClick={props.onSwitchToVector}
-                            >
-                                <img
-                                    className={styles.bitmapButtonIcon}
-                                    draggable={false}
-                                    src={bitmapIcon}
-                                />
-                                <span className={styles.buttonText}>
-                                    {props.intl.formatMessage(messages.vector)}
-                                </span>
-                            </Button> : null
+                    isBitmap(props.format) ?
+                        <Button
+                            className={styles.bitmapButton}
+                            onClick={props.onSwitchToVector}
+                        >
+                            <img
+                                className={styles.bitmapButtonIcon}
+                                draggable={false}
+                                src={bitmapIcon}
+                            />
+                            <span className={styles.buttonText}>
+                                {props.intl.formatMessage(messages.vector)}
+                            </span>
+                        </Button> : null
                     }
                     {/* Zoom controls */}
                     <InputGroup className={styles.zoomControls}>

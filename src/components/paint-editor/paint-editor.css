@@ -149,6 +149,13 @@ $border-radius: 0.25rem;
     justify-content: space-between;
 }
 
+.left-canvas-controls {
+    display: flex;
+    margin-top: $grid-unit;
+    justify-content: space-between;
+    height: 36px;
+}
+
 .zoom-controls {
     display: flex;
     flex-direction: row-reverse;
