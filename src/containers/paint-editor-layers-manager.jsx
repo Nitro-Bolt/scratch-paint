@@ -15,6 +15,7 @@ function handleChooseLayer (layer) {
 }
 
 const PaintEditorLayersManager = (props) => {
+
     const layers = props.activeLayer.children.filter(item => !(
         (item.index === 0  && props.activeLayer.children.length > 2) 
         || item._guide
