@@ -22,6 +22,7 @@ import viewBoundsReducer from './view-bounds';
 import undoReducer from './undo';
 import zoomLevelsReducer from './zoom-levels';
 import rectModeReducer from './rect-mode';
+import pointerReducer from './pointer.js';
 
 export default combineReducers({
     mode: modeReducer,
@@ -46,5 +47,6 @@ export default combineReducers({
     undo: undoReducer,
     viewBounds: viewBoundsReducer,
     zoomLevels: zoomLevelsReducer,
-    rectMode: rectModeReducer
+    rectMode: rectModeReducer,
+    pointer: pointerReducer
 });

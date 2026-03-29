@@ -41,7 +41,7 @@ class BrushMode extends React.Component {
                 fillColor: fillColor.primary,
                 strokeColor: strokeColor.primary,
                 strokeWidth,
-                ...nextProps.brushModeState
+                brushSize: nextProps.brushModeState.brushSize * nextProps.pressure,
             });
         }
     }
@@ -96,13 +96,15 @@ BrushMode.propTypes = {
     handleMouseDown: PropTypes.func.isRequired,
     isBrushModeActive: PropTypes.bool.isRequired,
     onChangeFillColor: PropTypes.func.isRequired,
-    onUpdateImage: PropTypes.func.isRequired
+    onUpdateImage: PropTypes.func.isRequired,
+    pressure: PropTypes.number
 };
 
 const mapStateToProps = state => ({
     brushModeState: state.scratchPaint.brushMode,
     colorState: state.scratchPaint.color,
-    isBrushModeActive: state.scratchPaint.mode === Modes.BRUSH
+    isBrushModeActive: state.scratchPaint.mode === Modes.BRUSH,
+    pressure: state.scratchPaint.pointer.pressure
 });
 const mapDispatchToProps = dispatch => ({
     clearSelectedItems: () => {

@@ -19,6 +19,7 @@ import {updateViewBounds} from '../reducers/view-bounds';
 import {setLayout} from '../reducers/layout';
 import {setTheme as setReduxTheme} from '../reducers/theme';
 import {setCustomFonts} from '../reducers/custom-fonts';
+import {changePointerPressure} from '../reducers/pointer.js';
 
 import {getSelectedLeafItems} from '../helper/selection';
 import {convertToBitmap, convertToVector} from '../helper/bitmap';
@@ -90,7 +91,8 @@ class PaintEditor extends React.Component {
             'handleChangeTheme',
             'handleZoomIn',
             'handleZoomOut',
-            'handleZoomReset'
+            'handleZoomReset',
+            'onPointerMove'
         ]);
         this.state = {
             canvas: null,
@@ -102,6 +104,9 @@ class PaintEditor extends React.Component {
     }
     componentDidMount () {
         document.addEventListener('keydown', this.props.onKeyPress);
+
+        // used to detect pen pressure
+        document.addEventListener('pointermove', this.onPointerMove);
 
         // document listeners used to detect if a mouse is down outside of the
         // canvas, and should therefore stop the eye dropper
@@ -145,6 +150,7 @@ class PaintEditor extends React.Component {
     }
     componentWillUnmount () {
         document.removeEventListener('keydown', this.props.onKeyPress);
+        document.removeEventListener('pointermove', this.props.onPointerMove);
         this.stopEyeDroppingLoop();
         document.removeEventListener('mousedown', this.onMouseDown);
         document.removeEventListener('touchstart', this.onMouseDown);
@@ -286,6 +292,10 @@ class PaintEditor extends React.Component {
             this.stopEyeDroppingLoop();
         }
     }
+    onPointerMove (event) {
+        const pressure = event.pressure;
+        this.props.changePointerPressure(pressure);
+    }
     startEyeDroppingLoop () {
         this.eyeDropper = new EyeDropperTool(
             this.canvas,
@@ -412,7 +422,8 @@ PaintEditor.propTypes = {
     height: PropTypes.number,
     updateViewBounds: PropTypes.func.isRequired,
     viewBounds: PropTypes.instanceOf(paper.Matrix).isRequired,
-    zoomLevelId: PropTypes.string
+    zoomLevelId: PropTypes.string,
+    changePointerPressure: PropTypes.func
 };
 
 PaintEditor.defaultProps = {
@@ -465,6 +476,9 @@ const mapDispatchToProps = dispatch => ({
     },
     updateViewBounds: matrix => {
         dispatch(updateViewBounds(matrix));
+    },
+    changePointerPressure: pressure => {
+        dispatch(changePointerPressure(pressure));
     }
 });
 
