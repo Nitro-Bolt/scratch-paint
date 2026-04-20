@@ -13,7 +13,6 @@ import {clearSelectedItems} from '../reducers/selected-items';
 import {clearSelection} from '../helper/selection';
 import {clearHoveredItem, setHoveredItem} from '../reducers/hover';
 import {changeGradientType} from '../reducers/fill-mode-gradient-type';
-import {addRecentColor} from '../reducers/nb-recent-colors.js';
 
 import FillModeComponent from '../components/fill-mode/fill-mode.jsx';
 
@@ -86,8 +85,7 @@ class FillMode extends React.Component {
         this.tool = new FillTool(
             this.props.setHoveredItem,
             this.props.clearHoveredItem,
-            this.props.onUpdateImage,
-            this.props.onAddRecentColor
+            this.props.onUpdateImage
         );
         this.tool.setFillColor(fillColor);
         this.tool.setFillColor2(fillColor2);
@@ -156,9 +154,6 @@ const mapDispatchToProps = dispatch => ({
         } else if (index === 1) {
             dispatch(changeFillColor2(fillColor));
         }
-    },
-    onAddRecentColor: color => {
-        dispatch(addRecentColor(color));
     }
 });
 

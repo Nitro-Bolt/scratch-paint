@@ -8,8 +8,8 @@ import parseColor from 'parse-color';
 import Slider, {CONTAINER_WIDTH, HANDLE_WIDTH} from '../forms/slider.jsx';
 import LabeledIconButton from '../labeled-icon-button/labeled-icon-button.jsx';
 import styles from './color-picker.css';
-import GradientTypes from '../../lib/gradient-types';
-import {MIXED} from '../../helper/style-path';
+import GradientTypes from '../../lib/gradient-types.js';
+import {MIXED} from '../../helper/style-path.js';
 
 import eyeDropperIcon from './icons/eye-dropper.svg';
 import noFillIcon from '../color-button/no-fill.svg';
@@ -19,11 +19,11 @@ import fillRadialIcon from '!../../tw-recolor/build!./icons/fill-radial-enabled.
 import fillSolidIcon from '!../../tw-recolor/build!./icons/fill-solid-enabled.svg';
 import fillVertGradientIcon from '!../../tw-recolor/build!./icons/fill-vert-gradient-enabled.svg';
 import swapIcon from '!../../tw-recolor/build!./icons/swap.svg';
-import Modes from '../../lib/modes';
+import Modes from '../../lib/modes.js';
 import alphaBackground from './alpha.png';
 import BufferedInputHOC from '../forms/buffered-input-hoc.jsx';
 import Input from '../forms/input.jsx';
-import {makeAlphaComponent} from '../../lib/tw-color-utils';
+import {makeAlphaComponent} from '../../lib/tw-color-utils.js';
 import TWColorReadout from '../tw-color-readout/tw-color-readout.jsx';
 import TWRenderRecoloredImage from '../../tw-recolor/render.jsx';
 import RecentColorsContainer from '../../containers/nb-recent-colors.jsx';
@@ -309,11 +309,14 @@ class ColorPickerComponent extends React.Component {
                             <FormattedMessage
                                 defaultMessage="Recent Colors"
                                 description="Label for the recent colors component in the color picker"
-                                id="nw.paint.recentColors"
+                                id="nb.paint.recentColors"
                             />
                         </span>
                     </div>
-                    <RecentColorsContainer onUpdateImage={console.log} />
+                    <RecentColorsContainer
+                        onUpdateImage={this.props.onUpdateImage}
+                        colorIndex={this.props.colorIndex}
+                    />
                 </div>
                 <div className={styles.pickerRow}>
                     <Input
@@ -391,6 +394,7 @@ ColorPickerComponent.propTypes = {
     intl: intlShape.isRequired,
     isEyeDropping: PropTypes.bool.isRequired,
     mode: PropTypes.oneOf(Object.keys(Modes)),
+    onUpdateImage: PropTypes.func,
     onActivateEyeDropper: PropTypes.func.isRequired,
     onBrightnessChange: PropTypes.func.isRequired,
     onChangeGradientTypeHorizontal: PropTypes.func.isRequired,

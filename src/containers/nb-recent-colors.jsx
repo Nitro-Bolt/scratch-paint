@@ -11,12 +11,16 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-    onSelectColor: (color, colorIndex) => {
+    onSelectColor: (color, selectedColorIndex) => {
+        const colorIndex = typeof selectedColorIndex !== 'undefined' ? 
+            selectedColorIndex : ownProps.colorIndex;
+            
         if (colorIndex === 0) {
             dispatch(changeFillColor(color));
-        } else {
+        } else if (colorIndex === 1) {
             dispatch(changeStrokeColor(color));
         }
+
         if (ownProps.onUpdateImage) {
             ownProps.onUpdateImage();
         }
@@ -26,7 +30,8 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 const mergeProps = (stateProps, dispatchProps, ownProps) => ({
     ...ownProps,
     recentColors: stateProps.recentColors,
-    onSelectColor: color => dispatchProps.onSelectColor(color, stateProps.colorIndex)
+    colorIndex: ownProps.colorIndex ?? stateProps.colorIndex,
+    onSelectColor: dispatchProps.onSelectColor
 });
 
 const RecentColorsContainer = connect(
@@ -36,7 +41,8 @@ const RecentColorsContainer = connect(
 )(RecentColorsComponent);
 
 RecentColorsContainer.propTypes = {
-    onUpdateImage: PropTypes.func.isRequired
+    onUpdateImage: PropTypes.func.isRequired,
+    colorIndex: PropTypes.number 
 };
 
 export default RecentColorsContainer;

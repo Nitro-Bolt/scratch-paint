@@ -5,7 +5,7 @@ import ColorButtonComponent from '../color-button/color-button.jsx';
 import GradientTypes from '../../lib/gradient-types';
 import styles from './nb-recent-colors.css';
 
-const RecentColorsComponent = ({recentColors, onSelectColor}) => {
+const RecentColorsComponent = ({recentColors, onSelectColor, colorIndex}) => {
     if (recentColors.length === 0) return null;
     return (
         <div className={styles.recentColorsPanel}>
@@ -17,7 +17,7 @@ const RecentColorsComponent = ({recentColors, onSelectColor}) => {
                     noArrow
                     outline={false}
                     size={"1.5rem"}
-                    onClick={() => onSelectColor(color)}
+                    onClick={() => onSelectColor(color, colorIndex)}
                 />
             ))}
         </div>
@@ -26,7 +26,8 @@ const RecentColorsComponent = ({recentColors, onSelectColor}) => {
 
 RecentColorsComponent.propTypes = {
     recentColors: PropTypes.arrayOf(PropTypes.string).isRequired,
-    onSelectColor: PropTypes.func.isRequired
+    onSelectColor: PropTypes.func.isRequired,
+    colorIndex: PropTypes.number.isRequired
 };
 
 export default RecentColorsComponent;

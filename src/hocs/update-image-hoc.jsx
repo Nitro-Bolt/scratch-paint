@@ -9,6 +9,7 @@ import {connect} from 'react-redux';
 import {undoSnapshot} from '../reducers/undo';
 import {setSelectedItems} from '../reducers/selected-items';
 import {updateViewBounds} from '../reducers/view-bounds';
+import {addRecentColors} from '../reducers/nb-recent-colors';
 
 import {getSelectedLeafItems} from '../helper/selection';
 import {getRaster, hideGuideLayers, showGuideLayers} from '../helper/layer';
@@ -24,6 +25,23 @@ import {
 import Modes, {BitmapModes} from '../lib/modes';
 import Formats, {isBitmap, isVector} from '../lib/format';
 import {isImportingImage} from '../lib/tw-is-importing-image';
+
+const COLOR_USING_MODES = new Set([
+    Modes.BRUSH,
+    Modes.PEN,
+    Modes.LINE,
+    Modes.FILL,
+    Modes.OVAL,
+    Modes.ROUNDED_RECT,
+    Modes.RECT,
+    Modes.TEXT,
+    Modes.BIT_BRUSH,
+    Modes.BIT_LINE,
+    Modes.BIT_OVAL,
+    Modes.BIT_RECT,
+    Modes.BIT_TEXT,
+    Modes.BIT_FILL
+]);
 
 const UpdateImageHOC = function (WrappedComponent) {
     class UpdateImageWrapper extends React.Component {
@@ -58,6 +76,18 @@ const UpdateImageHOC = function (WrappedComponent) {
             // Any time an image update is made, recalculate the bounds of the artwork
             setWorkspaceBounds();
             this.props.updateViewBounds(paper.view.matrix);
+
+            // Add colors to recent colors when a color-using tool is used
+            // Only add the color that was actually modified based on colorIndex
+            console.log(this.props)
+            if (COLOR_USING_MODES.has(this.props.mode)) {
+                const colorIndex = this.props.colorIndex;
+                if (colorIndex === 0 && this.props.fillColor) {
+                    this.props.addRecentColors([this.props.fillColor]);
+                } else if (colorIndex === 1 && this.props.strokeColor) {
+                    this.props.addRecentColors([this.props.strokeColor]);
+                }
+            }
         }
         handleUpdateBitmap (skipSnapshot) {
             if (!getRaster().loaded) {
@@ -175,7 +205,11 @@ const UpdateImageHOC = function (WrappedComponent) {
             const componentProps = omit(this.props, [
                 'format',
                 'onUpdateImage',
-                'undoSnapshot'
+                'undoSnapshot',
+                'addRecentColors',
+                'fillColor',
+                'strokeColor',
+                'colorIndex'
             ]);
             return (
                 <WrappedComponent
@@ -187,9 +221,13 @@ const UpdateImageHOC = function (WrappedComponent) {
     }
 
     UpdateImageWrapper.propTypes = {
+        addRecentColors: PropTypes.func.isRequired,
+        colorIndex: PropTypes.number,
+        fillColor: PropTypes.string,
         format: PropTypes.oneOf(Object.keys(Formats)),
         mode: PropTypes.oneOf(Object.keys(Modes)).isRequired,
         onUpdateImage: PropTypes.func.isRequired,
+        strokeColor: PropTypes.string,
         undoSnapshot: PropTypes.func.isRequired,
         updateViewBounds: PropTypes.func.isRequired
     };
@@ -197,7 +235,10 @@ const UpdateImageHOC = function (WrappedComponent) {
     const mapStateToProps = state => ({
         format: state.scratchPaint.format,
         mode: state.scratchPaint.mode,
-        undoState: state.scratchPaint.undo
+        undoState: state.scratchPaint.undo,
+        fillColor: state.scratchPaint.color.fillColor.primary,
+        strokeColor: state.scratchPaint.color.strokeColor.primary,
+        colorIndex: state.scratchPaint.color.colorIndex
     });
     const mapDispatchToProps = dispatch => ({
         setSelectedItems: format => {
@@ -208,6 +249,9 @@ const UpdateImageHOC = function (WrappedComponent) {
         },
         updateViewBounds: matrix => {
             dispatch(updateViewBounds(matrix));
+        },
+        addRecentColors: colors => {
+            dispatch(addRecentColors(colors));
         }
     });
 

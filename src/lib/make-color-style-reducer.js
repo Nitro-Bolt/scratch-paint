@@ -5,10 +5,12 @@ import GradientTypes from './gradient-types';
 
 // Matches hex colors
 const hexRegex = /^#[0-9a-f]{3,8}$/i;
+// Matches rgb colors
+const rgbRegex = /^rgb\(\s*\d+\s*,\s*\d+\s*,\s*\d+\s*\)$/i;
 
-const isValidHexColor = color => {
-    if (!hexRegex.test(color) && color !== null && color !== MIXED) {
-        log.warn(`Invalid hex color code: ${color}`);
+const isValidColor = color => {
+    if (!hexRegex.test(color) && !rgbRegex.test(color) && color !== null && color !== MIXED) {
+        log.warn(`Invalid color code: ${color}`);
         return false;
     }
     return true;
@@ -44,10 +46,10 @@ const makeColorStyleReducer = ({
     }
     switch (action.type) {
     case changePrimaryColorAction:
-        if (!isValidHexColor(action.color)) return state;
+        if (!isValidColor(action.color)) return state;
         return {...state, primary: action.color};
     case changeSecondaryColorAction:
-        if (!isValidHexColor(action.color)) return state;
+        if (!isValidColor(action.color)) return state;
         return {...state, secondary: action.color};
     case CHANGE_SELECTED_ITEMS: {
         // Don't change state if no selection
