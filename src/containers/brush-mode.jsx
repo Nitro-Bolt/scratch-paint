@@ -41,7 +41,7 @@ class BrushMode extends React.Component {
                 fillColor: fillColor.primary,
                 strokeColor: strokeColor.primary,
                 strokeWidth,
-                brushSize: nextProps.brushModeState.brushSize * (nextProps.pressure + 0.5)
+                brushSize: nextProps.brushModeState.brushSize * nextProps.pressure
             });
         }
     }

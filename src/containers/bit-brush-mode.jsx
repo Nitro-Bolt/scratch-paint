@@ -31,7 +31,7 @@ class BitBrushMode extends React.Component {
             this.tool.setColor(nextProps.color);
         }
         if (this.tool && (nextProps.bitBrushSize !== this.props.bitBrushSize || nextProps.pressure !== this.props.pressure)) {
-            this.tool.setBrushSize(nextProps.bitBrushSize * (nextProps.pressure + 0.5));
+            this.tool.setBrushSize(nextProps.bitBrushSize * nextProps.pressure);
         }
 
         if (nextProps.isBitBrushModeActive && !this.props.isBitBrushModeActive) {

@@ -19,7 +19,7 @@ import {updateViewBounds} from '../reducers/view-bounds';
 import {setLayout} from '../reducers/layout';
 import {setTheme as setReduxTheme} from '../reducers/theme';
 import {setCustomFonts} from '../reducers/custom-fonts';
-import {changePointerPressure} from '../reducers/pointer.js';
+import {changePointerPressure, changePointerType} from '../reducers/pointer.js';
 
 import {getSelectedLeafItems} from '../helper/selection';
 import {convertToBitmap, convertToVector} from '../helper/bitmap';
@@ -150,7 +150,7 @@ class PaintEditor extends React.Component {
     }
     componentWillUnmount () {
         document.removeEventListener('keydown', this.props.onKeyPress);
-        document.removeEventListener('pointermove', this.props.onPointerMove);
+        document.removeEventListener('pointermove', this.onPointerMove);
         this.stopEyeDroppingLoop();
         document.removeEventListener('mousedown', this.onMouseDown);
         document.removeEventListener('touchstart', this.onMouseDown);
@@ -294,7 +294,9 @@ class PaintEditor extends React.Component {
     }
     onPointerMove (event) {
         const pressure = event.pressure;
-        this.props.changePointerPressure(pressure);
+        const pointerType = event.pointerType;
+        this.props.changePointerPressure(pointerType === 'mouse' ? 1 : pressure);
+        this.props.changePointerType(pointerType);
     }
     startEyeDroppingLoop () {
         this.eyeDropper = new EyeDropperTool(
@@ -423,7 +425,8 @@ PaintEditor.propTypes = {
     updateViewBounds: PropTypes.func.isRequired,
     viewBounds: PropTypes.instanceOf(paper.Matrix).isRequired,
     zoomLevelId: PropTypes.string,
-    changePointerPressure: PropTypes.func
+    changePointerPressure: PropTypes.func,
+    changePointerType: PropTypes.func
 };
 
 PaintEditor.defaultProps = {
@@ -479,6 +482,9 @@ const mapDispatchToProps = dispatch => ({
     },
     changePointerPressure: pressure => {
         dispatch(changePointerPressure(pressure));
+    },
+    changePointerType: type => {
+        dispatch(changePointerType(type));
     }
 });
 
