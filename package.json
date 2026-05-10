@@ -5,13 +5,13 @@
   "main": "./dist/scratch-paint.js",
   "browser": "./src/index.js",
   "scripts": {
-    "build": "npm run clean && webpack --progress --colors --bail",
+    "build": "bun run clean && webpack --progress --colors --bail",
     "clean": "rimraf ./dist && mkdirp dist && rimraf ./playground && mkdirp playground",
     "i18n:push": "tx-push-src scratch-editor paint-editor ./translations/en.json",
     "i18n:src": "rimraf ./translations/messages && babel src > tmp.js && rimraf tmp.js && ./scripts/build-i18n-source.js ./translations/messages/ ./translations/",
     "lint": "eslint . --ext .js,.jsx",
     "start": "webpack-dev-server",
-    "test": "npm run unit",
+    "test": "bun run unit",
     "unit": "jest --reporters=default",
     "watch": "webpack --progress --colors --watch"
   },
