@@ -232,11 +232,19 @@ class PaintEditor extends React.Component {
         this.props.setReduxTheme(newTheme === this.props.theme ? 'default' : newTheme);
     }
     handleSwapColors () {
-        this.props.onChangeFillColor(this.props.strokeColor.primary);
-        this.props.onChangeFillColor2(this.props.strokeColor.secondary);
+        const toHex = color => {
+            if (!color || /^#[0-9a-f]{3,8}$/i.test(color)) return color
+            try {
+                return new paper.Color(color).toCSS(true);
+            } catch (e) {
+                return color;
+            }
+        };
+        this.props.onChangeFillColor(toHex(this.props.strokeColor.primary));
+        this.props.onChangeFillColor2(toHex(this.props.strokeColor.secondary));
         this.props.onChangeFillGradientType(this.props.strokeColor.gradientType);
-        this.props.onChangeStrokeColor(this.props.fillColor.primary);
-        this.props.onChangeStrokeColor2(this.props.fillColor.secondary);
+        this.props.onChangeStrokeColor(toHex(this.props.fillColor.primary));
+        this.props.onChangeStrokeColor2(toHex(this.props.fillColor.secondary));
         this.props.onChangeStrokeGradientType(this.props.fillColor.gradientType);
     }
     handleZoomIn () {
