@@ -35,12 +35,13 @@ import StrokeColorIndicatorComponent from '../../containers/stroke-color-indicat
 import StrokeWidthIndicatorComponent from '../../containers/stroke-width-indicator.jsx';
 import TextMode from '../../containers/text-mode.jsx';
 import RecentColorsContainer from '../../containers/nb-recent-colors.jsx';
+import TWRenderRecoloredImage from '../../tw-recolor/render.jsx';
 
 import Formats, {isBitmap, isVector} from '../../lib/format';
 import styles from './paint-editor.css';
 
 import bitmapIcon from './icons/bitmap.svg';
-import swapIcon from './icons/swap.svg';
+import swapIcon from '!../../tw-recolor/build!./icons/swap.svg';
 import zoomInIcon from './icons/zoom-in.svg';
 import zoomOutIcon from './icons/zoom-out.svg';
 import zoomResetIcon from './icons/zoom-reset.svg';
@@ -100,7 +101,7 @@ const PaintEditorComponent = props => (
                                 className={styles.swapColorsButton}
                                 onClick={props.onSwapColors}
                             >
-                                <img
+                                <TWRenderRecoloredImage
                                     className={styles.swapColorsButtonIcon}
                                     draggable={false}
                                     src={swapIcon}
