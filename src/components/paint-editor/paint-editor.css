@@ -120,6 +120,38 @@ $border-radius: 0.25rem;
     margin-left: calc(2 * $grid-unit);
 }
 
+.swap-colors-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: 1px solid $ui-pane-border;
+    border-radius: 4px;
+    background: transparent;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+[dir="ltr"] .swap-colors-button {
+    margin-right: calc(2 * $grid-unit);
+}
+
+[dir="rtl"] .swap-colors-button {
+    margin-left: calc(2 * $grid-unit);
+}
+
+.swap-colors-button:hover {
+    background: $ui-pane-border;
+}
+
+.swap-colors-button-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    vertical-align: middle;
+    filter: $filter-icon-gray;
+}
+
 .controls-container {
     width: 100%;
     display: flex;

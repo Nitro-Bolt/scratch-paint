@@ -40,6 +40,7 @@ import Formats, {isBitmap, isVector} from '../../lib/format';
 import styles from './paint-editor.css';
 
 import bitmapIcon from './icons/bitmap.svg';
+import swapIcon from './icons/swap.svg';
 import zoomInIcon from './icons/zoom-in.svg';
 import zoomOutIcon from './icons/zoom-out.svg';
 import zoomResetIcon from './icons/zoom-reset.svg';
@@ -94,6 +95,17 @@ const PaintEditorComponent = props => (
                                 className={styles.modMarginAfter}
                                 onUpdateImage={props.onUpdateImage}
                             />
+                            {/* swap colors */}
+                            <Button
+                                className={styles.swapColorsButton}
+                                onClick={props.onSwapColors}
+                            >
+                                <img
+                                    className={styles.swapColorsButtonIcon}
+                                    draggable={false}
+                                    src={swapIcon}
+                                />
+                            </Button>
                             {/* stroke */}
                             <StrokeColorIndicatorComponent
                                 onUpdateImage={props.onUpdateImage}
@@ -350,6 +362,7 @@ PaintEditorComponent.propTypes = {
     onChangeTheme: PropTypes.func.isRequired,
     onManageFonts: PropTypes.func,
     onRedo: PropTypes.func.isRequired,
+    onSwapColors: PropTypes.func.isRequired,
     onSwitchToBitmap: PropTypes.func.isRequired,
     onSwitchToVector: PropTypes.func.isRequired,
     onUndo: PropTypes.func.isRequired,
