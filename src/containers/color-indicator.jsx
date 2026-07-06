@@ -112,6 +112,9 @@ const makeColorIndicator = (label, isStroke) => {
             // that `color1` is selected.
             this.props.onCloseColor();
             this.props.onChangeColorIndex(0);
+            if (this.props.onAddRecentColor) {
+                this.props.onAddRecentColor(this.props.color, this.props.color2, this.props.gradientType);
+            }
         }
         handleSwap () {
             if (getSelectedLeafItems().length) {
@@ -156,6 +159,7 @@ const makeColorIndicator = (label, isStroke) => {
         gradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
         intl: intlShape,
         isEyeDropping: PropTypes.bool.isRequired,
+        onAddRecentColor: PropTypes.func,
         onChangeColorIndex: PropTypes.func.isRequired,
         onChangeColor: PropTypes.func.isRequired,
         onChangeGradientType: PropTypes.func,

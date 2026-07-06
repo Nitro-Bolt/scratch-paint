@@ -157,8 +157,8 @@ const mapDispatchToProps = dispatch => ({
             dispatch(changeFillColor2(fillColor));
         }
     },
-    onAddRecentColor: color => {
-        dispatch(addRecentColor(color));
+    onAddRecentColor: (primary, secondary, gradientType) => {
+        dispatch(addRecentColor(primary, secondary, gradientType));
     }
 });
 

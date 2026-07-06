@@ -7,6 +7,7 @@ import {changeGradientType} from '../reducers/fill-mode-gradient-type';
 import {openFillColor, closeFillColor} from '../reducers/modals';
 import {getSelectedLeafItems} from '../helper/selection';
 import {setSelectedItems} from '../reducers/selected-items';
+import {addRecentColor} from '../reducers/nb-recent-colors.js';
 import Modes, {GradientToolsModes} from '../lib/modes';
 import {isBitmap} from '../lib/format';
 
@@ -47,6 +48,9 @@ const mapDispatchToProps = dispatch => ({
         } else if (index === 1) {
             dispatch(changeFillColor2(fillColor));
         }
+    },
+    onAddRecentColor: (primary, secondary, gradientType) => {
+        dispatch(addRecentColor(primary, secondary, gradientType));
     },
     onOpenColor: () => {
         dispatch(openFillColor());

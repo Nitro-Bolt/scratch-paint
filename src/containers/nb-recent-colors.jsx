@@ -2,20 +2,25 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
 import RecentColorsComponent from '../components/nb-recent-colors/nb-recent-colors.jsx';
-import {changeFillColor} from '../reducers/fill-style';
-import {changeStrokeColor} from '../reducers/stroke-style';
+import {changeFillColor, changeFillColor2, changeFillGradientType} from '../reducers/fill-style';
+import {changeStrokeColor, changeStrokeColor2, changeStrokeGradientType} from '../reducers/stroke-style';
+import GradientTypes from '../lib/gradient-types';
 
 const mapStateToProps = state => ({
     recentColors: state.scratchPaint.color.recentColors,
-    colorIndex: state.scratchPaint.fillMode.colorIndex
+    isFill: state.scratchPaint.modals.fillColor
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-    onSelectColor: (color, colorIndex) => {
-        if (colorIndex === 0) {
-            dispatch(changeFillColor(color));
+    onSelectColor: (entry, isFill) => {
+        if (isFill) {
+            dispatch(changeFillColor(entry.primary));
+            dispatch(changeFillColor2(entry.secondary));
+            dispatch(changeFillGradientType(entry.gradientType || GradientTypes.SOLID));
         } else {
-            dispatch(changeStrokeColor(color));
+            dispatch(changeStrokeColor(entry.primary));
+            dispatch(changeStrokeColor2(entry.secondary));
+            dispatch(changeStrokeGradientType(entry.gradientType || GradientTypes.SOLID));
         }
         if (ownProps.onUpdateImage) {
             ownProps.onUpdateImage();
@@ -26,7 +31,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 const mergeProps = (stateProps, dispatchProps, ownProps) => ({
     ...ownProps,
     recentColors: stateProps.recentColors,
-    onSelectColor: color => dispatchProps.onSelectColor(color, stateProps.colorIndex)
+    onSelectColor: entry => dispatchProps.onSelectColor(entry, stateProps.isFill)
 });
 
 const RecentColorsContainer = connect(

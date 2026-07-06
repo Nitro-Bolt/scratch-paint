@@ -9,15 +9,16 @@ const RecentColorsComponent = ({recentColors, onSelectColor}) => {
     if (recentColors.length === 0) return null;
     return (
         <div className={styles.recentColorsPanel}>
-            {recentColors.map(color => (
+            {recentColors.map((entry, index) => (
                 <ColorButtonComponent
-                    key={color}
-                    color={color}
-                    gradientType={GradientTypes.SOLID}
+                    key={index}
+                    color={entry.primary}
+                    color2={entry.secondary}
+                    gradientType={entry.gradientType || GradientTypes.SOLID}
                     noArrow
                     outline={false}
                     size={"1.5rem"}
-                    onClick={() => onSelectColor(color)}
+                    onClick={() => onSelectColor(entry)}
                 />
             ))}
         </div>
@@ -25,7 +26,11 @@ const RecentColorsComponent = ({recentColors, onSelectColor}) => {
 };
 
 RecentColorsComponent.propTypes = {
-    recentColors: PropTypes.arrayOf(PropTypes.string).isRequired,
+    recentColors: PropTypes.arrayOf(PropTypes.shape({
+        primary: PropTypes.string,
+        secondary: PropTypes.string,
+        gradientType: PropTypes.string
+    })).isRequired,
     onSelectColor: PropTypes.func.isRequired
 };
 
