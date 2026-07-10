@@ -46,6 +46,7 @@ import zoomInIcon from './icons/zoom-in.svg';
 import zoomOutIcon from './icons/zoom-out.svg';
 import zoomResetIcon from './icons/zoom-reset.svg';
 import themeIcon from './icons/theme.svg';
+import LabeledIconButton from '../labeled-icon-button/labeled-icon-button.jsx';
 
 const messages = defineMessages({
     bitmap: {
@@ -57,6 +58,11 @@ const messages = defineMessages({
         defaultMessage: 'Convert to Vector',
         description: 'Label for button that converts the paint editor to vector mode',
         id: 'paint.paintEditor.vector'
+    },
+    swap: {
+        defaultMessage: 'Swap',
+        description: 'Label for button that swaps the fill and stroke colors',
+        id: 'paint.paintEditor.swap'
     }
 });
 
@@ -97,16 +103,12 @@ const PaintEditorComponent = props => (
                                 onUpdateImage={props.onUpdateImage}
                             />
                             {/* swap colors */}
-                            <Button
-                                className={styles.swapColorsButton}
+                            <LabeledIconButton
+                                title={props.intl.formatMessage(messages.swap)}
+                                imgSrc={swapIcon}
                                 onClick={props.onSwapColors}
-                            >
-                                <TWRenderRecoloredImage
-                                    className={styles.swapColorsButtonIcon}
-                                    draggable={false}
-                                    src={swapIcon}
-                                />
-                            </Button>
+                                className={styles.swapColorsButton}
+                            />
                             {/* stroke */}
                             <StrokeColorIndicatorComponent
                                 onUpdateImage={props.onUpdateImage}
