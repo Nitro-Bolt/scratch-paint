@@ -26,6 +26,7 @@ import {getSelectedLeafItems} from '../helper/selection';
 import {convertToBitmap, convertToVector} from '../helper/bitmap';
 import {resizeView, resetZoom, zoomOnSelection, OUTERMOST_ZOOM_LEVEL} from '../helper/view';
 import EyeDropperTool from '../helper/tools/eye-dropper';
+import {setNudgeMultiplier} from '../helper/selection-tools/nudge-tool';
 
 import Modes, {BitmapModes, VectorModes} from '../lib/modes';
 import Formats, {isBitmap, isVector} from '../lib/format';
@@ -101,6 +102,7 @@ class PaintEditor extends React.Component {
         };
         this.props.setLayout(this.props.rtl ? 'rtl' : 'ltr');
         this.props.onCustomFontsChanged(this.props.customFonts);
+        setNudgeMultiplier(this.props.nudgeMultiplier || 15);
         resizeView(this.props.width, this.props.height);
     }
     componentDidMount () {
@@ -127,6 +129,9 @@ class PaintEditor extends React.Component {
         }
         if (this.props.customFonts !== newProps.customFonts) {
             this.props.onCustomFontsChanged(newProps.customFonts);
+        }
+        if (newProps.nudgeMultiplier !== this.props.nudgeMultiplier) {
+            setNudgeMultiplier(newProps.nudgeMultiplier || 15);
         }
     }
     componentDidUpdate (prevProps) {
@@ -370,6 +375,7 @@ class PaintEditor extends React.Component {
                 onChangeTheme={this.handleChangeTheme}
                 onManageFonts={this.props.onManageFonts}
                 onRedo={this.props.onRedo}
+                noSwapButton={this.props.noSwapButton}
                 onSwapColors={this.handleSwapColors}
                 onSwitchToBitmap={this.props.handleSwitchToBitmap}
                 onSwitchToVector={this.props.handleSwitchToVector}
@@ -423,6 +429,8 @@ PaintEditor.propTypes = {
     isEyeDropping: PropTypes.bool,
     mode: PropTypes.oneOf(Object.keys(Modes)).isRequired,
     name: PropTypes.string,
+    nudgeMultiplier: PropTypes.number,
+    noSwapButton: PropTypes.bool,
     onDeactivateEyeDropper: PropTypes.func.isRequired,
     onKeyPress: PropTypes.func.isRequired,
     onRedo: PropTypes.func.isRequired,

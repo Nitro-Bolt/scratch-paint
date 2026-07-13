@@ -3,7 +3,13 @@ import {getSelectedRootItems} from '../selection';
 import {getActionBounds} from '../view';
 import {BitmapModes} from '../../lib/modes';
 
-const NUDGE_MORE_MULTIPLIER = 15;
+let nudgeMoreMultiplier = 15;
+
+const setNudgeMultiplier = value => {
+    nudgeMoreMultiplier = value;
+};
+
+export {setNudgeMultiplier};
 
 /**
  * Tool containing handlers for arrow key events for nudging the selection.
@@ -27,7 +33,7 @@ class NudgeTool {
         }
 
         let nudgeAmount = 1 / paper.view.zoom;
-        if (event.modifiers.shift) nudgeAmount *= NUDGE_MORE_MULTIPLIER;
+        if (event.modifiers.shift) nudgeAmount *= nudgeMoreMultiplier;
 
         const selected = getSelectedRootItems();
         if (selected.length === 0) return;

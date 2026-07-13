@@ -34,8 +34,6 @@ import SelectMode from '../../containers/select-mode.jsx';
 import StrokeColorIndicatorComponent from '../../containers/stroke-color-indicator.jsx';
 import StrokeWidthIndicatorComponent from '../../containers/stroke-width-indicator.jsx';
 import TextMode from '../../containers/text-mode.jsx';
-import RecentColorsContainer from '../../containers/nb-recent-colors.jsx';
-import TWRenderRecoloredImage from '../../tw-recolor/render.jsx';
 
 import Formats, {isBitmap, isVector} from '../../lib/format';
 import styles from './paint-editor.css';
@@ -103,12 +101,14 @@ const PaintEditorComponent = props => (
                                 onUpdateImage={props.onUpdateImage}
                             />
                             {/* swap colors */}
-                            <LabeledIconButton
-                                title={props.intl.formatMessage(messages.swap)}
-                                imgSrc={swapIcon}
-                                onClick={props.onSwapColors}
-                                className={styles.swapColorsButton}
-                            />
+                            {!props.noSwapButton && (
+                                <LabeledIconButton
+                                    title={props.intl.formatMessage(messages.swap)}
+                                    imgSrc={swapIcon}
+                                    onClick={props.onSwapColors}
+                                    className={styles.swapColorsButton}
+                                />
+                            )}
                             {/* stroke */}
                             <StrokeColorIndicatorComponent
                                 onUpdateImage={props.onUpdateImage}
@@ -362,6 +362,7 @@ PaintEditorComponent.propTypes = {
     intl: intlShape,
     isEyeDropping: PropTypes.bool,
     name: PropTypes.string,
+    noSwapButton: PropTypes.bool,
     onChangeTheme: PropTypes.func.isRequired,
     onManageFonts: PropTypes.func,
     onRedo: PropTypes.func.isRequired,
