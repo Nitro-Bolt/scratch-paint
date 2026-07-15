@@ -238,6 +238,7 @@ class ModeTools extends React.Component {
     render () {
         return (
             <ModeToolsComponent
+                noCutButton={this.props.noCutButton}
                 hasSelectedUncurvedPoints={this.hasSelectedUncurvedPoints()}
                 hasSelectedUnpointedPoints={this.hasSelectedUnpointedPoints()}
                 onCopyToClipboard={this.props.onCopyToClipboard}
@@ -257,6 +258,7 @@ class ModeTools extends React.Component {
 }
 
 ModeTools.propTypes = {
+    noCutButton: PropTypes.bool,
     clearSelectedItems: PropTypes.func.isRequired,
     format: PropTypes.oneOf(Object.keys(Formats)),
     mode: PropTypes.oneOf(Object.keys(Modes)),

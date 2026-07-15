@@ -239,12 +239,14 @@ const ModeToolsComponent = props => {
                         title={props.intl.formatMessage(messages.copy)}
                         onClick={props.onCopyToClipboard}
                     />
-                    <LabeledIconButton
-                        hideLabel={hideLabel(props.intl.locale)}
-                        imgSrc={cutIcon}
-                        title={props.intl.formatMessage(messages.cut)}
-                        onClick={props.onCutToClipboard}
-                    />
+                    {!props.noCutButton && (
+                        <LabeledIconButton
+                            hideLabel={hideLabel(props.intl.locale)}
+                            imgSrc={cutIcon}
+                            title={props.intl.formatMessage(messages.cut)}
+                            onClick={props.onCutToClipboard}
+                        />
+                    )}
                     <LabeledIconButton
                         disabled={!(props.clipboardItems.length > 0)}
                         hideLabel={hideLabel(props.intl.locale)}
@@ -432,6 +434,7 @@ const ModeToolsComponent = props => {
 };
 
 ModeToolsComponent.propTypes = {
+    noCutButton: PropTypes.bool,
     bitBrushSize: PropTypes.number,
     bitEraserSize: PropTypes.number,
     brushValue: PropTypes.number,

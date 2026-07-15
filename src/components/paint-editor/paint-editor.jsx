@@ -120,6 +120,7 @@ const PaintEditorComponent = props => (
                         </InputGroup>
                         <InputGroup className={styles.modModeTools}>
                             <ModeToolsContainer
+                                noCutButton={props.noCutButton}
                                 width={props.width}
                                 height={props.height}
                                 onUpdateImage={props.onUpdateImage}
@@ -363,6 +364,7 @@ PaintEditorComponent.propTypes = {
     isEyeDropping: PropTypes.bool,
     name: PropTypes.string,
     noSwapButton: PropTypes.bool,
+    noCutButton: PropTypes.bool,
     onChangeTheme: PropTypes.func.isRequired,
     onManageFonts: PropTypes.func,
     onRedo: PropTypes.func.isRequired,

@@ -19,7 +19,8 @@ module.exports = {
         // TW: ignore errors importing things from custom webpack loaders
         'import/no-unresolved': ['error', {
             ignore: ['^!']
-        }]
+        }],
+        'linebreak-style': 'off'
     },
     settings: {
         react: {

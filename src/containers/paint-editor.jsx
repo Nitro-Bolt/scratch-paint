@@ -376,6 +376,7 @@ class PaintEditor extends React.Component {
                 onManageFonts={this.props.onManageFonts}
                 onRedo={this.props.onRedo}
                 noSwapButton={this.props.noSwapButton}
+                noCutButton={this.props.noCutButton}
                 onSwapColors={this.handleSwapColors}
                 onSwitchToBitmap={this.props.handleSwitchToBitmap}
                 onSwitchToVector={this.props.handleSwitchToVector}
@@ -431,6 +432,7 @@ PaintEditor.propTypes = {
     name: PropTypes.string,
     nudgeMultiplier: PropTypes.number,
     noSwapButton: PropTypes.bool,
+    noCutButton: PropTypes.bool,
     onDeactivateEyeDropper: PropTypes.func.isRequired,
     onKeyPress: PropTypes.func.isRequired,
     onRedo: PropTypes.func.isRequired,
