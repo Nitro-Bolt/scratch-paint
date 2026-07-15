@@ -310,7 +310,6 @@ FixedToolsComponent.propTypes = {
     onUndo: PropTypes.func.isRequired,
     onUngroup: PropTypes.func.isRequired,
     onUpdateName: PropTypes.func.isRequired,
-    onMask: PropTypes.func.isRequired,
     rtl: PropTypes.bool.isRequired,
     width: PropTypes.number
 };
