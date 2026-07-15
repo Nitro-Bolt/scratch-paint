@@ -622,10 +622,10 @@ ModeToolsComponent.propTypes = {
     onPasteFromClipboard: PropTypes.func.isRequired,
     onPointPoints: PropTypes.func.isRequired,
     onUpdateImage: PropTypes.func.isRequired,
-    onMask: PropTypes.func.isRequired,
-    onFilter: PropTypes.func.isRequired,
-    onSubtract: PropTypes.func.isRequired,
-    onMerge: PropTypes.func.isRequired,
+    onMask: PropTypes.func,
+    onFilter: PropTypes.func,
+    onSubtract: PropTypes.func,
+    onMerge: PropTypes.func,
     rectRadius: PropTypes.number,
     onRectRadiusSliderChange: PropTypes.func
 };
