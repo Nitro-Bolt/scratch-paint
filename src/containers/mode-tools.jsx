@@ -15,6 +15,7 @@ import {
     selectAllItems,
     selectAllSegments
 } from '../helper/selection';
+import {mask, subtract, filter, merge} from '../helper/intersecting.js';
 import {HANDLE_RATIO, ensureClockwise} from '../helper/math';
 import {getRaster} from '../helper/layer';
 import {flipBitmapHorizontal, flipBitmapVertical, selectAllBitmap} from '../helper/bitmap';
@@ -35,7 +36,11 @@ class ModeTools extends React.Component {
             'handleCenterSelection',
             'handleDelete',
             'handlePasteFromClipboard',
-            'handlePointPoints'
+            'handlePointPoints',
+            'handleMask',
+            'handleSubtract',
+            'handleFilter',
+            'handleMerge'
         ]);
     }
     _getSelectedUncurvedPoints () {
@@ -235,6 +240,30 @@ class ModeTools extends React.Component {
             this.props.setSelectedItems(this.props.format);
         }
     }
+    handleMask () {
+        if (this.props.selectedItems.length >= 2){
+            mask(this.props.onUpdateImage);
+            this.props.onUpdateImage();
+        }
+    }
+    handleSubtract() {
+        if (this.props.selectedItems.length >= 2){
+            subtract(this.props.onUpdateImage);
+            this.props.onUpdateImage();
+        }
+    }
+    handleFilter() {
+        if (this.props.selectedItems.length >= 2){
+            filter(this.props.onUpdateImage);
+            this.props.onUpdateImage();
+        }
+    }
+    handleMerge() {
+        if (this.props.selectedItems.length >= 2){
+            merge(this.props.onUpdateImage);
+            this.props.onUpdateImage();
+        }
+    }
     render () {
         return (
             <ModeToolsComponent
@@ -252,6 +281,10 @@ class ModeTools extends React.Component {
                 onPasteFromClipboard={this.handlePasteFromClipboard}
                 onPointPoints={this.handlePointPoints}
                 onUpdateImage={this.props.onUpdateImage}
+                onMask={this.handleMask}
+                onSubtract={this.handleSubtract}
+                onFilter={this.handleFilter}
+                onMerge={this.handleMerge}
             />
         );
     }
@@ -266,6 +299,10 @@ ModeTools.propTypes = {
     onCutToClipboard: PropTypes.func.isRequired,
     onManageFonts: PropTypes.func,
     onPasteFromClipboard: PropTypes.func.isRequired,
+    onMask: PropTypes.func.isRequired,
+    onSubtract: PropTypes.func.isRequired,
+    onFilter: PropTypes.func.isRequired,
+    onMerge: PropTypes.func.isRequired,
     width: PropTypes.number,
     height: PropTypes.number,
     onUpdateImage: PropTypes.func.isRequired,
