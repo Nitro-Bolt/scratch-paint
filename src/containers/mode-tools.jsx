@@ -200,9 +200,12 @@ class ModeTools extends React.Component {
         let selectedItems = getSelectedRootItems();
         if (selectedItems.length === 0) {
             if (isBitmap(this.props.format)) {
-                return;
+                selectAllBitmap(this.props.clearSelectedItems);
+                selectedItems = getSelectedRootItems();
+                if (selectedItems.length === 0) return;
+            } else {
+                selectedItems = getAllRootItems();
             }
-            selectedItems = getAllRootItems();
         }
 
         for (const item of selectedItems) {

@@ -12,7 +12,7 @@ import {
     getSelectedLeafItems,
     getSelectedRootItems
 } from '../helper/selection';
-import {getTrimmedRaster} from '../helper/bitmap';
+import {getTrimmedRaster, selectAllBitmap} from '../helper/bitmap';
 import Formats, {isBitmap} from '../lib/format';
 import Modes from '../lib/modes';
 
@@ -77,9 +77,11 @@ const CopyPasteHOC = function (WrappedComponent) {
             }
             if (selectedItems.length === 0) {
                 if (isBitmap(this.props.format)) {
-                    const raster = getTrimmedRaster(false /* shouldInsert */);
-                    if (!raster) return;
-                    selectedItems.push(raster);
+                    // Cutting the whole bitmap must move its pixels onto the
+                    // selection layer first, so deleteSelection removes them.
+                    selectAllBitmap(this.props.clearSelectedItems);
+                    selectedItems = getSelectedRootItems();
+                    if (selectedItems.length === 0) return;
                 } else {
                     selectedItems = getAllRootItems();
                 }
