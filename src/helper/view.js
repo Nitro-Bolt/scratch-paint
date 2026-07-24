@@ -19,7 +19,7 @@ const BUFFER = 50; // Number of pixels of allowance around objects at the edges 
 const MIN_RATIO = .125; // Zoom in to at least 1/8 of the screen. This way you don't end up incredibly
 //                         zoomed in for tiny costumes.
 const OUTERMOST_ZOOM_LEVEL = 0.25;
-let CANVAS_SIZE_MULTIPLIER = 5; // Size multiplier for the canvas
+let CANVAS_SIZE_MULTIPLIER = 2; // Size multiplier for the canvas
 let ART_BOARD_BOUNDS;
 let MAX_WORKSPACE_BOUNDS;
 /* eslint-enable import/no-mutable-exports */
@@ -27,8 +27,8 @@ let MAX_WORKSPACE_BOUNDS;
 const resizeView = (width, height) => {
     SVG_ART_BOARD_WIDTH = width;
     SVG_ART_BOARD_HEIGHT = height;
-    ART_BOARD_WIDTH = SVG_ART_BOARD_WIDTH * 2 * CANVAS_SIZE_MULTIPLIER; // 2x is the default idk why
-    ART_BOARD_HEIGHT = SVG_ART_BOARD_HEIGHT * 2 * CANVAS_SIZE_MULTIPLIER;
+    ART_BOARD_WIDTH = SVG_ART_BOARD_WIDTH * 2; // 2x is the default idk why
+    ART_BOARD_HEIGHT = SVG_ART_BOARD_HEIGHT * 2;
     CENTER = new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2);
     ART_BOARD_BOUNDS = new paper.Rectangle(0, 0, ART_BOARD_WIDTH, ART_BOARD_HEIGHT);
     MAX_WORKSPACE_BOUNDS = new paper.Rectangle(
