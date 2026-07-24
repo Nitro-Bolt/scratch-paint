@@ -18,7 +18,7 @@ const PADDING_PERCENT = 25; // Padding as a percent of the max of width/height o
 const BUFFER = 50; // Number of pixels of allowance around objects at the edges of the workspace
 const MIN_RATIO = .125; // Zoom in to at least 1/8 of the screen. This way you don't end up incredibly
 //                         zoomed in for tiny costumes.
-const OUTERMOST_ZOOM_LEVEL = 0.333;
+const OUTERMOST_ZOOM_LEVEL = 0.25;
 let ART_BOARD_BOUNDS;
 let MAX_WORKSPACE_BOUNDS;
 /* eslint-enable import/no-mutable-exports */
@@ -26,8 +26,8 @@ let MAX_WORKSPACE_BOUNDS;
 const resizeView = (width, height) => {
     SVG_ART_BOARD_WIDTH = width;
     SVG_ART_BOARD_HEIGHT = height;
-    ART_BOARD_WIDTH = SVG_ART_BOARD_WIDTH * 2;
-    ART_BOARD_HEIGHT = SVG_ART_BOARD_HEIGHT * 2;
+    ART_BOARD_WIDTH = SVG_ART_BOARD_WIDTH * 4;
+    ART_BOARD_HEIGHT = SVG_ART_BOARD_HEIGHT * 4;
     CENTER = new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2);
     ART_BOARD_BOUNDS = new paper.Rectangle(0, 0, ART_BOARD_WIDTH, ART_BOARD_HEIGHT);
     MAX_WORKSPACE_BOUNDS = new paper.Rectangle(
