@@ -18,6 +18,7 @@ import {
 import {mask, subtract, filter, merge} from '../helper/intersecting.js';
 import {HANDLE_RATIO, ensureClockwise} from '../helper/math';
 import {getRaster} from '../helper/layer';
+import { CANVAS_SIZE_MULTIPLIER } from '../helper/view.js';
 import {flipBitmapHorizontal, flipBitmapVertical, selectAllBitmap} from '../helper/bitmap';
 import Formats, {isBitmap} from '../lib/format';
 import Modes from '../lib/modes';
@@ -213,7 +214,7 @@ class ModeTools extends React.Component {
         }
 
         const group = new paper.Group(selectedItems);
-        group.position = new paper.Point(this.props.width, this.props.height);
+        group.position = new paper.Point(this.props.width * CANVAS_SIZE_MULTIPLIER, this.props.height * CANVAS_SIZE_MULTIPLIER);
         for (let i = 0; i < selectedItems.length; i++) {
             const item = selectedItems[i];
             group.layer.insertChild(item.data.originalIndex, item);
