@@ -152,6 +152,11 @@ const ModeToolsComponent = props => {
             description: 'Label for the `Merge objects` button',
             id: 'paint.paintEditor.merge'
         },
+        masktools: {
+            defaultMessage: 'Booleans',
+            description: 'Label for dropdown to access the masking tools',
+            id: 'paint.paintEditor.masktools'
+        },
         more: {
             defaultMessage: 'More',
             description: 'Label for dropdown to access more action buttons',
@@ -364,31 +369,72 @@ const ModeToolsComponent = props => {
                     </InputGroup>
                 </MediaQuery>
                 <MediaQuery minWidth={layout.fullSizeEditorMinWidth}>
-                    <InputGroup className={styles.row}>
-                        <LabeledIconButton
-                            hideLabel={hideLabel(props.intl.locale)}
-                            imgSrc={maskIcon}
-                            title={props.intl.formatMessage(messages.mask)}
-                            onClick={props.onMask}
-                        />
-                        <LabeledIconButton
-                            hideLabel={hideLabel(props.intl.locale)}
-                            imgSrc={filterIcon}
-                            title={props.intl.formatMessage(messages.filter)}
-                            onClick={props.onFilter}
-                        />
-                        <LabeledIconButton
-                            hideLabel={hideLabel(props.intl.locale)}
-                            imgSrc={subtractIcon}
-                            title={props.intl.formatMessage(messages.subtract)}
-                            onClick={props.onSubtract}
-                        />
-                        <LabeledIconButton
-                            hideLabel={hideLabel(props.intl.locale)}
-                            imgSrc={mergeIcon}
-                            title={props.intl.formatMessage(messages.merge)}
-                            onClick={props.onMerge}
-                        />
+                    <InputGroup>
+                        <Dropdown
+                            className={styles.modUnselect}
+                            enterExitTransitionDurationMs={20}
+                            popoverContent={
+                                <InputGroup
+                                    className={styles.modContextMenu}
+                                >
+                                    <Button
+                                        className={styles.modMenuItem}
+                                        onClick={props.onMask}
+                                    >
+                                        <TWRenderRecoloredImage
+                                            className={styles.menuItemIcon}
+                                            draggable={false}
+                                            src={maskIcon}
+                                        />
+                                        {props.intl.locale === 'en' &&
+                                            <span>{props.intl.formatMessage(messages.mask)}</span>
+                                        }
+                                    </Button>
+                                    <Button
+                                        className={styles.modMenuItem}
+                                        onClick={props.onFilter}
+                                    >
+                                        <TWRenderRecoloredImage
+                                            className={styles.menuItemIcon}
+                                            draggable={false}
+                                            src={filterIcon}
+                                        />
+                                        {props.intl.locale === 'en' &&
+                                            <span>{props.intl.formatMessage(messages.filter)}</span>
+                                        }
+                                    </Button>
+                                    <Button
+                                        className={styles.modMenuItem}
+                                        onClick={props.onSubtract}
+                                    >
+                                        <TWRenderRecoloredImage
+                                            className={styles.menuItemIcon}
+                                            draggable={false}
+                                            src={subtractIcon}
+                                        />
+                                        {props.intl.locale === 'en' &&
+                                            <span>{props.intl.formatMessage(messages.subtract)}</span>
+                                        }
+                                    </Button>
+                                    <Button
+                                        className={styles.modMenuItem}
+                                        onClick={props.onMerge}
+                                    >
+                                        <TWRenderRecoloredImage
+                                            className={styles.menuItemIcon}
+                                            draggable={false}
+                                            src={mergeIcon}
+                                        />
+                                        {props.intl.locale === 'en' &&
+                                            <span>{props.intl.formatMessage(messages.merge)}</span>
+                                        }
+                                    </Button>
+                                </InputGroup>
+                            }
+                            tipSize={.01}
+                        >
+                            {props.intl.formatMessage(messages.masktools)}
+                        </Dropdown>
                     </InputGroup>
                 </MediaQuery>
                 <MediaQuery maxWidth={layout.fullSizeEditorMinWidth - 1}>
