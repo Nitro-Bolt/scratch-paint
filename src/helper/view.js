@@ -89,20 +89,7 @@ const setWorkspaceBounds = clipEmpty => {
 };
 
 const clampViewBounds = () => {
-    const {left, right, top, bottom} = paper.project.view.bounds;
-    if (left < _workspaceBounds.left) {
-        paper.project.view.scrollBy(new paper.Point(_workspaceBounds.left - left, 0));
-    }
-    if (top < _workspaceBounds.top) {
-        paper.project.view.scrollBy(new paper.Point(0, _workspaceBounds.top - top));
-    }
-    if (bottom > _workspaceBounds.bottom) {
-        paper.project.view.scrollBy(new paper.Point(0, _workspaceBounds.bottom - bottom));
-    }
-    if (right > _workspaceBounds.right) {
-        paper.project.view.scrollBy(new paper.Point(_workspaceBounds.right - right, 0));
-    }
-    setWorkspaceBounds();
+    return // this is exported and I'm too lazy to fix it everywhere, so it just doesn't clamp anymore
 };
 
 const resizeCrosshair = () => {
@@ -156,6 +143,7 @@ const zoomOnSelection = deltaZoom => {
 
 const resetZoom = () => {
     paper.project.view.zoom = .5;
+    paper.project.view.center = new paper.Point(ART_BOARD_WIDTH/2, ART_BOARD_HEIGHT/2)
     setWorkspaceBounds(true /* clipEmpty */);
     resizeCrosshair();
     clampViewBounds();
