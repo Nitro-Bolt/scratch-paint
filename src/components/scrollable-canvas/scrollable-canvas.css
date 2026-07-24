@@ -9,18 +9,18 @@ $scrollbar-padding: 4px;
 }
 .vertical-scrollbar-wrapper {
     position: absolute;
-    width: calc($scrollbar-size + $scrollbar-padding);
+    width: 0;
     right: 0;
     top: $scrollbar-padding;
-    height: calc(100% - $scrollbar-size - 2 * $scrollbar-padding);
+    height: 0;
 }
 
 .horizontal-scrollbar-wrapper {
     position: absolute;
-    height: calc($scrollbar-size + $scrollbar-padding);
+    height: 0;
     left: $scrollbar-padding;
     bottom: 0;
-    width: calc(100% - $scrollbar-size - 2 * $scrollbar-padding);
+    width: 0;
 }
 
 .vertical-scrollbar-hitbox, .horizontal-scrollbar-hitbox {
