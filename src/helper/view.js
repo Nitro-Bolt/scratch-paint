@@ -25,9 +25,9 @@ let MAX_WORKSPACE_BOUNDS;
 /* eslint-enable import/no-mutable-exports */
 
 const resizeView = (width, height) => {
-    SVG_ART_BOARD_WIDTH = width;
-    SVG_ART_BOARD_HEIGHT = height;
-    ART_BOARD_WIDTH = SVG_ART_BOARD_WIDTH * 2; // 2x is the default idk why
+    SVG_ART_BOARD_WIDTH = width * CANVAS_SIZE_MULTIPLIER;
+    SVG_ART_BOARD_HEIGHT = height * CANVAS_SIZE_MULTIPLIER;
+    ART_BOARD_WIDTH = SVG_ART_BOARD_WIDTH * 2;
     ART_BOARD_HEIGHT = SVG_ART_BOARD_HEIGHT * 2;
     CENTER = new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2);
     ART_BOARD_BOUNDS = new paper.Rectangle(0, 0, ART_BOARD_WIDTH, ART_BOARD_HEIGHT);
