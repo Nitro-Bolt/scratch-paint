@@ -91,7 +91,7 @@ const setWorkspaceBounds = clipEmpty => {
 };
 
 // this is exported and I'm too lazy to fix it everywhere, so it just doesn't clamp anymore
-const clampViewBounds = () => undefined;
+const clampViewBounds = () => null;
 
 const resizeCrosshair = () => {
     if (getDragCrosshairLayer() && getDragCrosshairLayer().dragCrosshair) {
