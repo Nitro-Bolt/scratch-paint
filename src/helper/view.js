@@ -90,9 +90,8 @@ const setWorkspaceBounds = clipEmpty => {
     _workspaceBounds = new paper.Rectangle(left, top, right - left, bottom - top);
 };
 
-const clampViewBounds = () => {
-    return; // this is exported and I'm too lazy to fix it everywhere, so it just doesn't clamp anymore
-};
+// this is exported and I'm too lazy to fix it everywhere, so it just doesn't clamp anymore
+const clampViewBounds = () => undefined;
 
 const resizeCrosshair = () => {
     if (getDragCrosshairLayer() && getDragCrosshairLayer().dragCrosshair) {
