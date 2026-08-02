@@ -19,7 +19,8 @@ const BUFFER = 50; // Number of pixels of allowance around objects at the edges 
 const MIN_RATIO = .125; // Zoom in to at least 1/8 of the screen. This way you don't end up incredibly
 //                         zoomed in for tiny costumes.
 const OUTERMOST_ZOOM_LEVEL = 0.25;
-let CANVAS_SIZE_MULTIPLIER = 2; // Size multiplier for the canvas
+const CANVAS_SIZE_MULTIPLIER = 2; // Size multiplier for the canvas
+//                                   PS this needs to be changed to let when it's added as an option
 let ART_BOARD_BOUNDS;
 let MAX_WORKSPACE_BOUNDS;
 /* eslint-enable import/no-mutable-exports */
@@ -90,7 +91,7 @@ const setWorkspaceBounds = clipEmpty => {
 };
 
 const clampViewBounds = () => {
-    return // this is exported and I'm too lazy to fix it everywhere, so it just doesn't clamp anymore
+    return; // this is exported and I'm too lazy to fix it everywhere, so it just doesn't clamp anymore
 };
 
 const resizeCrosshair = () => {
@@ -144,7 +145,7 @@ const zoomOnSelection = deltaZoom => {
 
 const resetZoom = () => {
     paper.project.view.zoom = .5;
-    paper.project.view.center = new paper.Point(ART_BOARD_WIDTH/2, ART_BOARD_HEIGHT/2)
+    paper.project.view.center = new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2);
     setWorkspaceBounds(true /* clipEmpty */);
     resizeCrosshair();
     clampViewBounds();
