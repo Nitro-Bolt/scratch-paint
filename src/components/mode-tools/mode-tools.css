@@ -44,7 +44,8 @@
     display: flex;
     margin: 0 -$grid-unit;
     min-width: 6.25rem;
-    padding: calc(3 * $grid-unit);
+    padding: calc(3 * $grid-unit) 2rem;
+    width: 100%;
     white-space: nowrap;
     cursor: pointer;
     transition: 0.1s ease;
@@ -62,7 +63,27 @@
     height: 1.25rem;
 }
 
+/* First item: top-left and top-right rounding */
+.mod-menu-item:first-child {
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+}
+
+/* Last item: bottom-right and bottom-left rounding */
+.mod-menu-item:last-child {
+    border-bottom-left-radius: .25rem;
+    border-bottom-right-radius: .25rem;
+}
+
+.mode-tools-mod {
+    padding: 0 12px !important;
+}
+
 [dir="rtl"] .menu-item-icon {
     margin-right: 0;
     margin-left: calc(2 * $grid-unit);
+}
+
+.Popover-body{
+    padding: 0 2rem;
 }
