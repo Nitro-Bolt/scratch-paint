@@ -25,6 +25,8 @@ let ART_BOARD_BOUNDS;
 let MAX_WORKSPACE_BOUNDS;
 /* eslint-enable import/no-mutable-exports */
 
+window.canvasSizeMultiplier = CANVAS_SIZE_MULTIPLIER;
+
 const resizeView = (width, height) => {
     SVG_ART_BOARD_WIDTH = width * CANVAS_SIZE_MULTIPLIER;
     SVG_ART_BOARD_HEIGHT = height * CANVAS_SIZE_MULTIPLIER;
