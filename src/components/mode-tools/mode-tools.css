@@ -44,7 +44,7 @@
     display: flex;
     margin: 0 -$grid-unit;
     min-width: 6.25rem;
-    padding: calc(3 * $grid-unit) 2rem;
+    padding: calc(3 * $grid-unit) 1rem;
     width: 100%;
     white-space: nowrap;
     cursor: pointer;
@@ -85,5 +85,5 @@
 }
 
 .Popover-body{
-    padding: 0 2rem;
+    padding: 0 1rem !important;
 }
