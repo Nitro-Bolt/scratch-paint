@@ -4,6 +4,8 @@
 
 .mode-tools {
     display: flex;
+    flex-wrap: wrap;
+    max-width: 32rem; /* approx. 7 buttons */
     min-height: 3rem;
     align-items: center;
 }
