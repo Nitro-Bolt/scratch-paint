@@ -24,7 +24,7 @@ import {setCustomFonts} from '../reducers/custom-fonts';
 
 import {getSelectedLeafItems} from '../helper/selection';
 import {convertToBitmap, convertToVector} from '../helper/bitmap';
-import {resizeView, resetZoom, zoomOnSelection, OUTERMOST_ZOOM_LEVEL} from '../helper/view';
+import {resizeView, setCanvasSizeMultiplier, resetZoom, zoomOnSelection, OUTERMOST_ZOOM_LEVEL} from '../helper/view';
 import EyeDropperTool from '../helper/tools/eye-dropper';
 import {setNudgeMultiplier} from '../helper/selection-tools/nudge-tool';
 
@@ -103,6 +103,7 @@ class PaintEditor extends React.Component {
         this.props.setLayout(this.props.rtl ? 'rtl' : 'ltr');
         this.props.onCustomFontsChanged(this.props.customFonts);
         setNudgeMultiplier(this.props.nudgeMultiplier || 15);
+        setCanvasSizeMultiplier(this.props.canvasSizeMultiplier || 2);
         resizeView(this.props.width, this.props.height);
     }
     componentDidMount () {
@@ -132,6 +133,10 @@ class PaintEditor extends React.Component {
         }
         if (newProps.nudgeMultiplier !== this.props.nudgeMultiplier) {
             setNudgeMultiplier(newProps.nudgeMultiplier || 15);
+        }
+        if (newProps.canvasSizeMultiplier !== this.props.canvasSizeMultiplier) {
+            setCanvasSizeMultiplier(newProps.canvasSizeMultiplier || 2);
+            resizeView(newProps.width, newProps.height);
         }
     }
     componentDidUpdate (prevProps) {
@@ -431,6 +436,7 @@ PaintEditor.propTypes = {
     mode: PropTypes.oneOf(Object.keys(Modes)).isRequired,
     name: PropTypes.string,
     nudgeMultiplier: PropTypes.number,
+    canvasSizeMultiplier: PropTypes.number,
     noSwapButton: PropTypes.bool,
     noCutButton: PropTypes.bool,
     onDeactivateEyeDropper: PropTypes.func.isRequired,

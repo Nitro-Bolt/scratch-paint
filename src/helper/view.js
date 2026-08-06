@@ -19,13 +19,18 @@ const BUFFER = 50; // Number of pixels of allowance around objects at the edges 
 const MIN_RATIO = .125; // Zoom in to at least 1/8 of the screen. This way you don't end up incredibly
 //                         zoomed in for tiny costumes.
 const OUTERMOST_ZOOM_LEVEL = 0.25;
-const CANVAS_SIZE_MULTIPLIER = 2; // Size multiplier for the canvas
-//                                   PS this needs to be changed to let when it's added as an option
+let CANVAS_SIZE_MULTIPLIER = 2; // Size multiplier for the canvas
+
 let ART_BOARD_BOUNDS;
 let MAX_WORKSPACE_BOUNDS;
 /* eslint-enable import/no-mutable-exports */
 
 window.canvasSizeMultiplier = CANVAS_SIZE_MULTIPLIER;
+
+const setCanvasSizeMultiplier = value => {
+    CANVAS_SIZE_MULTIPLIER = value;
+    window.canvasSizeMultiplier = value;
+};
 
 const resizeView = (width, height) => {
     SVG_ART_BOARD_WIDTH = width * CANVAS_SIZE_MULTIPLIER;
@@ -215,6 +220,7 @@ export {
     MAX_WORKSPACE_BOUNDS,
     CANVAS_SIZE_MULTIPLIER,
     resizeView,
+    setCanvasSizeMultiplier,
     clampViewBounds,
     getActionBounds,
     pan,
