@@ -164,7 +164,7 @@ $border-radius: 0.25rem;
     flex-wrap: wrap;
     align-items: flex-start;
     align-content: flex-start;
-    justify-content: space-between;
+    justify-content: center;
 }
 
 .zoom-controls {
