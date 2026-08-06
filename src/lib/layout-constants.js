@@ -1,4 +1,4 @@
 export default {
-    fullSizeEditorMinWidth: 1390,
-    referenceWidth: 480
+    fullSizeEditorMinWidth: 900,
+    referenceWidth: 500
 };
