@@ -5,7 +5,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import ScrollableCanvasComponent from '../components/scrollable-canvas/scrollable-canvas.jsx';
 
-import {clampViewBounds, pan, zoomOnFixedPoint, getWorkspaceBounds} from '../helper/view';
+import {clampViewBounds, pan, zoomOnFixedPoint, getWorkspaceBounds, CANVAS_SIZE_MULTIPLIER} from '../helper/view';
 import {updateViewBounds} from '../reducers/view-bounds';
 import {redrawSelectionBox} from '../reducers/selected-items';
 
@@ -173,12 +173,12 @@ class ScrollableCanvas extends React.Component {
         if (paper.project) {
             const bounds = getWorkspaceBounds();
             const {x, y, width, height} = paper.view.bounds;
-            widthPercent = Math.min(100, 100 * width / bounds.width);
-            heightPercent = Math.min(100, 100 * height / bounds.height);
+            widthPercent = Math.min(100, 100 * width / bounds.width) / CANVAS_SIZE_MULTIPLIER;
+            heightPercent = Math.min(100, 100 * height / bounds.height) / CANVAS_SIZE_MULTIPLIER;
             const centerX = (x + (width / 2) - bounds.x) / bounds.width;
             const centerY = (y + (height / 2) - bounds.y) / bounds.height;
-            topPercent = Math.max(0, (100 * centerY) - (heightPercent / 2));
-            leftPercent = Math.max(0, (100 * centerX) - (widthPercent / 2));
+            topPercent = Math.max(0, Math.min(101 - heightPercent,(100 * centerY) - (heightPercent / 2)));
+            leftPercent = Math.max(0, Math.min(101 - widthPercent, (100 * centerX) - (widthPercent / 2)));
         }
         return (
             <ScrollableCanvasComponent
