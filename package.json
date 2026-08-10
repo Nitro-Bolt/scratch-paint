@@ -1,17 +1,18 @@
 {
   "name": "scratch-paint",
   "version": "2.1.61",
+  "packageManager": "pnpm@10.33.0",
   "description": "Graphical User Interface for the Scratch 3.0 paint editor, which is used to make and edit sprites for use in projects.",
   "main": "./dist/scratch-paint.js",
   "browser": "./src/index.js",
   "scripts": {
-    "build": "npm run clean && webpack --progress --colors --bail",
+    "build": "pnpm run clean && webpack --progress --colors --bail",
     "clean": "rimraf ./dist && mkdirp dist && rimraf ./playground && mkdirp playground",
     "i18n:push": "tx-push-src scratch-editor paint-editor ./translations/en.json",
     "i18n:src": "rimraf ./translations/messages && babel src > tmp.js && rimraf tmp.js && ./scripts/build-i18n-source.js ./translations/messages/ ./translations/",
     "lint": "eslint . --ext .js,.jsx",
     "start": "webpack-dev-server",
-    "test": "npm run unit",
+    "test": "pnpm run unit",
     "unit": "jest --reporters=default",
     "watch": "webpack --progress --colors --watch"
   },
@@ -100,6 +101,11 @@
     "webpack": "4.47.0",
     "webpack-cli": "3.3.12",
     "webpack-dev-server": "3.11.2"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "core-js"
+    ]
   },
   "jest": {
     "setupFiles": [
