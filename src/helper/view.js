@@ -23,6 +23,7 @@ let CANVAS_SIZE_MULTIPLIER = 2; // Size multiplier for the canvas
 
 let ART_BOARD_BOUNDS;
 let MAX_WORKSPACE_BOUNDS;
+let _workspaceBounds;
 /* eslint-enable import/no-mutable-exports */
 
 window.canvasSizeMultiplier = CANVAS_SIZE_MULTIPLIER;
@@ -44,10 +45,9 @@ const resizeView = (width, height) => {
         -ART_BOARD_HEIGHT / 4,
         ART_BOARD_WIDTH * 1.5,
         ART_BOARD_HEIGHT * 1.5);
+    _workspaceBounds = ART_BOARD_BOUNDS;
 };
 resizeView(480, 360);
-
-let _workspaceBounds = ART_BOARD_BOUNDS;
 
 const getWorkspaceBounds = () => _workspaceBounds;
 
