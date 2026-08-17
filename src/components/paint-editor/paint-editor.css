@@ -145,7 +145,6 @@ $border-radius: 0.25rem;
     flex-flow: column;
     flex-grow: 1;
     margin-left: calc(2 * $grid-unit);
-    margin-right: calc(2 * $grid-unit);
 }
 
 .canvas-container {
