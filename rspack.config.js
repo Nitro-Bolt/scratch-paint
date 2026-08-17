@@ -3,7 +3,7 @@ const path = require('path');
 
 // Plugins
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const rspack = require('@rspack/core');
 
 // PostCss
 const autoprefixer = require('autoprefixer');
@@ -19,7 +19,6 @@ const base = {
             loader: 'babel-loader',
             include: path.resolve(__dirname, 'src'),
             options: {
-                plugins: ['transform-object-rest-spread'],
                 presets: [
                     ['@babel/preset-env', {
                         targets: ['last 3 versions', 'Safari >= 8', 'iOS >= 8']}],
@@ -33,38 +32,44 @@ const base = {
             }, {
                 loader: 'css-loader',
                 options: {
+                    esModule: false,
                     modules: {
-                        localIdentName: '[name]_[local]_[hash:base64:5]'
+                        localIdentName: '[name]_[local]_[hash:base64:5]',
+                        exportLocalsConvention: 'camel-case'
                     },
                     importLoaders: 1,
-                    localsConvention: 'camelCase'
                 }
             }, {
                 loader: 'postcss-loader',
                 options: {
-                    ident: 'postcss',
-                    plugins: function () {
-                        return [
-                            postcssImport,
-                            postcssVars,
+                    postcssOptions: {
+                        plugins: [
+                            postcssImport(),
+                            postcssVars(),
                             autoprefixer()
-                        ];
+                        ]
                     }
                 }
             }]
         },
         {
             test: /\.png$/i,
-            loader: 'url-loader'
+            type: 'asset/inline'
         },
         {
             test: /\.svg$/,
-            loader: 'svg-url-loader?noquotes'
+            resourceQuery: /recolor/,
+            use: [path.resolve(__dirname, 'src/tw-recolor/build.js')]
+        },
+        {
+            test: /\.svg$/,
+            resourceQuery: {not: /recolor/},
+            type: 'asset/inline'
         }]
     },
     optimization: {
         minimizer: [
-            new UglifyJsPlugin({
+            new rspack.SwcJsMinimizerRspackPlugin({
                 include: /\.min\.js$/
             })
         ]
@@ -76,7 +81,9 @@ module.exports = [
     // For the playground
     defaultsDeep({}, base, {
         devServer: {
-            contentBase: path.resolve(__dirname, 'playground'),
+            static: {
+                directory: path.resolve(__dirname, 'playground')
+            },
             host: '0.0.0.0',
             port: process.env.PORT || 8078
         },

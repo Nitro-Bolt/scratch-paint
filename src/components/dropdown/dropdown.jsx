@@ -6,7 +6,7 @@ import React from 'react';
 
 import styles from './dropdown.css';
 
-import dropdownIcon from '!../../tw-recolor/build!./dropdown-caret.svg';
+import dropdownIcon from './dropdown-caret.svg?recolor';
 import TWRenderRecoloredImage from '../../tw-recolor/render.jsx';
 
 class Dropdown extends React.Component {

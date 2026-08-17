@@ -39,7 +39,7 @@ import Formats, {isBitmap, isVector} from '../../lib/format';
 import styles from './paint-editor.css';
 
 import bitmapIcon from './icons/bitmap.svg';
-import swapIcon from '!../../tw-recolor/build!./icons/swap.svg';
+import swapIcon from './icons/swap.svg?recolor';
 import zoomInIcon from './icons/zoom-in.svg';
 import zoomOutIcon from './icons/zoom-out.svg';
 import zoomResetIcon from './icons/zoom-reset.svg';
