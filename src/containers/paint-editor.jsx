@@ -367,6 +367,7 @@ class PaintEditor extends React.Component {
                 imageId={this.props.imageId}
                 isEyeDropping={this.props.isEyeDropping}
                 name={this.props.name}
+                sharedAssetControl={this.props.sharedAssetControl}
                 rotationCenterX={this.props.rotationCenterX}
                 rotationCenterY={this.props.rotationCenterY}
                 rtl={this.props.rtl}
@@ -397,6 +398,7 @@ class PaintEditor extends React.Component {
 }
 
 PaintEditor.propTypes = {
+    sharedAssetControl: PropTypes.node,
     changeColorToEyeDropper: PropTypes.func,
     changeMode: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,

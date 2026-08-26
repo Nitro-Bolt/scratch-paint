@@ -112,6 +112,7 @@ const FixedToolsComponent = props => {
                     />
                 </MediaQuery>
             </InputGroup>
+            {props.sharedAssetControl}
 
             {/* Undo/Redo */}
             <InputGroup>
@@ -296,6 +297,7 @@ const FixedToolsComponent = props => {
 };
 
 FixedToolsComponent.propTypes = {
+    sharedAssetControl: PropTypes.node,
     canRedo: PropTypes.func.isRequired,
     canUndo: PropTypes.func.isRequired,
     format: PropTypes.oneOf(Object.keys(Formats)),

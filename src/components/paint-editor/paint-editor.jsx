@@ -78,6 +78,7 @@ const PaintEditorComponent = props => (
                         canRedo={props.canRedo}
                         canUndo={props.canUndo}
                         name={props.name}
+                        sharedAssetControl={props.sharedAssetControl}
                         onRedo={props.onRedo}
                         onUndo={props.onUndo}
                         onUpdateImage={props.onUpdateImage}
@@ -349,6 +350,7 @@ const PaintEditorComponent = props => (
 );
 
 PaintEditorComponent.propTypes = {
+    sharedAssetControl: PropTypes.node,
     canRedo: PropTypes.func.isRequired,
     canUndo: PropTypes.func.isRequired,
     canvas: PropTypes.instanceOf(Element),

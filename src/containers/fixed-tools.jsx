@@ -58,6 +58,7 @@ class FixedTools extends React.Component {
                 canRedo={this.props.canRedo}
                 canUndo={this.props.canUndo}
                 name={this.props.name}
+                sharedAssetControl={this.props.sharedAssetControl}
                 onGroup={this.handleGroup}
                 onRedo={this.props.onRedo}
                 onSendBackward={this.handleSendBackward}
@@ -75,6 +76,7 @@ class FixedTools extends React.Component {
 }
 
 FixedTools.propTypes = {
+    sharedAssetControl: PropTypes.node,
     canRedo: PropTypes.func.isRequired,
     canUndo: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
