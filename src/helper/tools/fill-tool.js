@@ -115,7 +115,10 @@ class FillTool extends paper.Tool {
         // Still hitting the same thing
         if (!hitTargetChanged) {
             // Only radial gradient needs to be updated
-            if (this.gradientType === GradientTypes.RADIAL) {
+            const isRadial = this.gradientType === GradientTypes.RADIAL ||
+                (this.gradientType === GradientTypes.CUSTOM &&
+                    this.customGradient && this.customGradient.type === 'radial');
+            if (isRadial) {
                 this._setFillItemColor(this.fillColor, this.fillColor2, this.gradientType, event.point);
             }
             return;
