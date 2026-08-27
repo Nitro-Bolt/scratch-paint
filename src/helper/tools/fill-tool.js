@@ -12,7 +12,7 @@ class FillTool extends paper.Tool {
      * @param {function} setHoveredItem Callback to set the hovered item
      * @param {function} clearHoveredItem Callback to clear the hovered item
      * @param {!function} onUpdateImage A callback to call when the image visibly changes
-     * @param {!function} onUpdateImage Callback to add a color to the recent colors list
+     * @param {!function} onAddRecentColor Callback to add a color to the recent colors list
      */
     constructor (setHoveredItem, clearHoveredItem, onUpdateImage, onAddRecentColor) {
         super();
@@ -31,6 +31,7 @@ class FillTool extends paper.Tool {
         this.fillColor = null;
         this.fillColor2 = null;
         this.gradientType = null;
+        this.customGradient = null;
 
         // The path that's being hovered over.
         this.fillItem = null;
@@ -83,6 +84,9 @@ class FillTool extends paper.Tool {
     }
     setGradientType (gradientType) {
         this.gradientType = gradientType;
+    }
+    setCustomGradient (customGradient) {
+        this.customGradient = customGradient;
     }
     /**
      * To be called when the hovered item changes. When the select tool hovers over a
@@ -198,7 +202,9 @@ class FillTool extends paper.Tool {
             this.fillProperty = null;
             this.addedFillItem = null;
             this.fillItemOrigColor = null;
-            if (this.fillColor) this.onAddRecentColor(this.fillColor, this.fillColor2, this.gradientType);
+            if (this.fillColor && this.gradientType !== GradientTypes.CUSTOM) {
+                this.onAddRecentColor(this.fillColor, this.fillColor2, this.gradientType);
+            }
             this.onUpdateImage();
         }
     }
@@ -222,8 +228,10 @@ class FillTool extends paper.Tool {
                 gradientType,
                 item.bounds,
                 pointerLocation,
-                item.strokeWidth
+                item.strokeWidth,
+                this.customGradient
             );
+            if (this.customGradient) item[colorProp].customGradient = this.customGradient;
         } else {
             item[colorProp] = color1;
         }

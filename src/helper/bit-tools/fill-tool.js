@@ -24,6 +24,7 @@ class FillTool extends paper.Tool {
         this.color = null;
         this.color2 = null;
         this.gradientType = null;
+        this.customGradient = null;
         this.active = false;
     }
     setColor (color) {
@@ -34,6 +35,9 @@ class FillTool extends paper.Tool {
     }
     setGradientType (gradientType) {
         this.gradientType = gradientType;
+    }
+    setCustomGradient (customGradient) {
+        this.customGradient = customGradient;
     }
     handleMouseDown (event) {
         this.paint(event);
@@ -85,7 +89,10 @@ class FillTool extends paper.Tool {
                     this.color2,
                     this.gradientType,
                     gradient.bounds,
-                    event.point);
+                    event.point,
+                    null,
+                    this.customGradient);
+                if (this.customGradient) gradient.fillColor.customGradient = this.customGradient;
                 const rasterGradient = gradient.rasterize(getRaster().resolution.width, false /* insert */);
 
                 // Mask gradient

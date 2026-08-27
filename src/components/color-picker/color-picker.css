@@ -109,6 +109,33 @@ body :global(.Popover) {
     user-select: none;
 }
 
+.custom-gradient-button {
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border: 1px solid $ui-pane-border;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 18px;
+    font-weight: bold;
+    text-shadow: 0 1px 2px black, 0 0 3px black;
+}
+
+.active-custom-gradient {
+    border-color: $looks-secondary;
+    box-shadow: 0 0 0 2px $looks-transparent;
+}
+
+[dir="ltr"] .gradient-picker-row > .custom-gradient-button {
+    margin-left: calc(2 * $grid-unit);
+}
+
+[dir="rtl"] .gradient-picker-row > .custom-gradient-button {
+    margin-right: calc(2 * $grid-unit);
+}
+
 [dir="ltr"] .gradient-picker-row > img + img {
     margin-left: calc(2 * $grid-unit);
 }

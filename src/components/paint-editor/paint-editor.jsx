@@ -98,6 +98,7 @@ const PaintEditorComponent = props => (
                             {/* fill */}
                             <FillColorIndicatorComponent
                                 className={styles.modMarginAfter}
+                                onOpenCustomGradient={props.onOpenCustomGradient}
                                 onUpdateImage={props.onUpdateImage}
                             />
                             {/* swap colors */}
@@ -111,6 +112,7 @@ const PaintEditorComponent = props => (
                             )}
                             {/* stroke */}
                             <StrokeColorIndicatorComponent
+                                onOpenCustomGradient={props.onOpenCustomGradient}
                                 onUpdateImage={props.onUpdateImage}
                             />
                             {/* stroke width */}
@@ -140,6 +142,7 @@ const PaintEditorComponent = props => (
                                 {/* fill */}
                                 <FillColorIndicatorComponent
                                     className={styles.modMarginAfter}
+                                    onOpenCustomGradient={props.onOpenCustomGradient}
                                     onUpdateImage={props.onUpdateImage}
                                 />
                             </InputGroup>
@@ -367,6 +370,7 @@ PaintEditorComponent.propTypes = {
     noCutButton: PropTypes.bool,
     onChangeTheme: PropTypes.func.isRequired,
     onManageFonts: PropTypes.func,
+    onOpenCustomGradient: PropTypes.func.isRequired,
     onRedo: PropTypes.func.isRequired,
     onSwapColors: PropTypes.func.isRequired,
     onSwitchToBitmap: PropTypes.func.isRequired,

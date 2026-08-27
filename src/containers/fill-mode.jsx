@@ -44,6 +44,9 @@ class FillMode extends React.Component {
             if (nextProps.fillModeGradientType !== this.props.fillModeGradientType) {
                 this.tool.setGradientType(nextProps.fillModeGradientType);
             }
+            if (nextProps.customGradient !== this.props.customGradient) {
+                this.tool.setCustomGradient(nextProps.customGradient);
+            }
         }
 
         if (nextProps.isFillModeActive && !this.props.isFillModeActive) {
@@ -92,6 +95,7 @@ class FillMode extends React.Component {
         this.tool.setFillColor(fillColor);
         this.tool.setFillColor2(fillColor2);
         this.tool.setGradientType(gradientType);
+        this.tool.setCustomGradient(this.props.customGradient);
         this.tool.setPrevHoveredItemId(this.props.hoveredItemId);
         this.tool.activate();
     }
@@ -116,12 +120,14 @@ FillMode.propTypes = {
     clearSelectedItems: PropTypes.func.isRequired,
     fillColor: PropTypes.string,
     fillColor2: PropTypes.string,
+    customGradient: PropTypes.object,
     fillStyleGradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
     fillModeGradientType: PropTypes.oneOf(Object.keys(GradientTypes)),
     handleMouseDown: PropTypes.func.isRequired,
     hoveredItemId: PropTypes.number,
     isFillModeActive: PropTypes.bool.isRequired,
     onChangeFillColor: PropTypes.func.isRequired,
+    onAddRecentColor: PropTypes.func.isRequired,
     onUpdateImage: PropTypes.func.isRequired,
     setHoveredItem: PropTypes.func.isRequired
 };
@@ -130,6 +136,7 @@ const mapStateToProps = state => ({
     fillModeGradientType: state.scratchPaint.fillMode.gradientType, // Last user-selected gradient type
     fillColor: state.scratchPaint.color.fillColor.primary,
     fillColor2: state.scratchPaint.color.fillColor.secondary,
+    customGradient: state.scratchPaint.color.fillColor.customGradient,
     fillStyleGradientType: state.scratchPaint.color.fillColor.gradientType, // Selected item(s)' gradient type
     hoveredItemId: state.scratchPaint.hoveredItemId,
     isFillModeActive: state.scratchPaint.mode === Modes.FILL

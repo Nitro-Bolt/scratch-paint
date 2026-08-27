@@ -3,6 +3,7 @@ import makeColorStyleReducer from '../lib/make-color-style-reducer';
 const CHANGE_STROKE_COLOR = 'scratch-paint/stroke-style/CHANGE_STROKE_COLOR';
 const CHANGE_STROKE_COLOR_2 = 'scratch-paint/stroke-style/CHANGE_STROKE_COLOR_2';
 const CHANGE_STROKE_GRADIENT_TYPE = 'scratch-paint/stroke-style/CHANGE_STROKE_GRADIENT_TYPE';
+const CHANGE_STROKE_CUSTOM_GRADIENT = 'scratch-paint/stroke-style/CHANGE_STROKE_CUSTOM_GRADIENT';
 const CLEAR_STROKE_GRADIENT = 'scratch-paint/stroke-style/CLEAR_STROKE_GRADIENT';
 const DEFAULT_COLOR = '#000000';
 
@@ -12,11 +13,13 @@ const reducer = makeColorStyleReducer({
     changePrimaryColorAction: CHANGE_STROKE_COLOR,
     changeSecondaryColorAction: CHANGE_STROKE_COLOR_2,
     changeGradientTypeAction: CHANGE_STROKE_GRADIENT_TYPE,
+    changeCustomGradientAction: CHANGE_STROKE_CUSTOM_GRADIENT,
     clearGradientAction: CLEAR_STROKE_GRADIENT,
     defaultColor: DEFAULT_COLOR,
     selectionPrimaryColorKey: 'strokeColor',
     selectionSecondaryColorKey: 'strokeColor2',
-    selectionGradientTypeKey: 'strokeGradientType'
+    selectionGradientTypeKey: 'strokeGradientType',
+    selectionCustomGradientKey: 'strokeCustomGradient'
 });
 
 // This is mostly the same as the generated reducer, but with one piece of extra logic to set the color to null when the
@@ -57,6 +60,11 @@ const changeStrokeGradientType = function (gradientType) {
     };
 };
 
+const changeStrokeCustomGradient = customGradient => ({
+    type: CHANGE_STROKE_CUSTOM_GRADIENT,
+    customGradient
+});
+
 const clearStrokeGradient = function () {
     return {
         type: CLEAR_STROKE_GRADIENT
@@ -68,6 +76,7 @@ export {
     changeStrokeColor,
     changeStrokeColor2,
     changeStrokeGradientType,
+    changeStrokeCustomGradient,
     clearStrokeGradient,
     DEFAULT_COLOR,
     CHANGE_STROKE_GRADIENT_TYPE

@@ -10,7 +10,7 @@ import styles from './color-button.css';
 import GradientTypes from '../../lib/gradient-types';
 import log from '../../log/log';
 
-const colorToBackground = (color, color2, gradientType) => {
+const colorToBackground = (color, color2, gradientType, customGradient) => {
     if (color === MIXED || (gradientType !== GradientTypes.SOLID && color2 === MIXED)) return 'white';
     if (color === null) color = 'white';
     if (color2 === null) color2 = 'white';
@@ -19,6 +19,11 @@ const colorToBackground = (color, color2, gradientType) => {
     case GradientTypes.HORIZONTAL: return `linear-gradient(to right, ${color}, ${color2})`;
     case GradientTypes.VERTICAL: return `linear-gradient(${color}, ${color2})`;
     case GradientTypes.RADIAL: return `radial-gradient(${color}, ${color2})`;
+    case GradientTypes.CUSTOM:
+        if (!customGradient) return color;
+        return `${customGradient.type}-gradient(${customGradient.type === 'linear' ?
+            `${customGradient.angle}deg, ` : ''}${customGradient.stops.map(stop =>
+            `${stop.color} ${stop.offset * 100}%`).join(', ')})`;
     default: log.error(`Unrecognized gradient type: ${gradientType}`);
     }
 };
@@ -27,15 +32,15 @@ const ColorButtonComponent = props => (
     <div
         className={styles.colorButton}
         onClick={props.onClick}
-        style={props.size ? {width: props.size, height: props.size} : {} }
+        style={props.size ? {width: props.size, height: props.size} : {}}
     >
         <div
             className={classNames(styles.colorButtonSwatch, {
                 [styles.outlineSwatch]: props.outline && !(props.color === MIXED)
-            }, props.noArrow !== true ? styles.colorButtonSwatchWithArrow : null)}
+            }, props.noArrow ? null : styles.colorButtonSwatchWithArrow)}
             style={Object.assign({
-                background: colorToBackground(props.color, props.color2, props.gradientType)
-            }, props.size ? {flexBasis: props.size} : {} )}
+                background: colorToBackground(props.color, props.color2, props.gradientType, props.customGradient)
+            }, props.size ? {flexBasis: props.size} : {})}
         >
             {props.color === null && (props.gradientType === GradientTypes.SOLID || props.color2 === null) ? (
                 <img
@@ -59,6 +64,7 @@ ColorButtonComponent.propTypes = {
     color: PropTypes.string,
     color2: PropTypes.string,
     gradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
+    customGradient: PropTypes.object,
     onClick: PropTypes.func.isRequired,
     outline: PropTypes.bool.isRequired,
     noArrow: PropTypes.bool,

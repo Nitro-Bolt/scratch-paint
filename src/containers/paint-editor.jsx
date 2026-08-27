@@ -243,7 +243,7 @@ class PaintEditor extends React.Component {
     }
     handleSwapColors () {
         const toHex = color => {
-            if (!color || /^#[0-9a-f]{3,8}$/i.test(color)) return color
+            if (!color || /^#[0-9a-f]{3,8}$/i.test(color)) return color;
             try {
                 return new paper.Color(color).toCSS(true);
             } catch (e) {
@@ -379,6 +379,7 @@ class PaintEditor extends React.Component {
                 zoomLevelId={this.props.zoomLevelId}
                 onChangeTheme={this.handleChangeTheme}
                 onManageFonts={this.props.onManageFonts}
+                onOpenCustomGradient={this.props.onOpenCustomGradient}
                 onRedo={this.props.onRedo}
                 noSwapButton={this.props.noSwapButton}
                 noCutButton={this.props.noCutButton}
@@ -422,6 +423,7 @@ PaintEditor.propTypes = {
     })).isRequired,
     onCustomFontsChanged: PropTypes.func.isRequired,
     onManageFonts: PropTypes.func,
+    onOpenCustomGradient: PropTypes.func,
     format: PropTypes.oneOf(Object.keys(Formats)), // Internal, up-to-date data format
     fontInlineFn: PropTypes.func,
     handleSwitchToBitmap: PropTypes.func.isRequired,
@@ -468,6 +470,7 @@ PaintEditor.propTypes = {
 };
 
 PaintEditor.defaultProps = {
+    onOpenCustomGradient: () => {},
     width: 480,
     height: 360,
     theme: 'light',
