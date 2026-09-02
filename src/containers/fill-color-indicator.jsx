@@ -2,13 +2,15 @@ import {connect} from 'react-redux';
 import {defineMessages} from 'react-intl';
 
 import {changeColorIndex} from '../reducers/color-index';
-import {changeFillColor, changeFillColor2} from '../reducers/fill-style';
+import {changeFillColor, changeFillColor2, changeFillCustomGradient} from '../reducers/fill-style';
 import {changeGradientType} from '../reducers/fill-mode-gradient-type';
 import {openFillColor, closeFillColor} from '../reducers/modals';
 import {getSelectedLeafItems} from '../helper/selection';
 import {setSelectedItems} from '../reducers/selected-items';
+import {addRecentColor} from '../reducers/nb-recent-colors.js';
 import Modes, {GradientToolsModes} from '../lib/modes';
 import {isBitmap} from '../lib/format';
+import GradientTypes from '../lib/gradient-types';
 
 import makeColorIndicator from './color-indicator.jsx';
 
@@ -31,6 +33,7 @@ const mapStateToProps = state => ({
     fillBitmapShapes: state.scratchPaint.fillBitmapShapes,
     format: state.scratchPaint.format,
     gradientType: state.scratchPaint.color.fillColor.gradientType,
+    customGradient: state.scratchPaint.color.fillColor.customGradient,
     isEyeDropping: state.scratchPaint.color.eyeDropper.active,
     mode: state.scratchPaint.mode,
     shouldShowGradientTools: state.scratchPaint.mode in GradientToolsModes,
@@ -48,6 +51,9 @@ const mapDispatchToProps = dispatch => ({
             dispatch(changeFillColor2(fillColor));
         }
     },
+    onAddRecentColor: (primary, secondary, gradientType) => {
+        dispatch(addRecentColor(primary, secondary, gradientType));
+    },
     onOpenColor: () => {
         dispatch(openFillColor());
     },
@@ -56,6 +62,10 @@ const mapDispatchToProps = dispatch => ({
     },
     onChangeGradientType: gradientType => {
         dispatch(changeGradientType(gradientType));
+    },
+    onChangeCustomGradient: customGradient => {
+        dispatch(changeFillCustomGradient(customGradient));
+        dispatch(changeGradientType(GradientTypes.CUSTOM));
     },
     setSelectedItems: format => {
         dispatch(setSelectedItems(getSelectedLeafItems(), isBitmap(format)));

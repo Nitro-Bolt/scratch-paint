@@ -26,6 +26,7 @@ import Input from '../forms/input.jsx';
 import {makeAlphaComponent} from '../../lib/tw-color-utils';
 import TWColorReadout from '../tw-color-readout/tw-color-readout.jsx';
 import TWRenderRecoloredImage from '../../tw-recolor/render.jsx';
+import RecentColorsContainer from '../../containers/nb-recent-colors.jsx';
 
 const BufferedInput = BufferedInputHOC(Input);
 
@@ -39,9 +40,21 @@ const messages = defineMessages({
         defaultMessage: 'Swap',
         description: 'Label for button that swaps the two colors in a gradient',
         id: 'paint.colorPicker.swap'
+    },
+    customGradient: {
+        defaultMessage: 'Custom Gradient',
+        description: 'Label for the custom gradient editor button',
+        id: 'paint.colorPicker.customGradient'
     }
 });
 class ColorPickerComponent extends React.Component {
+    handleRecentColorUpdate () {}
+    _makeCustomGradientBackground () {
+        const {type, angle, stops} = this.props.customGradient;
+        const direction = type === 'linear' ? `${angle}deg, ` : '';
+        return `${type}-gradient(${direction}${stops.map(stop =>
+            `${stop.color} ${stop.offset * 100}%`).join(', ')})`;
+    }
     _makeBackground (channel) {
         const stops = [];
         // Generate the color slider background CSS gradients by adding
@@ -137,80 +150,93 @@ class ColorPickerComponent extends React.Component {
                                     width={20}
                                     height={20}
                                 />
+                                <button
+                                    className={classNames(styles.customGradientButton, {
+                                        [styles.activeCustomGradient]:
+                                            this.props.gradientType === GradientTypes.CUSTOM
+                                    })}
+                                    title={this.props.intl.formatMessage(messages.customGradient)}
+                                    type="button"
+                                    style={{background: this._makeCustomGradientBackground()}}
+                                    onClick={this.props.onToggleCustomGradient}
+                                >+</button>
                             </div>
                         </div>
                         <div className={styles.divider} />
-                        {this.props.gradientType === GradientTypes.SOLID ? null : (
-                            <div className={styles.row}>
-                                <div
-                                    className={classNames(
-                                        styles.gradientPickerRow,
-                                        styles.gradientSwatchesRow
-                                    )}
-                                >
+                        {this.props.gradientType === GradientTypes.SOLID ||
+                            this.props.gradientType === GradientTypes.CUSTOM ? null : (
+                                <div className={styles.row}>
                                     <div
-                                        className={classNames({
-                                            [styles.clickable]: true,
-                                            [styles.swatch]: true,
-                                            [styles.largeSwatch]: true,
-                                            [styles.activeSwatch]: this.props.colorIndex === 0
-                                        })}
-                                        style={{
-                                            backgroundColor: this.props.color === null || this.props.color === MIXED ?
-                                                'white' : this.props.color
-                                        }}
-                                        onClick={this.props.onSelectColor}
+                                        className={classNames(
+                                            styles.gradientPickerRow,
+                                            styles.gradientSwatchesRow
+                                        )}
                                     >
-                                        {this.props.color === null ? (
-                                            <img
-                                                className={styles.largeSwatchIcon}
-                                                draggable={false}
-                                                src={noFillIcon}
-                                            />
-                                        ) : this.props.color === MIXED ? (
-                                            <img
-                                                className={styles.largeSwatchIcon}
-                                                draggable={false}
-                                                src={mixedFillIcon}
-                                            />
-                                        ) : null}
-                                    </div>
-                                    <LabeledIconButton
-                                        className={styles.swapButton}
-                                        imgSrc={swapIcon}
-                                        title={this.props.intl.formatMessage(messages.swap)}
-                                        onClick={this.props.onSwap}
-                                    />
-                                    <div
-                                        className={classNames({
-                                            [styles.clickable]: true,
-                                            [styles.swatch]: true,
-                                            [styles.largeSwatch]: true,
-                                            [styles.activeSwatch]: this.props.colorIndex === 1
-                                        })}
-                                        style={{
-                                            backgroundColor: this.props.color2 === null || this.props.color2 === MIXED ?
-                                                'white' : this.props.color2
-                                        }}
-                                        onClick={this.props.onSelectColor2}
-                                    >
-                                        {this.props.color2 === null ? (
-                                            <img
-                                                className={styles.largeSwatchIcon}
-                                                draggable={false}
-                                                src={noFillIcon}
-                                            />
-                                        ) : this.props.color2 === MIXED ? (
-                                            <img
-                                                className={styles.largeSwatchIcon}
-                                                draggable={false}
-                                                src={mixedFillIcon}
-                                            />
-                                        ) : null}
+                                        <div
+                                            className={classNames({
+                                                [styles.clickable]: true,
+                                                [styles.swatch]: true,
+                                                [styles.largeSwatch]: true,
+                                                [styles.activeSwatch]: this.props.colorIndex === 0
+                                            })}
+                                            style={{
+                                                backgroundColor: this.props.color === null ||
+                                                    this.props.color === MIXED ?
+                                                    'white' : this.props.color
+                                            }}
+                                            onClick={this.props.onSelectColor}
+                                        >
+                                            {this.props.color === null ? (
+                                                <img
+                                                    className={styles.largeSwatchIcon}
+                                                    draggable={false}
+                                                    src={noFillIcon}
+                                                />
+                                            ) : this.props.color === MIXED ? (
+                                                <img
+                                                    className={styles.largeSwatchIcon}
+                                                    draggable={false}
+                                                    src={mixedFillIcon}
+                                                />
+                                            ) : null}
+                                        </div>
+                                        <LabeledIconButton
+                                            className={styles.swapButton}
+                                            imgSrc={swapIcon}
+                                            title={this.props.intl.formatMessage(messages.swap)}
+                                            onClick={this.props.onSwap}
+                                        />
+                                        <div
+                                            className={classNames({
+                                                [styles.clickable]: true,
+                                                [styles.swatch]: true,
+                                                [styles.largeSwatch]: true,
+                                                [styles.activeSwatch]: this.props.colorIndex === 1
+                                            })}
+                                            style={{
+                                                backgroundColor: this.props.color2 === null ||
+                                                    this.props.color2 === MIXED ?
+                                                    'white' : this.props.color2
+                                            }}
+                                            onClick={this.props.onSelectColor2}
+                                        >
+                                            {this.props.color2 === null ? (
+                                                <img
+                                                    className={styles.largeSwatchIcon}
+                                                    draggable={false}
+                                                    src={noFillIcon}
+                                                />
+                                            ) : this.props.color2 === MIXED ? (
+                                                <img
+                                                    className={styles.largeSwatchIcon}
+                                                    draggable={false}
+                                                    src={mixedFillIcon}
+                                                />
+                                            ) : null}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        )}
+                            )}
                     </div>
                 ) : null}
                 <div className={styles.row}>
@@ -302,6 +328,18 @@ class ColorPickerComponent extends React.Component {
                         />
                     </div>
                 </div>
+                <div className={styles.row}>
+                    <div className={styles.rowHeader}>
+                        <span className={styles.labelName}>
+                            <FormattedMessage
+                                defaultMessage="Recent Colors"
+                                description="Label for the recent colors component in the color picker"
+                                id="nw.paint.recentColors"
+                            />
+                        </span>
+                    </div>
+                    <RecentColorsContainer onUpdateImage={this.handleRecentColorUpdate} />
+                </div>
                 <div className={styles.pickerRow}>
                     <Input
                         type="color"
@@ -374,6 +412,7 @@ ColorPickerComponent.propTypes = {
     color2: PropTypes.string,
     colorIndex: PropTypes.number.isRequired,
     gradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
+    customGradient: PropTypes.object.isRequired,
     hue: PropTypes.number.isRequired,
     intl: intlShape.isRequired,
     isEyeDropping: PropTypes.bool.isRequired,
@@ -384,6 +423,7 @@ ColorPickerComponent.propTypes = {
     onChangeGradientTypeRadial: PropTypes.func.isRequired,
     onChangeGradientTypeSolid: PropTypes.func.isRequired,
     onChangeGradientTypeVertical: PropTypes.func.isRequired,
+    onToggleCustomGradient: PropTypes.func.isRequired,
     onHueChange: PropTypes.func.isRequired,
     onSaturationChange: PropTypes.func.isRequired,
     onSelectColor: PropTypes.func.isRequired,

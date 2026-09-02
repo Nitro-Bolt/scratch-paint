@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import React from 'react';
+import MediaQuery from 'react-responsive';
 
 import {changeBrushSize} from '../../reducers/brush-mode';
 import {changeBrushSize as changeEraserSize} from '../../reducers/eraser-mode';
@@ -21,6 +22,10 @@ import Modes from '../../lib/modes';
 import Formats, {isBitmap, isVector} from '../../lib/format';
 import {hideLabel} from '../../lib/hide-label';
 import styles from './mode-tools.css';
+import layout from '../../lib/layout-constants';
+import Dropdown from '../dropdown/dropdown.jsx';
+import Button from '../button/button.jsx';
+import TWRenderRecoloredImage from '../../tw-recolor/render.jsx';
 
 import copyIcon from '!../../tw-recolor/build!./icons/copy.svg';
 import cutIcon from '!../../tw-recolor/build!./icons/cut.svg';
@@ -37,6 +42,10 @@ import flipHorizontalIcon from '!../../tw-recolor/build!./icons/flip-horizontal.
 import flipVerticalIcon from '!../../tw-recolor/build!./icons/flip-vertical.svg';
 import centerIcon from '!../../tw-recolor/build!./icons/center.svg';
 import straightPointIcon from '!../../tw-recolor/build!./icons/straight-point.svg';
+import maskIcon from '!../../tw-recolor/build!./icons/mask.svg';
+import subtractIcon from '!../../tw-recolor/build!./icons/subtract.svg';
+import filterIcon from '!../../tw-recolor/build!./icons/filter.svg';
+import mergeIcon from '!../../tw-recolor/build!./icons/merge.svg';
 import roundRectIcon from '../rounded-rect-mode/rounded-rectangle.svg';
 import bitOvalIcon from '../bit-oval-mode/oval.svg';
 import bitRectIcon from '../bit-rect-mode/rectangle.svg';
@@ -122,6 +131,36 @@ const ModeToolsComponent = props => {
             defaultMessage: 'Rectangle Curve',
             description: 'Label for the rectangle curve input',
             id: 'paint.modeTools.rectRadius'
+        },
+        mask: {
+            defaultMessage: 'Mask',
+            description: 'Label for the `Mask intersections` button',
+            id: 'paint.paintEditor.mask'
+        },
+        subtract: {
+            defaultMessage: 'Subtract',
+            description: 'Label for the `Subtract intersections` button',
+            id: 'paint.paintEditor.subtract'
+        },
+        filter: {
+            defaultMessage: 'Filter',
+            description: 'Label for the `Filter intersections` button',
+            id: 'paint.paintEditor.filter'
+        },
+        merge: {
+            defaultMessage: 'Merge',
+            description: 'Label for the `Merge objects` button',
+            id: 'paint.paintEditor.merge'
+        },
+        masktools: {
+            defaultMessage: 'Booleans',
+            description: 'Label for dropdown to access the masking tools',
+            id: 'paint.paintEditor.masktools'
+        },
+        more: {
+            defaultMessage: 'More',
+            description: 'Label for dropdown to access more action buttons',
+            id: 'paint.paintEditor.more'
         }
     });
 
@@ -218,8 +257,6 @@ const ModeToolsComponent = props => {
             </div>
         );
     case Modes.BIT_SELECT:
-        /* falls through */
-    case Modes.SELECT:
         return (
             <div className={classNames(props.className, styles.modeTools)}>
                 <InputGroup className={classNames(styles.modDashedBorder, styles.modLabeledIconHeight)}>
@@ -230,11 +267,11 @@ const ModeToolsComponent = props => {
                         onClick={props.onCopyToClipboard}
                     />
                     <LabeledIconButton
-                            hideLabel={hideLabel(props.intl.locale)}
-                            imgSrc={cutIcon}
-                            title={props.intl.formatMessage(messages.cut)}
-                            onClick={props.onCutToClipboard}
-                        />
+                        hideLabel={hideLabel(props.intl.locale)}
+                        imgSrc={cutIcon}
+                        title={props.intl.formatMessage(messages.cut)}
+                        onClick={props.onCutToClipboard}
+                    />
                     <LabeledIconButton
                         disabled={!(props.clipboardItems.length > 0)}
                         hideLabel={hideLabel(props.intl.locale)}
@@ -251,26 +288,263 @@ const ModeToolsComponent = props => {
                         onClick={props.onDelete}
                     />
                 </InputGroup>
-                <InputGroup className={classNames(styles.modLabeledIconHeight)}>
+                <MediaQuery minWidth={layout.fullSizeEditorMinWidth}>
+                    <InputGroup className={classNames(styles.modDashedBorder)}>
+                        <LabeledIconButton
+                            hideLabel={props.intl.locale !== 'en'}
+                            imgSrc={flipHorizontalIcon}
+                            title={props.intl.formatMessage(messages.flipHorizontal)}
+                            onClick={props.onFlipHorizontal}
+                        />
+                        <LabeledIconButton
+                            hideLabel={props.intl.locale !== 'en'}
+                            imgSrc={flipVerticalIcon}
+                            title={props.intl.formatMessage(messages.flipVertical)}
+                            onClick={props.onFlipVertical}
+                        />
+                        <LabeledIconButton
+                            hideLabel={props.intl.locale !== 'en'}
+                            imgSrc={centerIcon}
+                            title={props.intl.formatMessage(messages.center)}
+                            onClick={props.onCenterSelection}
+                        />
+                    </InputGroup>
+                </MediaQuery>
+            </div>
+        );
+    case Modes.SELECT:
+        return (
+            <div className={classNames(props.className, styles.modeTools)}>
+                <InputGroup className={classNames(styles.modDashedBorder, styles.modLabeledIconHeight)}>
                     <LabeledIconButton
-                        hideLabel={props.intl.locale !== 'en'}
-                        imgSrc={flipHorizontalIcon}
-                        title={props.intl.formatMessage(messages.flipHorizontal)}
-                        onClick={props.onFlipHorizontal}
+                        hideLabel={hideLabel(props.intl.locale)}
+                        imgSrc={copyIcon}
+                        title={props.intl.formatMessage(messages.copy)}
+                        onClick={props.onCopyToClipboard}
                     />
+                    {!props.noCutButton && (
+                        <LabeledIconButton
+                            hideLabel={hideLabel(props.intl.locale)}
+                            imgSrc={cutIcon}
+                            title={props.intl.formatMessage(messages.cut)}
+                            onClick={props.onCutToClipboard}
+                        />
+                    )}
                     <LabeledIconButton
-                        hideLabel={props.intl.locale !== 'en'}
-                        imgSrc={flipVerticalIcon}
-                        title={props.intl.formatMessage(messages.flipVertical)}
-                        onClick={props.onFlipVertical}
-                    />
-                    <LabeledIconButton
-                        hideLabel={props.intl.locale !== 'en'}
-                        imgSrc={centerIcon}
-                        title={props.intl.formatMessage(messages.center)}
-                        onClick={props.onCenterSelection}
+                        disabled={!(props.clipboardItems.length > 0)}
+                        hideLabel={hideLabel(props.intl.locale)}
+                        imgSrc={pasteIcon}
+                        title={props.intl.formatMessage(messages.paste)}
+                        onClick={props.onPasteFromClipboard}
                     />
                 </InputGroup>
+                <InputGroup className={classNames(styles.modDashedBorder, styles.modLabeledIconHeight)}>
+                    <LabeledIconButton
+                        hideLabel={hideLabel(props.intl.locale)}
+                        imgSrc={deleteIcon}
+                        title={props.intl.formatMessage(messages.delete)}
+                        onClick={props.onDelete}
+                    />
+                </InputGroup>
+                <MediaQuery minWidth={layout.fullSizeEditorMinWidth}>
+                    <InputGroup className={classNames(styles.modDashedBorder)}>
+                        <LabeledIconButton
+                            hideLabel={props.intl.locale !== 'en'}
+                            imgSrc={flipHorizontalIcon}
+                            title={props.intl.formatMessage(messages.flipHorizontal)}
+                            onClick={props.onFlipHorizontal}
+                        />
+                        <LabeledIconButton
+                            hideLabel={props.intl.locale !== 'en'}
+                            imgSrc={flipVerticalIcon}
+                            title={props.intl.formatMessage(messages.flipVertical)}
+                            onClick={props.onFlipVertical}
+                        />
+                        <LabeledIconButton
+                            hideLabel={props.intl.locale !== 'en'}
+                            imgSrc={centerIcon}
+                            title={props.intl.formatMessage(messages.center)}
+                            onClick={props.onCenterSelection}
+                        />
+                    </InputGroup>
+                </MediaQuery>
+                <MediaQuery minWidth={layout.fullSizeEditorMinWidth}>
+                    <InputGroup>
+                        <Dropdown
+                            className={styles.modUnselect}
+                            enterExitTransitionDurationMs={20}
+                            popoverContent={
+                                <InputGroup
+                                    className={styles.modContextMenu}
+                                >
+                                    <Button
+                                        className={styles.modMenuItem}
+                                        onClick={props.onMask}
+                                    >
+                                        <TWRenderRecoloredImage
+                                            className={styles.menuItemIcon}
+                                            draggable={false}
+                                            src={maskIcon}
+                                        />
+                                        {props.intl.locale === 'en' &&
+                                            <span>{props.intl.formatMessage(messages.mask)}</span>
+                                        }
+                                    </Button>
+                                    <Button
+                                        className={styles.modMenuItem}
+                                        onClick={props.onFilter}
+                                    >
+                                        <TWRenderRecoloredImage
+                                            className={styles.menuItemIcon}
+                                            draggable={false}
+                                            src={filterIcon}
+                                        />
+                                        {props.intl.locale === 'en' &&
+                                            <span>{props.intl.formatMessage(messages.filter)}</span>
+                                        }
+                                    </Button>
+                                    <Button
+                                        className={styles.modMenuItem}
+                                        onClick={props.onSubtract}
+                                    >
+                                        <TWRenderRecoloredImage
+                                            className={styles.menuItemIcon}
+                                            draggable={false}
+                                            src={subtractIcon}
+                                        />
+                                        {props.intl.locale === 'en' &&
+                                            <span>{props.intl.formatMessage(messages.subtract)}</span>
+                                        }
+                                    </Button>
+                                    <Button
+                                        className={styles.modMenuItem}
+                                        onClick={props.onMerge}
+                                    >
+                                        <TWRenderRecoloredImage
+                                            className={styles.menuItemIcon}
+                                            draggable={false}
+                                            src={mergeIcon}
+                                        />
+                                        {props.intl.locale === 'en' &&
+                                            <span>{props.intl.formatMessage(messages.merge)}</span>
+                                        }
+                                    </Button>
+                                </InputGroup>
+                            }
+                            tipSize={.01}
+                        >
+                            {props.intl.formatMessage(messages.masktools)}
+                        </Dropdown>
+                    </InputGroup>
+                </MediaQuery>
+                <MediaQuery maxWidth={layout.fullSizeEditorMinWidth - 1}>
+                    <InputGroup>
+                        <Dropdown
+                            className={styles.modUnselect}
+                            enterExitTransitionDurationMs={20}
+                            popoverContent={
+                                <InputGroup
+                                    className={styles.modContextMenu}
+                                >
+                                    <Button
+                                        className={styles.modMenuItem}
+                                        onClick={props.onFlipHorizontal}
+                                    >
+                                        <TWRenderRecoloredImage
+                                            className={styles.menuItemIcon}
+                                            draggable={false}
+                                            src={flipHorizontalIcon}
+                                        />
+                                        {props.intl.locale === 'en' &&
+                                            <span>{props.intl.formatMessage(messages.flipHorizontal)}</span>
+                                        }
+                                    </Button>
+                                    <Button
+                                        className={styles.modMenuItem}
+                                        onClick={props.onFlipVertical}
+                                    >
+                                        <TWRenderRecoloredImage
+                                            className={styles.menuItemIcon}
+                                            draggable={false}
+                                            src={flipVerticalIcon}
+                                        />
+                                        {props.intl.locale === 'en' &&
+                                            <span>{props.intl.formatMessage(messages.flipVertical)}</span>
+                                        }
+                                    </Button>
+                                    <Button
+                                        className={styles.modMenuItem}
+                                        onClick={props.onCenterSelection}
+                                    >
+                                        <TWRenderRecoloredImage
+                                            className={styles.menuItemIcon}
+                                            draggable={false}
+                                            src={centerIcon}
+                                        />
+                                        {props.intl.locale === 'en' &&
+                                            <span>{props.intl.formatMessage(messages.center)}</span>
+                                        }
+                                    </Button>
+                                    <Button
+                                        className={styles.modMenuItem}
+                                        onClick={props.onMask}
+                                    >
+                                        <TWRenderRecoloredImage
+                                            className={styles.menuItemIcon}
+                                            draggable={false}
+                                            src={maskIcon}
+                                        />
+                                        {props.intl.locale === 'en' &&
+                                            <span>{props.intl.formatMessage(messages.mask)}</span>
+                                        }
+                                    </Button>
+                                    <Button
+                                        className={styles.modMenuItem}
+                                        onClick={props.onFilter}
+                                    >
+                                        <TWRenderRecoloredImage
+                                            className={styles.menuItemIcon}
+                                            draggable={false}
+                                            src={filterIcon}
+                                        />
+                                        {props.intl.locale === 'en' &&
+                                            <span>{props.intl.formatMessage(messages.filter)}</span>
+                                        }
+                                    </Button>
+                                    <Button
+                                        className={styles.modMenuItem}
+                                        onClick={props.onSubtract}
+                                    >
+                                        <TWRenderRecoloredImage
+                                            className={styles.menuItemIcon}
+                                            draggable={false}
+                                            src={subtractIcon}
+                                        />
+                                        {props.intl.locale === 'en' &&
+                                            <span>{props.intl.formatMessage(messages.subtract)}</span>
+                                        }
+                                    </Button>
+                                    <Button
+                                        className={styles.modMenuItem}
+                                        onClick={props.onMerge}
+                                    >
+                                        <TWRenderRecoloredImage
+                                            className={styles.menuItemIcon}
+                                            draggable={false}
+                                            src={mergeIcon}
+                                        />
+                                        {props.intl.locale === 'en' &&
+                                            <span>{props.intl.formatMessage(messages.merge)}</span>
+                                        }
+                                    </Button>
+                                </InputGroup>
+                            }
+                            tipSize={.01}
+                        >
+                            {props.intl.formatMessage(messages.more)}
+                        </Dropdown>
+                    </InputGroup>
+                </MediaQuery>
             </div>
         );
     case Modes.BIT_TEXT:
@@ -348,7 +622,7 @@ const ModeToolsComponent = props => {
                     range
                     small
                     max={MAX_STROKE_WIDTH}
-                    min="1"
+                    min="0"
                     type="number"
                     value={currentRadiusValue}
                     onSubmit={changeFunction}
@@ -364,6 +638,7 @@ const ModeToolsComponent = props => {
 };
 
 ModeToolsComponent.propTypes = {
+    noCutButton: PropTypes.bool,
     bitBrushSize: PropTypes.number,
     bitEraserSize: PropTypes.number,
     brushValue: PropTypes.number,
@@ -393,6 +668,10 @@ ModeToolsComponent.propTypes = {
     onPasteFromClipboard: PropTypes.func.isRequired,
     onPointPoints: PropTypes.func.isRequired,
     onUpdateImage: PropTypes.func.isRequired,
+    onMask: PropTypes.func,
+    onFilter: PropTypes.func,
+    onSubtract: PropTypes.func,
+    onMerge: PropTypes.func,
     rectRadius: PropTypes.number,
     onRectRadiusSliderChange: PropTypes.func
 };

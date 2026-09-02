@@ -39,6 +39,9 @@ class BitFillMode extends React.Component {
             if (nextProps.fillModeGradientType !== this.props.fillModeGradientType) {
                 this.tool.setGradientType(nextProps.fillModeGradientType);
             }
+            if (nextProps.customGradient !== this.props.customGradient) {
+                this.tool.setCustomGradient(nextProps.customGradient);
+            }
         }
 
         if (nextProps.isFillModeActive && !this.props.isFillModeActive) {
@@ -82,6 +85,7 @@ class BitFillMode extends React.Component {
         this.tool.setColor(color);
         this.tool.setColor2(color2);
         this.tool.setGradientType(gradientType);
+        this.tool.setCustomGradient(this.props.customGradient);
         this.tool.activate();
     }
     deactivateTool () {
@@ -104,6 +108,7 @@ BitFillMode.propTypes = {
     clearSelectedItems: PropTypes.func.isRequired,
     color: PropTypes.string,
     color2: PropTypes.string,
+    customGradient: PropTypes.object,
     styleGradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
     fillModeGradientType: PropTypes.oneOf(Object.keys(GradientTypes)),
     handleMouseDown: PropTypes.func.isRequired,
@@ -116,6 +121,7 @@ const mapStateToProps = state => ({
     fillModeGradientType: state.scratchPaint.fillMode.gradientType, // Last user-selected gradient type
     color: state.scratchPaint.color.fillColor.primary,
     color2: state.scratchPaint.color.fillColor.secondary,
+    customGradient: state.scratchPaint.color.fillColor.customGradient,
     styleGradientType: state.scratchPaint.color.fillColor.gradientType,
     isFillModeActive: state.scratchPaint.mode === Modes.BIT_FILL
 });

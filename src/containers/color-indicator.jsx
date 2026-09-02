@@ -11,6 +11,7 @@ import GradientTypes from '../lib/gradient-types';
 import ColorIndicatorComponent from '../components/color-indicator.jsx';
 import {applyColorToSelection,
     applyGradientTypeToSelection,
+    applyCustomGradientToSelection,
     applyStrokeWidthToSelection,
     generateSecondaryColor,
     swapColorsInSelection,
@@ -23,6 +24,7 @@ const makeColorIndicator = (label, isStroke) => {
             bindAll(this, [
                 'handleChangeColor',
                 'handleChangeGradientType',
+                'handleChangeCustomGradient',
                 'handleCloseColor',
                 'handleSwap'
             ]);
@@ -102,6 +104,16 @@ const makeColorIndicator = (label, isStroke) => {
             }
             if (this.props.onChangeGradientType) this.props.onChangeGradientType(gradientType);
         }
+        handleChangeCustomGradient (customGradient) {
+            const formatIsBitmap = isBitmap(this.props.format);
+            const isDifferent = applyCustomGradientToSelection(
+                customGradient,
+                isStroke || (formatIsBitmap && !this.props.fillBitmapShapes),
+                this.props.textEditTarget
+            );
+            this._hasChanged = this._hasChanged || isDifferent;
+            this.props.onChangeCustomGradient(customGradient);
+        }
         handleCloseColor () {
             // If the eyedropper is currently being used, don't
             // close the color menu.
@@ -112,6 +124,9 @@ const makeColorIndicator = (label, isStroke) => {
             // that `color1` is selected.
             this.props.onCloseColor();
             this.props.onChangeColorIndex(0);
+            if (this.props.onAddRecentColor && this.props.gradientType !== GradientTypes.CUSTOM) {
+                this.props.onAddRecentColor(this.props.color, this.props.color2, this.props.gradientType);
+            }
         }
         handleSwap () {
             if (getSelectedLeafItems().length) {
@@ -138,6 +153,8 @@ const makeColorIndicator = (label, isStroke) => {
                     outline={isStroke}
                     onChangeColor={this.handleChangeColor}
                     onChangeGradientType={this.handleChangeGradientType}
+                    onChangeCustomGradient={this.handleChangeCustomGradient}
+                    onOpenCustomGradient={this.props.onOpenCustomGradient}
                     onCloseColor={this.handleCloseColor}
                     onSwap={this.handleSwap}
                 />
@@ -154,11 +171,15 @@ const makeColorIndicator = (label, isStroke) => {
         fillBitmapShapes: PropTypes.bool.isRequired,
         format: PropTypes.oneOf(Object.keys(Formats)),
         gradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
+        customGradient: PropTypes.object,
         intl: intlShape,
         isEyeDropping: PropTypes.bool.isRequired,
+        onAddRecentColor: PropTypes.func,
         onChangeColorIndex: PropTypes.func.isRequired,
         onChangeColor: PropTypes.func.isRequired,
         onChangeGradientType: PropTypes.func,
+        onChangeCustomGradient: PropTypes.func.isRequired,
+        onOpenCustomGradient: PropTypes.func.isRequired,
         onChangeStrokeWidth: PropTypes.func,
         onCloseColor: PropTypes.func.isRequired,
         onUpdateImage: PropTypes.func.isRequired,

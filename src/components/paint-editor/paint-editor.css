@@ -120,6 +120,25 @@ $border-radius: 0.25rem;
     margin-left: calc(2 * $grid-unit);
 }
 
+[dir="ltr"] .swap-colors-button {
+    margin-right: calc(2 * $grid-unit);
+}
+
+[dir="rtl"] .swap-colors-button {
+    margin-left: calc(2 * $grid-unit);
+}
+
+.swap-colors-button:hover {
+    background: $ui-pane-border;
+}
+
+.swap-colors-button-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    vertical-align: middle;
+    filter: $filter-icon-gray;
+}
+
 .controls-container {
     width: 100%;
     display: flex;
@@ -141,12 +160,12 @@ $border-radius: 0.25rem;
 
 .mode-selector {
     display: flex;
-    max-width: 7.5rem;
+    max-width: 6rem;
     flex-direction: row;
     flex-wrap: wrap;
     align-items: flex-start;
     align-content: flex-start;
-    justify-content: space-between;
+    justify-content: center;
 }
 
 .left-canvas-controls {

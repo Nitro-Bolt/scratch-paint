@@ -40,10 +40,12 @@ import Formats, {isBitmap, isVector} from '../../lib/format';
 import styles from './paint-editor.css';
 
 import bitmapIcon from './icons/bitmap.svg';
+import swapIcon from '!../../tw-recolor/build!./icons/swap.svg';
 import zoomInIcon from './icons/zoom-in.svg';
 import zoomOutIcon from './icons/zoom-out.svg';
 import zoomResetIcon from './icons/zoom-reset.svg';
 import themeIcon from './icons/theme.svg';
+import LabeledIconButton from '../labeled-icon-button/labeled-icon-button.jsx';
 
 const messages = defineMessages({
     bitmap: {
@@ -55,6 +57,11 @@ const messages = defineMessages({
         defaultMessage: 'Convert to Vector',
         description: 'Label for button that converts the paint editor to vector mode',
         id: 'paint.paintEditor.vector'
+    },
+    swap: {
+        defaultMessage: 'Swap',
+        description: 'Label for button that swaps the fill and stroke colors',
+        id: 'paint.paintEditor.swap'
     }
 });
 
@@ -92,10 +99,21 @@ const PaintEditorComponent = props => (
                             {/* fill */}
                             <FillColorIndicatorComponent
                                 className={styles.modMarginAfter}
+                                onOpenCustomGradient={props.onOpenCustomGradient}
                                 onUpdateImage={props.onUpdateImage}
                             />
+                            {/* swap colors */}
+                            {!props.noSwapButton && (
+                                <LabeledIconButton
+                                    title={props.intl.formatMessage(messages.swap)}
+                                    imgSrc={swapIcon}
+                                    onClick={props.onSwapColors}
+                                    className={styles.swapColorsButton}
+                                />
+                            )}
                             {/* stroke */}
                             <StrokeColorIndicatorComponent
+                                onOpenCustomGradient={props.onOpenCustomGradient}
                                 onUpdateImage={props.onUpdateImage}
                             />
                             {/* stroke width */}
@@ -105,6 +123,7 @@ const PaintEditorComponent = props => (
                         </InputGroup>
                         <InputGroup className={styles.modModeTools}>
                             <ModeToolsContainer
+                                noCutButton={props.noCutButton}
                                 width={props.width}
                                 height={props.height}
                                 onUpdateImage={props.onUpdateImage}
@@ -124,6 +143,7 @@ const PaintEditorComponent = props => (
                                 {/* fill */}
                                 <FillColorIndicatorComponent
                                     className={styles.modMarginAfter}
+                                    onOpenCustomGradient={props.onOpenCustomGradient}
                                     onUpdateImage={props.onUpdateImage}
                                 />
                             </InputGroup>
@@ -357,9 +377,13 @@ PaintEditorComponent.propTypes = {
     intl: intlShape,
     isEyeDropping: PropTypes.bool,
     name: PropTypes.string,
+    noSwapButton: PropTypes.bool,
+    noCutButton: PropTypes.bool,
     onChangeTheme: PropTypes.func.isRequired,
     onManageFonts: PropTypes.func,
+    onOpenCustomGradient: PropTypes.func.isRequired,
     onRedo: PropTypes.func.isRequired,
+    onSwapColors: PropTypes.func.isRequired,
     onSwitchToBitmap: PropTypes.func.isRequired,
     onSwitchToVector: PropTypes.func.isRequired,
     onUndo: PropTypes.func.isRequired,

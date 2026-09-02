@@ -18,14 +18,24 @@ const PADDING_PERCENT = 25; // Padding as a percent of the max of width/height o
 const BUFFER = 50; // Number of pixels of allowance around objects at the edges of the workspace
 const MIN_RATIO = .125; // Zoom in to at least 1/8 of the screen. This way you don't end up incredibly
 //                         zoomed in for tiny costumes.
-const OUTERMOST_ZOOM_LEVEL = 0.333;
+const OUTERMOST_ZOOM_LEVEL = 0.25;
+let CANVAS_SIZE_MULTIPLIER = 2; // Size multiplier for the canvas
+
 let ART_BOARD_BOUNDS;
 let MAX_WORKSPACE_BOUNDS;
+let _workspaceBounds;
 /* eslint-enable import/no-mutable-exports */
 
+window.canvasSizeMultiplier = CANVAS_SIZE_MULTIPLIER;
+
+const setCanvasSizeMultiplier = value => {
+    CANVAS_SIZE_MULTIPLIER = value;
+    window.canvasSizeMultiplier = value;
+};
+
 const resizeView = (width, height) => {
-    SVG_ART_BOARD_WIDTH = width;
-    SVG_ART_BOARD_HEIGHT = height;
+    SVG_ART_BOARD_WIDTH = width * CANVAS_SIZE_MULTIPLIER;
+    SVG_ART_BOARD_HEIGHT = height * CANVAS_SIZE_MULTIPLIER;
     ART_BOARD_WIDTH = SVG_ART_BOARD_WIDTH * 2;
     ART_BOARD_HEIGHT = SVG_ART_BOARD_HEIGHT * 2;
     CENTER = new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2);
@@ -35,10 +45,9 @@ const resizeView = (width, height) => {
         -ART_BOARD_HEIGHT / 4,
         ART_BOARD_WIDTH * 1.5,
         ART_BOARD_HEIGHT * 1.5);
+    _workspaceBounds = ART_BOARD_BOUNDS;
 };
 resizeView(480, 360);
-
-let _workspaceBounds = ART_BOARD_BOUNDS;
 
 const getWorkspaceBounds = () => _workspaceBounds;
 
@@ -88,22 +97,8 @@ const setWorkspaceBounds = clipEmpty => {
     _workspaceBounds = new paper.Rectangle(left, top, right - left, bottom - top);
 };
 
-const clampViewBounds = () => {
-    const {left, right, top, bottom} = paper.project.view.bounds;
-    if (left < _workspaceBounds.left) {
-        paper.project.view.scrollBy(new paper.Point(_workspaceBounds.left - left, 0));
-    }
-    if (top < _workspaceBounds.top) {
-        paper.project.view.scrollBy(new paper.Point(0, _workspaceBounds.top - top));
-    }
-    if (bottom > _workspaceBounds.bottom) {
-        paper.project.view.scrollBy(new paper.Point(0, _workspaceBounds.bottom - bottom));
-    }
-    if (right > _workspaceBounds.right) {
-        paper.project.view.scrollBy(new paper.Point(_workspaceBounds.right - right, 0));
-    }
-    setWorkspaceBounds();
-};
+// this is exported and I'm too lazy to fix it everywhere, so it just doesn't clamp anymore
+const clampViewBounds = () => null;
 
 const resizeCrosshair = () => {
     if (getDragCrosshairLayer() && getDragCrosshairLayer().dragCrosshair) {
@@ -156,6 +151,7 @@ const zoomOnSelection = deltaZoom => {
 
 const resetZoom = () => {
     paper.project.view.zoom = .5;
+    paper.project.view.center = new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2);
     setWorkspaceBounds(true /* clipEmpty */);
     resizeCrosshair();
     clampViewBounds();
@@ -222,7 +218,9 @@ export {
     SVG_ART_BOARD_WIDTH,
     SVG_ART_BOARD_HEIGHT,
     MAX_WORKSPACE_BOUNDS,
+    CANVAS_SIZE_MULTIPLIER,
     resizeView,
+    setCanvasSizeMultiplier,
     clampViewBounds,
     getActionBounds,
     pan,

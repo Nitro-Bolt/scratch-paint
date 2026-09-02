@@ -20,9 +20,12 @@ const ColorIndicatorComponent = props => (
                     color={props.color}
                     color2={props.color2}
                     gradientType={props.gradientType}
+                    customGradient={props.customGradient}
                     shouldShowGradientTools={props.shouldShowGradientTools}
                     onChangeColor={props.onChangeColor}
                     onChangeGradientType={props.onChangeGradientType}
+                    onChangeCustomGradient={props.onChangeCustomGradient}
+                    onOpenCustomGradient={props.onOpenCustomGradient}
                     onSwap={props.onSwap}
                 />
             }
@@ -35,6 +38,7 @@ const ColorIndicatorComponent = props => (
                     color={props.color}
                     color2={props.color2}
                     gradientType={props.gradientType}
+                    customGradient={props.customGradient}
                     onClick={props.onOpenColor}
                     outline={props.outline}
                 />
@@ -50,9 +54,12 @@ ColorIndicatorComponent.propTypes = {
     color2: PropTypes.string,
     colorModalVisible: PropTypes.bool.isRequired,
     gradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
+    customGradient: PropTypes.object,
     label: PropTypes.string.isRequired,
     onChangeColor: PropTypes.func.isRequired,
     onChangeGradientType: PropTypes.func.isRequired,
+    onChangeCustomGradient: PropTypes.func.isRequired,
+    onOpenCustomGradient: PropTypes.func.isRequired,
     onCloseColor: PropTypes.func.isRequired,
     onOpenColor: PropTypes.func.isRequired,
     onSwap: PropTypes.func.isRequired,

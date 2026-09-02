@@ -15,8 +15,10 @@ import {
     selectAllItems,
     selectAllSegments
 } from '../helper/selection';
+import {mask, subtract, filter, merge} from '../helper/intersecting.js';
 import {HANDLE_RATIO, ensureClockwise} from '../helper/math';
 import {getRaster} from '../helper/layer';
+import { CANVAS_SIZE_MULTIPLIER } from '../helper/view.js';
 import {flipBitmapHorizontal, flipBitmapVertical, selectAllBitmap} from '../helper/bitmap';
 import Formats, {isBitmap} from '../lib/format';
 import Modes from '../lib/modes';
@@ -35,7 +37,11 @@ class ModeTools extends React.Component {
             'handleCenterSelection',
             'handleDelete',
             'handlePasteFromClipboard',
-            'handlePointPoints'
+            'handlePointPoints',
+            'handleMask',
+            'handleSubtract',
+            'handleFilter',
+            'handleMerge'
         ]);
     }
     _getSelectedUncurvedPoints () {
@@ -195,9 +201,12 @@ class ModeTools extends React.Component {
         let selectedItems = getSelectedRootItems();
         if (selectedItems.length === 0) {
             if (isBitmap(this.props.format)) {
-                return;
+                selectAllBitmap(this.props.clearSelectedItems);
+                selectedItems = getSelectedRootItems();
+                if (selectedItems.length === 0) return;
+            } else {
+                selectedItems = getAllRootItems();
             }
-            selectedItems = getAllRootItems();
         }
 
         for (const item of selectedItems) {
@@ -205,7 +214,7 @@ class ModeTools extends React.Component {
         }
 
         const group = new paper.Group(selectedItems);
-        group.position = new paper.Point(this.props.width, this.props.height);
+        group.position = new paper.Point(this.props.width * CANVAS_SIZE_MULTIPLIER, this.props.height * CANVAS_SIZE_MULTIPLIER);
         for (let i = 0; i < selectedItems.length; i++) {
             const item = selectedItems[i];
             group.layer.insertChild(item.data.originalIndex, item);
@@ -235,9 +244,34 @@ class ModeTools extends React.Component {
             this.props.setSelectedItems(this.props.format);
         }
     }
+    handleMask () {
+        if (this.props.selectedItems.length >= 2){
+            mask(this.props.onUpdateImage);
+            this.props.onUpdateImage();
+        }
+    }
+    handleSubtract() {
+        if (this.props.selectedItems.length >= 2){
+            subtract(this.props.onUpdateImage);
+            this.props.onUpdateImage();
+        }
+    }
+    handleFilter() {
+        if (this.props.selectedItems.length >= 2){
+            filter(this.props.onUpdateImage);
+            this.props.onUpdateImage();
+        }
+    }
+    handleMerge() {
+        if (this.props.selectedItems.length >= 2){
+            merge(this.props.onUpdateImage);
+            this.props.onUpdateImage();
+        }
+    }
     render () {
         return (
             <ModeToolsComponent
+                noCutButton={this.props.noCutButton}
                 hasSelectedUncurvedPoints={this.hasSelectedUncurvedPoints()}
                 hasSelectedUnpointedPoints={this.hasSelectedUnpointedPoints()}
                 onCopyToClipboard={this.props.onCopyToClipboard}
@@ -251,12 +285,17 @@ class ModeTools extends React.Component {
                 onPasteFromClipboard={this.handlePasteFromClipboard}
                 onPointPoints={this.handlePointPoints}
                 onUpdateImage={this.props.onUpdateImage}
+                onMask={this.handleMask}
+                onSubtract={this.handleSubtract}
+                onFilter={this.handleFilter}
+                onMerge={this.handleMerge}
             />
         );
     }
 }
 
 ModeTools.propTypes = {
+    noCutButton: PropTypes.bool,
     clearSelectedItems: PropTypes.func.isRequired,
     format: PropTypes.oneOf(Object.keys(Formats)),
     mode: PropTypes.oneOf(Object.keys(Modes)),
@@ -264,6 +303,10 @@ ModeTools.propTypes = {
     onCutToClipboard: PropTypes.func.isRequired,
     onManageFonts: PropTypes.func,
     onPasteFromClipboard: PropTypes.func.isRequired,
+    onMask: PropTypes.func,
+    onSubtract: PropTypes.func,
+    onFilter: PropTypes.func,
+    onMerge: PropTypes.func,
     width: PropTypes.number,
     height: PropTypes.number,
     onUpdateImage: PropTypes.func.isRequired,

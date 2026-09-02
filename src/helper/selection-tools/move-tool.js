@@ -126,9 +126,6 @@ class MoveTool {
         const point = event.point;
         const actionBounds = getActionBounds(this.mode in BitmapModes);
 
-        point.x = Math.max(actionBounds.left, Math.min(point.x, actionBounds.right));
-        point.y = Math.max(actionBounds.top, Math.min(point.y, actionBounds.bottom));
-
         const dragVector = point.subtract(event.downPoint);
         let snapVector;
 

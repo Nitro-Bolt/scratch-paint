@@ -21,6 +21,7 @@ const makeColorStyleReducer = ({
     changeSecondaryColorAction,
     // Action name for changing the gradient type
     changeGradientTypeAction,
+    changeCustomGradientAction,
     // Action name for clearing the gradient
     clearGradientAction,
     // Initial color when not set
@@ -33,13 +34,16 @@ const makeColorStyleReducer = ({
     selectionSecondaryColorKey,
     // The name of the property read from getColorsFromSelection to get the gradient type.
     // e.g. `fillGradientType` or `strokeGradientType`.
-    selectionGradientTypeKey
+    selectionGradientTypeKey,
+    // The name of the property containing the selected custom gradient data.
+    selectionCustomGradientKey
 }) => function colorReducer (state, action) {
     if (typeof state === 'undefined') {
         state = {
             primary: defaultColor,
             secondary: null,
-            gradientType: GradientTypes.SOLID
+            gradientType: GradientTypes.SOLID,
+            customGradient: null
         };
     }
     switch (action.type) {
@@ -67,6 +71,9 @@ const makeColorStyleReducer = ({
         if (selectionGradientTypeKey in colors) {
             newState.gradientType = colors[selectionGradientTypeKey];
         }
+        if (selectionCustomGradientKey in colors) {
+            newState.customGradient = colors[selectionCustomGradientKey];
+        }
 
         // Gradient type may be solid when multiple gradient types are selected.
         // In this case, changing the first color should not change the second color.
@@ -85,6 +92,12 @@ const makeColorStyleReducer = ({
         }
         log.warn(`Gradient type does not exist: ${action.gradientType}`);
         return state;
+    case changeCustomGradientAction:
+        return {
+            ...state,
+            gradientType: GradientTypes.CUSTOM,
+            customGradient: action.customGradient
+        };
     case clearGradientAction:
         return {...state, secondary: null, gradientType: GradientTypes.SOLID};
     default:

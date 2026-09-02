@@ -13,6 +13,8 @@ import UpdateImageHOC from '../hocs/update-image-hoc.jsx';
 import {changeMode} from '../reducers/modes';
 import {changeFormat} from '../reducers/format';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
+import {changeFillColor, changeFillColor2, changeFillGradientType} from '../reducers/fill-style';
+import {changeStrokeColor, changeStrokeColor2, changeStrokeGradientType} from '../reducers/stroke-style';
 import {deactivateEyeDropper} from '../reducers/eye-dropper';
 import {setTextEditTarget} from '../reducers/text-edit-target';
 import {updateViewBounds} from '../reducers/view-bounds';
@@ -22,8 +24,9 @@ import {setCustomFonts} from '../reducers/custom-fonts';
 
 import {getSelectedLeafItems} from '../helper/selection';
 import {convertToBitmap, convertToVector} from '../helper/bitmap';
-import {resizeView, resetZoom, zoomOnSelection, OUTERMOST_ZOOM_LEVEL} from '../helper/view';
+import {resizeView, setCanvasSizeMultiplier, resetZoom, zoomOnSelection, OUTERMOST_ZOOM_LEVEL} from '../helper/view';
 import EyeDropperTool from '../helper/tools/eye-dropper';
+import {setNudgeMultiplier} from '../helper/selection-tools/nudge-tool';
 
 import Modes, {BitmapModes, VectorModes} from '../lib/modes';
 import Formats, {isBitmap, isVector} from '../lib/format';
@@ -88,6 +91,7 @@ class PaintEditor extends React.Component {
             'stopEyeDroppingLoop',
             'handleSetSelectedItems',
             'handleChangeTheme',
+            'handleSwapColors',
             'handleZoomIn',
             'handleZoomOut',
             'handleZoomReset'
@@ -98,6 +102,8 @@ class PaintEditor extends React.Component {
         };
         this.props.setLayout(this.props.rtl ? 'rtl' : 'ltr');
         this.props.onCustomFontsChanged(this.props.customFonts);
+        setNudgeMultiplier(this.props.nudgeMultiplier || 15);
+        setCanvasSizeMultiplier(this.props.canvasSizeMultiplier || 2);
         resizeView(this.props.width, this.props.height);
     }
     componentDidMount () {
@@ -124,6 +130,13 @@ class PaintEditor extends React.Component {
         }
         if (this.props.customFonts !== newProps.customFonts) {
             this.props.onCustomFontsChanged(newProps.customFonts);
+        }
+        if (newProps.nudgeMultiplier !== this.props.nudgeMultiplier) {
+            setNudgeMultiplier(newProps.nudgeMultiplier || 15);
+        }
+        if (newProps.canvasSizeMultiplier !== this.props.canvasSizeMultiplier) {
+            setCanvasSizeMultiplier(newProps.canvasSizeMultiplier || 2);
+            resizeView(newProps.width, newProps.height);
         }
     }
     componentDidUpdate (prevProps) {
@@ -227,6 +240,22 @@ class PaintEditor extends React.Component {
     handleChangeTheme () {
         const newTheme = this.getEffectiveTheme() === 'light' ? 'dark' : 'light';
         this.props.setReduxTheme(newTheme === this.props.theme ? 'default' : newTheme);
+    }
+    handleSwapColors () {
+        const toHex = color => {
+            if (!color || /^#[0-9a-f]{3,8}$/i.test(color)) return color;
+            try {
+                return new paper.Color(color).toCSS(true);
+            } catch (e) {
+                return color;
+            }
+        };
+        this.props.onChangeFillColor(toHex(this.props.strokeColor.primary));
+        this.props.onChangeFillColor2(toHex(this.props.strokeColor.secondary));
+        this.props.onChangeFillGradientType(this.props.strokeColor.gradientType);
+        this.props.onChangeStrokeColor(toHex(this.props.fillColor.primary));
+        this.props.onChangeStrokeColor2(toHex(this.props.fillColor.secondary));
+        this.props.onChangeStrokeGradientType(this.props.fillColor.gradientType);
     }
     handleZoomIn () {
         // Make the "next step" after the outermost zoom level be the default
@@ -350,7 +379,11 @@ class PaintEditor extends React.Component {
                 zoomLevelId={this.props.zoomLevelId}
                 onChangeTheme={this.handleChangeTheme}
                 onManageFonts={this.props.onManageFonts}
+                onOpenCustomGradient={this.props.onOpenCustomGradient}
                 onRedo={this.props.onRedo}
+                noSwapButton={this.props.noSwapButton}
+                noCutButton={this.props.noCutButton}
+                onSwapColors={this.handleSwapColors}
                 onSwitchToBitmap={this.props.handleSwitchToBitmap}
                 onSwitchToVector={this.props.handleSwitchToVector}
                 onUndo={this.props.onUndo}
@@ -368,12 +401,29 @@ PaintEditor.propTypes = {
     changeColorToEyeDropper: PropTypes.func,
     changeMode: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
+    fillColor: PropTypes.shape({
+        primary: PropTypes.string,
+        secondary: PropTypes.string,
+        gradientType: PropTypes.string
+    }),
+    strokeColor: PropTypes.shape({
+        primary: PropTypes.string,
+        secondary: PropTypes.string,
+        gradientType: PropTypes.string
+    }),
+    onChangeFillColor: PropTypes.func.isRequired,
+    onChangeFillColor2: PropTypes.func.isRequired,
+    onChangeFillGradientType: PropTypes.func.isRequired,
+    onChangeStrokeColor: PropTypes.func.isRequired,
+    onChangeStrokeColor2: PropTypes.func.isRequired,
+    onChangeStrokeGradientType: PropTypes.func.isRequired,
     customFonts: PropTypes.arrayOf(PropTypes.shape({
         name: PropTypes.string.isRequired,
         family: PropTypes.string.isRequired
     })).isRequired,
     onCustomFontsChanged: PropTypes.func.isRequired,
     onManageFonts: PropTypes.func,
+    onOpenCustomGradient: PropTypes.func,
     format: PropTypes.oneOf(Object.keys(Formats)), // Internal, up-to-date data format
     fontInlineFn: PropTypes.func,
     handleSwitchToBitmap: PropTypes.func.isRequired,
@@ -387,6 +437,10 @@ PaintEditor.propTypes = {
     isEyeDropping: PropTypes.bool,
     mode: PropTypes.oneOf(Object.keys(Modes)).isRequired,
     name: PropTypes.string,
+    nudgeMultiplier: PropTypes.number,
+    canvasSizeMultiplier: PropTypes.number,
+    noSwapButton: PropTypes.bool,
+    noCutButton: PropTypes.bool,
     onDeactivateEyeDropper: PropTypes.func.isRequired,
     onKeyPress: PropTypes.func.isRequired,
     onRedo: PropTypes.func.isRequired,
@@ -416,6 +470,7 @@ PaintEditor.propTypes = {
 };
 
 PaintEditor.defaultProps = {
+    onOpenCustomGradient: () => {},
     width: 480,
     height: 360,
     theme: 'light',
@@ -424,6 +479,8 @@ PaintEditor.defaultProps = {
 
 const mapStateToProps = state => ({
     changeColorToEyeDropper: state.scratchPaint.color.eyeDropper.callback,
+    fillColor: state.scratchPaint.color.fillColor,
+    strokeColor: state.scratchPaint.color.strokeColor,
     format: state.scratchPaint.format,
     isEyeDropping: state.scratchPaint.color.eyeDropper.active,
     mode: state.scratchPaint.mode,
@@ -437,6 +494,24 @@ const mapDispatchToProps = dispatch => ({
     },
     clearSelectedItems: () => {
         dispatch(clearSelectedItems());
+    },
+    onChangeFillColor: fillColor => {
+        dispatch(changeFillColor(fillColor));
+    },
+    onChangeFillColor2: fillColor2 => {
+        dispatch(changeFillColor2(fillColor2));
+    },
+    onChangeFillGradientType: gradientType => {
+        dispatch(changeFillGradientType(gradientType));
+    },
+    onChangeStrokeColor: strokeColor => {
+        dispatch(changeStrokeColor(strokeColor));
+    },
+    onChangeStrokeColor2: strokeColor2 => {
+        dispatch(changeStrokeColor2(strokeColor2));
+    },
+    onChangeStrokeGradientType: gradientType => {
+        dispatch(changeStrokeGradientType(gradientType));
     },
     onCustomFontsChanged: customFonts => {
         dispatch(setCustomFonts(customFonts));
