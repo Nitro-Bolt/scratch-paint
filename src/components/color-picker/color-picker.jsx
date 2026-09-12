@@ -334,7 +334,7 @@ class ColorPickerComponent extends React.Component {
                             <FormattedMessage
                                 defaultMessage="Recent Colors"
                                 description="Label for the recent colors component in the color picker"
-                                id="nw.paint.recentColors"
+                                id="nb.paint.recentColors"
                             />
                         </span>
                     </div>

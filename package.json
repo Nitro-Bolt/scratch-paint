@@ -9,7 +9,7 @@
     "build": "pnpm run clean && webpack --progress --colors --bail",
     "clean": "rimraf ./dist && mkdirp dist && rimraf ./playground && mkdirp playground",
     "i18n:push": "tx-push-src scratch-editor paint-editor ./translations/en.json",
-    "i18n:src": "rimraf ./translations/messages && babel src > tmp.js && rimraf tmp.js && ./scripts/build-i18n-source.js ./translations/messages/ ./translations/",
+    "i18n:src": "rimraf ./translations/messages && babel src > tmp.js && rimraf tmp.js && node ./scripts/build-i18n-source.js ./translations/messages/ ./translations/",
     "lint": "eslint . --ext .js,.jsx",
     "start": "webpack-dev-server",
     "test": "pnpm run unit",
