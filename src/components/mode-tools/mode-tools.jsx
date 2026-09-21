@@ -10,6 +10,7 @@ import {changeBitBrushSize} from '../../reducers/bit-brush-size';
 import {changeBitEraserSize} from '../../reducers/bit-eraser-size';
 import {setShapesFilled} from '../../reducers/fill-bitmap-shapes';
 import {changeRectRadius} from '../../reducers/rect-mode';
+import {changeTextAlignment} from '../../reducers/text-alignment';
 
 import FontDropdown from '../../containers/font-dropdown.jsx';
 import LiveInputHOC from '../forms/live-input-hoc.jsx';
@@ -51,6 +52,10 @@ import bitOvalIcon from '../bit-oval-mode/oval.svg';
 import bitRectIcon from '../bit-rect-mode/rectangle.svg';
 import bitOvalOutlinedIcon from '../bit-oval-mode/oval-outlined.svg';
 import bitRectOutlinedIcon from '../bit-rect-mode/rectangle-outlined.svg';
+import alignLeftIcon from './icons/align-left.svg';
+import alignCenterIcon from './icons/align-center.svg';
+import alignRightIcon from './icons/align-right.svg';
+import alignJustifyIcon from './icons/align-justify.svg';
 
 import {MAX_STROKE_WIDTH} from '../../reducers/stroke-width';
 
@@ -161,6 +166,26 @@ const ModeToolsComponent = props => {
             defaultMessage: 'More',
             description: 'Label for dropdown to access more action buttons',
             id: 'paint.paintEditor.more'
+        },
+        alignLeft: {
+            defaultMessage: 'Left',
+            description: 'Label for the text align left button',
+            id: 'paint.modeTools.alignLeft'
+        },
+        alignCenter: {
+            defaultMessage: 'Center',
+            description: 'Label for the text align center button',
+            id: 'paint.modeTools.alignCenter'
+        },
+        alignRight: {
+            defaultMessage: 'Right',
+            description: 'Label for the text align right button',
+            id: 'paint.modeTools.alignRight'
+        },
+        alignJustify: {
+            defaultMessage: 'Justify',
+            description: 'Label for the text justify button',
+            id: 'paint.modeTools.alignJustify'
         }
     });
 
@@ -552,10 +577,40 @@ const ModeToolsComponent = props => {
     case Modes.TEXT:
         return (
             <div className={classNames(props.className, styles.modeTools)}>
-                <InputGroup>
+                <InputGroup className={styles.modDashedBorder}>
                     <FontDropdown
                         onUpdateImage={props.onUpdateImage}
                         onManageFonts={props.onManageFonts}
+                    />
+                </InputGroup>
+                <InputGroup className={styles.textAlignmentTools}>
+                    <LabeledIconButton
+                        gray
+                        highlighted={props.textAlignment === 'left'}
+                        imgSrc={alignLeftIcon}
+                        title={props.intl.formatMessage(messages.alignLeft)}
+                        onClick={props.onAlignLeft}
+                    />
+                    <LabeledIconButton
+                        gray
+                        highlighted={props.textAlignment === 'center'}
+                        imgSrc={alignCenterIcon}
+                        title={props.intl.formatMessage(messages.alignCenter)}
+                        onClick={props.onAlignCenter}
+                    />
+                    <LabeledIconButton
+                        gray
+                        highlighted={props.textAlignment === 'right'}
+                        imgSrc={alignRightIcon}
+                        title={props.intl.formatMessage(messages.alignRight)}
+                        onClick={props.onAlignRight}
+                    />
+                    <LabeledIconButton
+                        gray
+                        highlighted={props.textAlignment === 'justify'}
+                        imgSrc={alignJustifyIcon}
+                        title={props.intl.formatMessage(messages.alignJustify)}
+                        onClick={props.onAlignJustify}
                     />
                 </InputGroup>
             </div>
@@ -604,7 +659,7 @@ const ModeToolsComponent = props => {
             </div>
         );
     }
-    case Modes.RECT:
+    case Modes.RECT: {
         const currentIcon = roundRectIcon;
         const currentRadiusValue = props.rectRadius;
         const changeFunction = props.onRectRadiusSliderChange;
@@ -629,6 +684,7 @@ const ModeToolsComponent = props => {
                 />
             </div>
         );
+    }
     default:
         // Leave empty for now, if mode not supported
         return (
@@ -673,6 +729,11 @@ ModeToolsComponent.propTypes = {
     onSubtract: PropTypes.func,
     onMerge: PropTypes.func,
     rectRadius: PropTypes.number,
+    textAlignment: PropTypes.string.isRequired,
+    onAlignLeft: PropTypes.func.isRequired,
+    onAlignCenter: PropTypes.func.isRequired,
+    onAlignRight: PropTypes.func.isRequired,
+    onAlignJustify: PropTypes.func.isRequired,
     onRectRadiusSliderChange: PropTypes.func
 };
 
@@ -685,9 +746,22 @@ const mapStateToProps = state => ({
     brushValue: state.scratchPaint.brushMode.brushSize,
     clipboardItems: state.scratchPaint.clipboard.items,
     eraserValue: state.scratchPaint.eraserMode.brushSize,
-    rectRadius: state.scratchPaint.rectMode.rectRadius
+    rectRadius: state.scratchPaint.rectMode.rectRadius,
+    textAlignment: state.scratchPaint.textAlignment
 });
 const mapDispatchToProps = dispatch => ({
+    onAlignLeft: () => {
+        dispatch(changeTextAlignment('left'));
+    },
+    onAlignCenter: () => {
+        dispatch(changeTextAlignment('center'));
+    },
+    onAlignRight: () => {
+        dispatch(changeTextAlignment('right'));
+    },
+    onAlignJustify: () => {
+        dispatch(changeTextAlignment('justify'));
+    },
     onBrushSliderChange: brushSize => {
         dispatch(changeBrushSize(brushSize));
     },

@@ -6,6 +6,46 @@ import NudgeTool from '../selection-tools/nudge-tool';
 import {hoverBounds} from '../guides';
 import {getRaster} from '../layer';
 
+const originalPointTextDraw = paper.PointText.prototype._draw;
+
+// Paper.js does not support justified PointText, so draw each line word-by-word
+// across the width of the longest line while keeping the source text editable.
+paper.PointText.prototype._draw = function (context, param, viewMatrix) {
+    if (!this.data || this.data.textAlignment !== 'justify') {
+        return originalPointTextDraw.call(this, context, param, viewMatrix);
+    }
+    if (!this._content) return;
+
+    this._setStyles(context, param, viewMatrix);
+    const lines = this._lines;
+    const style = this._style;
+    const hasFill = style.hasFill();
+    const hasStroke = style.hasStroke();
+    const leading = style.getLeading();
+    const shadowColor = context.shadowColor;
+    context.font = style.getFontStyle();
+    context.textAlign = 'left';
+    const lineWidths = lines.map(line => context.measureText(line).width);
+    const targetWidth = Math.max.apply(null, lineWidths);
+
+    for (let i = 0; i < lines.length; i++) {
+        const words = lines[i].trim().split(/\s+/);
+        const wordsWidth = words.reduce((width, word) => width + context.measureText(word).width, 0);
+        const spacing = words.length > 1 ? (targetWidth - wordsWidth) / (words.length - 1) : 0;
+        let x = 0;
+        for (const word of words) {
+            context.shadowColor = shadowColor;
+            if (hasFill) {
+                context.fillText(word, x, 0);
+                context.shadowColor = 'rgba(0,0,0,0)';
+            }
+            if (hasStroke) context.strokeText(word, x, 0);
+            x += context.measureText(word).width + spacing;
+        }
+        context.translate(0, leading);
+    }
+};
+
 const getTextColor = text => {
     let color = text.fillColor;
     if (!color) return null;
@@ -49,10 +89,11 @@ class TextTool extends paper.Tool {
      * @param {!function} onUpdateImage A callback to call when the image visibly changes
      * @param {!function} setTextEditTarget Call to set text editing target whenever text editing is active
      * @param {!function} changeFont Call to change the font in the dropdown
+     * @param {!function} changeTextAlignment Call to change the alignment controls
      * @param {?boolean} isBitmap True if text should be rasterized once it's deselected
      */
     constructor (textAreaElement, setSelectedItems, clearSelectedItems, setCursor, onUpdateImage, setTextEditTarget,
-        changeFont, isBitmap) {
+        changeFont, changeTextAlignment, isBitmap) {
         super();
         this.element = textAreaElement;
         this.setSelectedItems = setSelectedItems;
@@ -60,6 +101,7 @@ class TextTool extends paper.Tool {
         this.onUpdateImage = onUpdateImage;
         this.setTextEditTarget = setTextEditTarget;
         this.changeFont = changeFont;
+        this.changeTextAlignment = changeTextAlignment;
         const paintMode = isBitmap ? Modes.BIT_TEXT : Modes.TEXT;
         this.boundingBoxTool = new BoundingBoxTool(
             paintMode,
@@ -87,6 +129,7 @@ class TextTool extends paper.Tool {
         this.active = false;
         this.lastTypeEvent = null;
         this.lastEvent = null;
+        this.alignment = 'left';
 
         // If text selected and then activate this tool, switch to text edit mode for that text
         // If double click on text while in select mode, does mode change to text mode? Text fully selected by default
@@ -145,6 +188,41 @@ class TextTool extends paper.Tool {
         this.element.style.fontFamily = font;
         this.setSelectedItems();
     }
+    setAlignment (alignment) {
+        this.alignment = alignment;
+        const paperAlignment = alignment === 'justify' ? 'left' : alignment;
+        let changed = false;
+        const alignedItems = [];
+        const alignItem = item => {
+            if (!(item instanceof paper.PointText) || alignedItems.indexOf(item) !== -1) return;
+            alignedItems.push(item);
+            const itemChanged = item.justification !== paperAlignment ||
+                item.data.textAlignment !== alignment;
+            if (!itemChanged) return;
+
+            // Paper positions PointText from its alignment anchor. Preserve the
+            // visible top-left corner so alignment changes affect the lines,
+            // rather than moving the entire text object on the canvas.
+            const originalTopLeft = item.bounds.topLeft;
+            item.justification = paperAlignment;
+            item.data.textAlignment = alignment;
+            item.translate(originalTopLeft.subtract(item.bounds.topLeft));
+            changed = true;
+        };
+
+        if (this.textBox) alignItem(this.textBox);
+        const selected = getSelectedLeafItems();
+        for (const item of selected) {
+            alignItem(item);
+        }
+        this.element.style.textAlign = alignment;
+        this.setSelectedItems();
+        if (this.textBox) {
+            this.resizeGuide();
+            this.calculateMatrix(paper.view.matrix);
+        }
+        if (changed) this.onUpdateImage();
+    }
     // Allow other tools to cancel text edit mode
     onTextEditCancelled () {
         if (this.mode !== TextTool.TEXT_EDIT_MODE) {
@@ -182,6 +260,16 @@ class TextTool extends paper.Tool {
         calculated.translate(tx, this.textBox.internalBounds.y);
         calculated.append(viewMtx);
         calculated.append(textBoxMtx);
+
+        // The textarea starts at its left edge, but Paper's point is the center
+        // or right edge for those alignments. Move only the final CSS translation
+        // by the local horizontal bounds offset. The transform origin already
+        // accounts for scale and rotation, so transforming this offset again
+        // would cause selection drift at non-default zoom levels. Keeping this
+        // separate from the matrix composition preserves the baseline and
+        // rotation behavior used by the original text editor.
+        const boundsOffsetX = this.textBox.internalBounds.x;
+        calculated.tx += boundsOffsetX;
         this.element.style.transform = `matrix(${calculated.a}, ${calculated.b}, ${calculated.c}, ${calculated.d},
              ${calculated.tx}, ${calculated.ty})`;
     }
@@ -259,6 +347,8 @@ class TextTool extends paper.Tool {
                 // This value was obtained experimentally.
                 leading: 46.15
             });
+            this.textBox.justification = this.alignment === 'justify' ? 'left' : this.alignment;
+            this.textBox.data.textAlignment = this.alignment;
             this.beginTextEdit(this.textBox);
         }
     }
@@ -313,9 +403,16 @@ class TextTool extends paper.Tool {
         }
         this.lastTypeEvent = event;
         if (this.mode === TextTool.TEXT_EDIT_MODE) {
+            const originalTopLeft = this.textBox.bounds.topLeft;
             this.textBox.content = this.element.value;
+            if (this.alignment !== 'left') {
+                this.textBox.translate(originalTopLeft.subtract(this.textBox.bounds.topLeft));
+            }
         }
         this.resizeGuide();
+        if (this.mode === TextTool.TEXT_EDIT_MODE && this.alignment !== 'left') {
+            this.calculateMatrix(paper.view.matrix);
+        }
     }
     resizeGuide () {
         if (this.guide) this.guide.remove();
@@ -352,6 +449,13 @@ class TextTool extends paper.Tool {
         if (this.font !== this.textBox.font) {
             this.changeFont(this.textBox.font);
         }
+        const alignment = this.textBox.data.textAlignment || this.textBox.justification ||
+            (this.rtl ? 'right' : 'left');
+        if (this.alignment !== alignment) {
+            this.changeTextAlignment(alignment);
+        }
+        this.alignment = alignment;
+        this.element.style.textAlign = alignment;
         this.element.style.fontSize = `${this.textBox.fontSize}px`;
         this.element.style.lineHeight = this.textBox.leading / this.textBox.fontSize;
 
@@ -362,12 +466,8 @@ class TextTool extends paper.Tool {
         this.element.value = textBox.content ? textBox.content : '';
         this.calculateMatrix(paper.view.matrix);
 
-        if (this.rtl) {
-            // make both the textbox and the textarea element grow to the left
-            this.textBox.justification = 'right';
-        } else {
-            this.textBox.justification = 'left';
-        }
+        this.textBox.justification = alignment === 'justify' ? 'left' : alignment;
+        this.textBox.data.textAlignment = alignment;
 
         this.element.focus({preventScroll: true});
         this.eventListener = this.handleTextInput.bind(this);

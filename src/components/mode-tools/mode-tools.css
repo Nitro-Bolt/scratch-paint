@@ -35,6 +35,10 @@
     user-select: none;
 }
 
+.text-alignment-tools {
+    display: flex;
+}
+
 .mod-context-menu {
     display: flex;
     flex-direction: column;

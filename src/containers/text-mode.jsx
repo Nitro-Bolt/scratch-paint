@@ -13,6 +13,7 @@ import {changeFillColor, clearFillGradient, DEFAULT_COLOR} from '../reducers/fil
 import {changeStrokeColor} from '../reducers/stroke-style';
 import {changeMode} from '../reducers/modes';
 import {setTextEditTarget} from '../reducers/text-edit-target';
+import {changeTextAlignment} from '../reducers/text-alignment';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {setCursor} from '../reducers/cursor';
 
@@ -50,6 +51,9 @@ class TextMode extends React.Component {
             }
             if (nextProps.font !== this.props.font) {
                 this.tool.setFont(nextProps.font);
+            }
+            if (nextProps.textAlignment !== this.props.textAlignment) {
+                this.tool.setAlignment(nextProps.textAlignment);
             }
             if (nextProps.rtl !== this.props.rtl) {
                 this.tool.setRtl(nextProps.rtl);
@@ -108,11 +112,13 @@ class TextMode extends React.Component {
             this.props.onUpdateImage,
             this.props.setTextEditTarget,
             this.props.changeFont,
+            this.props.changeTextAlignment,
             nextProps.isBitmap
         );
         this.tool.setRtl(this.props.rtl);
         this.tool.setColorState(nextProps.colorState);
         this.tool.setFont(nextProps.font);
+        this.tool.setAlignment(nextProps.textAlignment);
         this.tool.activate();
         if (textBoxToStartEditing) {
             this.tool.beginTextEdit(textBoxToStartEditing);
@@ -141,6 +147,7 @@ class TextMode extends React.Component {
 
 TextMode.propTypes = {
     changeFont: PropTypes.func.isRequired,
+    changeTextAlignment: PropTypes.func.isRequired,
     clearGradient: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
     colorState: PropTypes.shape({
@@ -162,6 +169,7 @@ TextMode.propTypes = {
     setSelectedItems: PropTypes.func.isRequired,
     setTextEditTarget: PropTypes.func.isRequired,
     textArea: PropTypes.instanceOf(Element),
+    textAlignment: PropTypes.string.isRequired,
     textEditTarget: PropTypes.number,
     viewBounds: PropTypes.instanceOf(paper.Matrix).isRequired
 };
@@ -169,6 +177,7 @@ TextMode.propTypes = {
 const mapStateToProps = (state, ownProps) => ({
     colorState: state.scratchPaint.color,
     font: state.scratchPaint.font,
+    textAlignment: state.scratchPaint.textAlignment,
     isTextModeActive: ownProps.isBitmap ?
         state.scratchPaint.mode === Modes.BIT_TEXT :
         state.scratchPaint.mode === Modes.TEXT,
@@ -180,6 +189,9 @@ const mapStateToProps = (state, ownProps) => ({
 const mapDispatchToProps = (dispatch, ownProps) => ({
     changeFont: font => {
         dispatch(changeFont(font));
+    },
+    changeTextAlignment: alignment => {
+        dispatch(changeTextAlignment(alignment));
     },
     clearSelectedItems: () => {
         dispatch(clearSelectedItems());
