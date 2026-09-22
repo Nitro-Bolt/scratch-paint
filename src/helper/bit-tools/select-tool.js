@@ -1,4 +1,4 @@
-import paper from '@turbowarp/paper';
+import paper from '@nitro-bolt/paper';
 import Modes from '../../lib/modes';
 
 import {getRaster} from '../layer';

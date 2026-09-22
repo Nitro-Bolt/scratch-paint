@@ -1,4 +1,4 @@
-import paper from '@turbowarp/paper';
+import paper from '@nitro-bolt/paper';
 
 /**
  * Tool to handle rotation when dragging the rotation handle in the bounding box tool.

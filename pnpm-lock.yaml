@@ -8,12 +8,12 @@ importers:
 
   .:
     dependencies:
+      '@nitro-bolt/paper':
+        specifier: ^0.13.1
+        version: 0.13.1
       '@turbowarp/nanolog':
         specifier: ^0.2.0
         version: 0.2.0
-      '@turbowarp/paper':
-        specifier: ^0.13.0
-        version: 0.13.0
       classnames:
         specifier: 2.2.5
         version: 2.2.5
@@ -982,6 +982,10 @@ packages:
   '@nicolo-ribaudo/eslint-scope-5-internals@5.1.1-v1':
     resolution: {integrity: sha512-54/JRvkLIzzDWshCWfuhadfrfZVPiElY8Fcgmg1HroEly/EDSszzhBAsarCux+D/kOslTRquNzuyGSmUSTTHGg==}
 
+  '@nitro-bolt/paper@0.13.1':
+    resolution: {integrity: sha512-Tw1SKBg4gg+FF3C6Y5xXLNHJTsHE6woygr+chKC0x/cSRWBEKZgfZ3AjnDwQcFVgOUMt5/AGQRw1YeyV25kgsg==}
+    engines: {node: '>=20.0.0'}
+
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
     engines: {node: '>= 8'}
@@ -1017,10 +1021,6 @@ packages:
 
   '@turbowarp/nanolog@0.2.0':
     resolution: {integrity: sha512-texcM9oxfEsADVlVDR5UhLkYclPKsV9mytJh+9pHHonNcUrxRVGF6FkJTzWO/Hl5NafU1crSdw737nqKE3atSA==}
-
-  '@turbowarp/paper@0.13.0':
-    resolution: {integrity: sha512-ECixLnNuI6oO2hLLte+i6WdRZvo8mcTgkmMJna/si/7JXzu0/z7eoYzWQb48+BWVKj747+ArBPNvC43wFivz/Q==}
-    engines: {node: '>=8.0.0'}
 
   '@types/babel__core@7.20.5':
     resolution: {integrity: sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA==}
@@ -6982,6 +6982,8 @@ snapshots:
     dependencies:
       eslint-scope: 5.1.1
 
+  '@nitro-bolt/paper@0.13.1': {}
+
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
       '@nodelib/fs.stat': 2.0.5
@@ -7013,8 +7015,6 @@ snapshots:
       core-js: 3.35.0
 
   '@turbowarp/nanolog@0.2.0': {}
-
-  '@turbowarp/paper@0.13.0': {}
 
   '@types/babel__core@7.20.5':
     dependencies:

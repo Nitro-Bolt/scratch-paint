@@ -1,50 +1,10 @@
-import paper from '@turbowarp/paper';
+import paper from '@nitro-bolt/paper';
 import Modes from '../../lib/modes';
 import {clearSelection, getSelectedLeafItems} from '../selection';
 import BoundingBoxTool from '../selection-tools/bounding-box-tool';
 import NudgeTool from '../selection-tools/nudge-tool';
 import {hoverBounds} from '../guides';
 import {getRaster} from '../layer';
-
-const originalPointTextDraw = paper.PointText.prototype._draw;
-
-// Paper.js does not support justified PointText, so draw each line word-by-word
-// across the width of the longest line while keeping the source text editable.
-paper.PointText.prototype._draw = function (context, param, viewMatrix) {
-    if (!this.data || this.data.textAlignment !== 'justify') {
-        return originalPointTextDraw.call(this, context, param, viewMatrix);
-    }
-    if (!this._content) return;
-
-    this._setStyles(context, param, viewMatrix);
-    const lines = this._lines;
-    const style = this._style;
-    const hasFill = style.hasFill();
-    const hasStroke = style.hasStroke();
-    const leading = style.getLeading();
-    const shadowColor = context.shadowColor;
-    context.font = style.getFontStyle();
-    context.textAlign = 'left';
-    const lineWidths = lines.map(line => context.measureText(line).width);
-    const targetWidth = Math.max.apply(null, lineWidths);
-
-    for (let i = 0; i < lines.length; i++) {
-        const words = lines[i].trim().split(/\s+/);
-        const wordsWidth = words.reduce((width, word) => width + context.measureText(word).width, 0);
-        const spacing = words.length > 1 ? (targetWidth - wordsWidth) / (words.length - 1) : 0;
-        let x = 0;
-        for (const word of words) {
-            context.shadowColor = shadowColor;
-            if (hasFill) {
-                context.fillText(word, x, 0);
-                context.shadowColor = 'rgba(0,0,0,0)';
-            }
-            if (hasStroke) context.strokeText(word, x, 0);
-            x += context.measureText(word).width + spacing;
-        }
-        context.translate(0, leading);
-    }
-};
 
 const getTextColor = text => {
     let color = text.fillColor;
@@ -190,7 +150,7 @@ class TextTool extends paper.Tool {
     }
     setAlignment (alignment) {
         this.alignment = alignment;
-        const paperAlignment = alignment === 'justify' ? 'left' : alignment;
+        const paperAlignment = alignment;
         let changed = false;
         const alignedItems = [];
         const alignItem = item => {
@@ -347,7 +307,7 @@ class TextTool extends paper.Tool {
                 // This value was obtained experimentally.
                 leading: 46.15
             });
-            this.textBox.justification = this.alignment === 'justify' ? 'left' : this.alignment;
+            this.textBox.justification = this.alignment;
             this.textBox.data.textAlignment = this.alignment;
             this.beginTextEdit(this.textBox);
         }
@@ -466,7 +426,7 @@ class TextTool extends paper.Tool {
         this.element.value = textBox.content ? textBox.content : '';
         this.calculateMatrix(paper.view.matrix);
 
-        this.textBox.justification = alignment === 'justify' ? 'left' : alignment;
+        this.textBox.justification = alignment;
         this.textBox.data.textAlignment = alignment;
 
         this.element.focus({preventScroll: true});

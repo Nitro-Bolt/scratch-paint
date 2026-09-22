@@ -1,4 +1,4 @@
-import paper from '@turbowarp/paper';
+import paper from '@nitro-bolt/paper';
 
 /** The ratio of the curve length to use for the handle length to convert squares into approximately circles. */
 const HANDLE_RATIO = 0.3902628565;

@@ -1,4 +1,4 @@
-import paper from '@turbowarp/paper';
+import paper from '@nitro-bolt/paper';
 import log from '../log/log';
 import {ART_BOARD_BOUNDS, ART_BOARD_WIDTH, ART_BOARD_HEIGHT, CENTER, MAX_WORKSPACE_BOUNDS, CANVAS_SIZE_MULTIPLIER} from './view';
 import {isGroupItem} from './item';

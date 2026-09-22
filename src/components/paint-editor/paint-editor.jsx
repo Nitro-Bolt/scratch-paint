@@ -1,4 +1,4 @@
-import paper from '@turbowarp/paper';
+import paper from '@nitro-bolt/paper';
 import classNames from 'classnames';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import React from 'react';

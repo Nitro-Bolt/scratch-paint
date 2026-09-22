@@ -1,4 +1,4 @@
-import paper from '@turbowarp/paper';
+import paper from '@nitro-bolt/paper';
 import {getGuideLayer} from './layer';
 import {getAllRootItems} from './selection';
 

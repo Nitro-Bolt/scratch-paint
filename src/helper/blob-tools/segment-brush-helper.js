@@ -1,4 +1,4 @@
-import paper from '@turbowarp/paper';
+import paper from '@nitro-bolt/paper';
 import {styleBlob} from '../../helper/style-path';
 
 /**
@@ -25,7 +25,7 @@ class SegmentBrushHelper {
 
         tool.minDistance = 2 / paper.view.zoom;
         tool.maxDistance = options.brushSize;
-        
+
         this.firstCircle = new paper.Path.Circle({
             center: event.point,
             radius: options.brushSize / 2

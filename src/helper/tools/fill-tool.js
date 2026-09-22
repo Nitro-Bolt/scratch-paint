@@ -1,4 +1,4 @@
-import paper from '@turbowarp/paper';
+import paper from '@nitro-bolt/paper';
 import {getHoveredItem} from '../hover';
 import {expandBy} from '../math';
 import {createGradientObject} from '../style-path';

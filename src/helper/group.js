@@ -1,4 +1,4 @@
-import paper from '@turbowarp/paper';
+import paper from '@nitro-bolt/paper';
 import {getRootItem, isGroupItem} from './item';
 import {clearSelection, getSelectedRootItems, setItemSelection} from './selection';
 

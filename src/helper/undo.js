@@ -1,6 +1,6 @@
 // undo functionality
 // modifed from https://github.com/memononen/stylii
-import paper from '@turbowarp/paper';
+import paper from '@nitro-bolt/paper';
 import {hideGuideLayers, showGuideLayers, getRaster} from '../helper/layer';
 import {getSelectedLeafItems} from '../helper/selection';
 import Formats, {isVector, isBitmap} from '../lib/format';

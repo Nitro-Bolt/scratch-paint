@@ -1,4 +1,4 @@
-import paper from '@turbowarp/paper';
+import paper from '@nitro-bolt/paper';
 import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
 import PropTypes from 'prop-types';

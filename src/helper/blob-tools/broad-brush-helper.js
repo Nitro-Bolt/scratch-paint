@@ -1,5 +1,5 @@
 // Broadbrush based on http://paperjs.org/tutorials/interaction/working-with-mouse-vectors/
-import paper from '@turbowarp/paper';
+import paper from '@nitro-bolt/paper';
 import {styleBlob} from '../../helper/style-path';
 import log from '../../log/log';
 

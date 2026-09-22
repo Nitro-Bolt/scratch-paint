@@ -1,4 +1,4 @@
-import paper from '@turbowarp/paper';
+import paper from '@nitro-bolt/paper';
 
 import PropTypes from 'prop-types';
 import React from 'react';

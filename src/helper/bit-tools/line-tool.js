@@ -1,4 +1,4 @@
-import paper from '@turbowarp/paper';
+import paper from '@nitro-bolt/paper';
 import {getRaster, createCanvas, getGuideLayer} from '../layer';
 import {createMaskingCanvas, forEachLinePoint, getBrushMark} from '../bitmap';
 import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT} from '../view';
@@ -13,7 +13,7 @@ class LineTool extends paper.Tool {
     constructor (onUpdateImage) {
         super();
         this.onUpdateImage = onUpdateImage;
-        
+
         // We have to set these functions instead of just declaring them because
         // paper.js tools hook up the listeners in the setter functions.
         this.onMouseMove = this.handleMouseMove;

@@ -1,6 +1,6 @@
 import bindAll from 'lodash.bindall';
 import {connect} from 'react-redux';
-import paper from '@turbowarp/paper';
+import paper from '@nitro-bolt/paper';
 import parseColor from 'parse-color';
 import PropTypes from 'prop-types';
 import React from 'react';

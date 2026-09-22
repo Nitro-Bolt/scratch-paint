@@ -1,4 +1,4 @@
-import paper from '@turbowarp/paper';
+import paper from '@nitro-bolt/paper';
 import keyMirror from 'keymirror';
 
 import {getSelectedRootItems} from '../selection';

@@ -1,4 +1,4 @@
-import paper from '@turbowarp/paper';
+import paper from '@nitro-bolt/paper';
 import {CHANGE_SELECTED_ITEMS} from './selected-items';
 
 const SET_FILLED = 'scratch-paint/fill-bitmap-shapes/SET_FILLED';
