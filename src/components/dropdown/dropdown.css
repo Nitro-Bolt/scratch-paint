@@ -11,6 +11,10 @@ $arrow-border-width: 14px;
     padding: .5rem;
 }
 
+.dropdown:hover{
+    cursor: pointer;
+}
+
 .mod-open {
     background-color: $form-border;
 }
