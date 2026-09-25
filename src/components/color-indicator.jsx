@@ -27,6 +27,7 @@ const ColorIndicatorComponent = props => (
                     onChangeCustomGradient={props.onChangeCustomGradient}
                     onOpenCustomGradient={props.onOpenCustomGradient}
                     onSwap={props.onSwap}
+                    onApplyRecentColor={props.onApplyRecentColor}
                 />
             }
             isOpen={props.colorModalVisible}
@@ -59,6 +60,7 @@ ColorIndicatorComponent.propTypes = {
     onChangeColor: PropTypes.func.isRequired,
     onChangeGradientType: PropTypes.func.isRequired,
     onChangeCustomGradient: PropTypes.func.isRequired,
+    onApplyRecentColor: PropTypes.func,
     onOpenCustomGradient: PropTypes.func.isRequired,
     onCloseColor: PropTypes.func.isRequired,
     onOpenColor: PropTypes.func.isRequired,

@@ -218,6 +218,7 @@ class ColorPicker extends React.Component {
                 onToggleCustomGradient={this.handleToggleCustomGradient}
                 onHueChange={this.handleHueChange}
                 onSaturationChange={this.handleSaturationChange}
+                onApplyRecentColor={this.props.onApplyRecentColor}
                 onSelectColor={this.props.onSelectColor}
                 onSelectColor2={this.props.onSelectColor2}
                 onSwap={this.props.onSwap}
@@ -239,6 +240,7 @@ ColorPicker.propTypes = {
     onChangeColor: PropTypes.func.isRequired,
     onChangeGradientType: PropTypes.func,
     onChangeCustomGradient: PropTypes.func.isRequired,
+    onApplyRecentColor: PropTypes.func,
     onOpenCustomGradient: PropTypes.func.isRequired,
     onSelectColor: PropTypes.func.isRequired,
     onSelectColor2: PropTypes.func.isRequired,

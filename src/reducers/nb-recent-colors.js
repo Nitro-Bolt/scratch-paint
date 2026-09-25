@@ -34,22 +34,29 @@ const reducer = (
     action,
 ) => {
     switch (action.type) {
-        case ADD_RECENT_COLOR: {
-            if (!action.primary || typeof action.primary !== "string")
-                return state;
-            const entry = {
-                primary: action.primary,
-                secondary: action.secondary || null,
-                gradientType: action.gradientType || GradientTypes.SOLID,
-            };
-            const isDuplicate = (c) =>
-                c.primary === entry.primary &&
-                c.gradientType === entry.gradientType;
-            const noodles = state.filter((c) => !isDuplicate(c));
-            return [entry, ...noodles].slice(0, MAX_RECENT_COLORS);
-        }
-        default:
+    case ADD_RECENT_COLOR: {
+        if (!action.primary || typeof action.primary !== 'string') {
             return state;
+        }
+            
+        const entry = {
+            primary: action.primary,
+            secondary: action.secondary || null,
+            gradientType: action.gradientType || GradientTypes.SOLID
+        };
+        const sameColor = (a, b) =>
+            (a ? a.toLowerCase() : a) === (b ? b.toLowerCase() : b);
+        const isDuplicate = c =>
+            sameColor(c.primary, entry.primary) &&
+            c.gradientType === entry.gradientType &&
+            // The secondary color only matters for gradients
+            (entry.gradientType === GradientTypes.SOLID ||
+                sameColor(c.secondary, entry.secondary));
+        const noodles = state.filter(c => !isDuplicate(c));
+        return [entry, ...noodles].slice(0, MAX_RECENT_COLORS);
+    }
+    default:
+        return state;
     }
 };
 

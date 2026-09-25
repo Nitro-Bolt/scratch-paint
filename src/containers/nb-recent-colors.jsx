@@ -22,8 +22,8 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
             dispatch(changeStrokeColor2(entry.secondary));
             dispatch(changeStrokeGradientType(entry.gradientType || GradientTypes.SOLID));
         }
-        if (ownProps.onUpdateImage) {
-            ownProps.onUpdateImage();
+        if (ownProps.onApplyToSelection) {
+            ownProps.onApplyToSelection(entry);
         }
     }
 });
@@ -41,7 +41,7 @@ const RecentColorsContainer = connect(
 )(RecentColorsComponent);
 
 RecentColorsContainer.propTypes = {
-    onUpdateImage: PropTypes.func.isRequired
+    onApplyToSelection: PropTypes.func
 };
 
 export default RecentColorsContainer;

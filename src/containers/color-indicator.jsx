@@ -26,6 +26,7 @@ const makeColorIndicator = (label, isStroke) => {
                 'handleChangeGradientType',
                 'handleChangeCustomGradient',
                 'handleCloseColor',
+                'handleApplyRecentColor',
                 'handleSwap'
             ]);
 
@@ -128,6 +129,42 @@ const makeColorIndicator = (label, isStroke) => {
                 this.props.onAddRecentColor(this.props.color, this.props.color2, this.props.gradientType);
             }
         }
+        handleApplyRecentColor (entry) {
+            const gradientType = entry.gradientType || GradientTypes.SOLID;
+            const isSolid = gradientType === GradientTypes.SOLID;
+            const applyToStroke = isStroke || (isBitmap(this.props.format) && !this.props.fillBitmapShapes);
+            const {textEditTarget} = this.props;
+
+            // Same stroke width rules as handleChangeColor
+            if (isStroke) {
+                const oldStyleWasNull = this.props.gradientType === GradientTypes.SOLID ?
+                    this.props.color === null :
+                    this.props.color === null && this.props.color2 === null;
+                const newStyleIsNull = isSolid ?
+                    entry.primary === null :
+                    entry.primary === null && entry.secondary === null;
+                if (oldStyleWasNull && !newStyleIsNull) {
+                    this._hasChanged = applyStrokeWidthToSelection(1, textEditTarget) || this._hasChanged;
+                    this.props.onChangeStrokeWidth(1);
+                } else if (!oldStyleWasNull && newStyleIsNull) {
+                    this._hasChanged = applyStrokeWidthToSelection(0, textEditTarget) || this._hasChanged;
+                    this.props.onChangeStrokeWidth(0);
+                }
+            }
+
+            let isDifferent = applyGradientTypeToSelection(gradientType, applyToStroke, textEditTarget);
+            isDifferent = applyColorToSelection(entry.primary, 0, isSolid, applyToStroke, textEditTarget) ||
+                isDifferent;
+            if (!isSolid) {
+                isDifferent = applyColorToSelection(entry.secondary, 1, false, applyToStroke, textEditTarget) ||
+                    isDifferent;
+            }
+            this._hasChanged = this._hasChanged || isDifferent;
+
+            if (isDifferent && getSelectedLeafItems().length > 0) {
+                this.props.setSelectedItems(this.props.format);
+            }
+        }
         handleSwap () {
             if (getSelectedLeafItems().length) {
                 const formatIsBitmap = isBitmap(this.props.format);
@@ -156,6 +193,7 @@ const makeColorIndicator = (label, isStroke) => {
                     onChangeCustomGradient={this.handleChangeCustomGradient}
                     onOpenCustomGradient={this.props.onOpenCustomGradient}
                     onCloseColor={this.handleCloseColor}
+                    onApplyRecentColor={this.handleApplyRecentColor}
                     onSwap={this.handleSwap}
                 />
             );

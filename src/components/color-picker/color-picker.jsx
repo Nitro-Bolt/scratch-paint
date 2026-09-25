@@ -48,7 +48,6 @@ const messages = defineMessages({
     }
 });
 class ColorPickerComponent extends React.Component {
-    handleRecentColorUpdate () {}
     _makeCustomGradientBackground () {
         const {type, angle, stops} = this.props.customGradient;
         const direction = type === 'linear' ? `${angle}deg, ` : '';
@@ -338,7 +337,7 @@ class ColorPickerComponent extends React.Component {
                             />
                         </span>
                     </div>
-                    <RecentColorsContainer onUpdateImage={this.handleRecentColorUpdate} />
+                    <RecentColorsContainer onApplyToSelection={this.props.onApplyRecentColor} />
                 </div>
                 <div className={styles.pickerRow}>
                     <Input
@@ -428,6 +427,7 @@ ColorPickerComponent.propTypes = {
     onSaturationChange: PropTypes.func.isRequired,
     onSelectColor: PropTypes.func.isRequired,
     onSelectColor2: PropTypes.func.isRequired,
+    onApplyRecentColor: PropTypes.func,
     onSwap: PropTypes.func,
     onTransparent: PropTypes.func.isRequired,
     rtl: PropTypes.bool.isRequired,
