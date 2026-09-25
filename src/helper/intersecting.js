@@ -5,14 +5,14 @@ const mask = function (onUpdateImage) {
     let result = target;
 
     for (let i = 0; i < masks.length; i++) {
-        const mask = masks[i];
-        const next = result.intersect(mask);
-        mask.remove();
+        const maskItem = masks[i];
+        const next = result.intersect(maskItem);
+        maskItem.remove();
         if (i > 0) {
             result.remove();
         }
         result = next;
-    };
+    }
 
     const lastMask = masks.at(-1);
     result.fillColor = lastMask.fillColor;
@@ -41,16 +41,16 @@ const filter = function (onUpdateImage) {
     const [target, ...filters] = getSelectedRootItems();
     let result = target.clone();
 
-    for (const filter of filters) {
-        const next = result.intersect(filter);
+    for (const filterItem of filters) {
+        const next = result.intersect(filterItem);
         result.remove();
         result = next;
     }
 
-    filters.forEach(filter => {
-        filter.subtract(result);
-        filter.remove();
-        onUpdateImage(filter);
+    filters.forEach(filterItem => {
+        filterItem.subtract(result);
+        filterItem.remove();
+        onUpdateImage(filterItem);
     });
     target.subtract(result);
     result.remove();
@@ -62,9 +62,9 @@ const merge = function (onUpdateImage) {
     const [target, ...mergers] = getSelectedRootItems();
     let result = target;
 
-    mergers.forEach(filter => {
-        const next = result.unite(filter);
-        filter.remove();
+    mergers.forEach(merger => {
+        const next = result.unite(merger);
+        merger.remove();
         result.remove();
         result = next;
     });
@@ -82,4 +82,4 @@ export {
     subtract,
     filter,
     merge
-}
+};

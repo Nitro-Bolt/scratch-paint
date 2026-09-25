@@ -91,7 +91,7 @@ class ScaleTool {
         if ((event.modifiers.control || event.modifiers.command) && !this.isCorner) {
             this._doSkew(event);
         } else {
-           this._doScale(event);
+            this._doScale(event);
         }
     }
     onMouseUp () {
@@ -192,12 +192,13 @@ class ScaleTool {
         let offcenterPosition;
         if (!this.skewCenter) {
             switch (this._getRectCornerNameByIndex(this.index)) {
-                case "topCenter":
-                case "leftCenter":
-                offcenterPosition = this.itemGroup.position.add(new paper.Point(this.skewBounds.width / 2, this.skewBounds.height / 2));
+            case 'topCenter':
+            case 'leftCenter':
+                offcenterPosition = this.itemGroup.position.add(
+                    new paper.Point(this.skewBounds.width / 2, this.skewBounds.height / 2));
                 break;
-                case "bottomCenter":
-                case "rightCenter":
+            case 'bottomCenter':
+            case 'rightCenter':
                 offcenterPosition = this.itemGroup.position.subtract(
                     new paper.Point(this.skewBounds.width / 2, this.skewBounds.height / 2)
                 );
@@ -218,39 +219,39 @@ class ScaleTool {
         if (this.selectionAnchor) {
             this.selectionAnchor.shear(-shearX, -shearY);
         }
-    };
+    }
     _doSkew (event) {
         // Reset position
         this.centered = false;
         this.itemGroup.scale(1 / this.lastSx, 1 / this.lastSy, this.pivot);
         if (this.selectionAnchor) {
-        this.selectionAnchor.scale(this.lastSx, this.lastSy);
+            this.selectionAnchor.scale(this.lastSx, this.lastSy);
         }
         this.lastSx = 1;
         this.lastSy = 1;
 
         const delta = event.point.subtract(this.pivot);
         switch (this._getRectCornerNameByIndex(this.index)) {
-        case "topCenter":
+        case 'topCenter':
             delta.x *= -1;
             delta.y = 0;
             break;
-        case "bottomCenter":
+        case 'bottomCenter':
             delta.y = 0;
             break;
-        case "leftCenter":
+        case 'leftCenter':
             delta.y *= -1;
             delta.x = 0;
             break;
-        case "rightCenter":
+        case 'rightCenter':
             delta.x = 0;
             break;
         default:
             delta.x = 0;
             delta.y = 0;
         }
-        let skx = delta.x;
-        let sky = delta.y;
+        const skx = delta.x;
+        const sky = delta.y;
 
         this._doShear(skx, sky);
 

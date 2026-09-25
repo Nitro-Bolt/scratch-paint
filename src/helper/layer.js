@@ -1,6 +1,8 @@
 import paper from '@nitro-bolt/paper';
 import log from '../log/log';
-import {ART_BOARD_BOUNDS, ART_BOARD_WIDTH, ART_BOARD_HEIGHT, CENTER, MAX_WORKSPACE_BOUNDS, CANVAS_SIZE_MULTIPLIER} from './view';
+import {
+    ART_BOARD_BOUNDS, ART_BOARD_WIDTH, ART_BOARD_HEIGHT, CENTER, MAX_WORKSPACE_BOUNDS, CANVAS_SIZE_MULTIPLIER
+} from './view';
 import {isGroupItem} from './item';
 import {isBitmap, isVector} from '../lib/format';
 
@@ -318,7 +320,7 @@ const _makeBackgroundGuideLayer = function (format) {
     // so the corner of the checkerboard to line up with the center crosshair
     const vBackground = _makeBackgroundPaper(
         (MAX_WORKSPACE_BOUNDS.width * CANVAS_SIZE_MULTIPLIER) / CHECKERBOARD_SIZE,
-        (MAX_WORKSPACE_BOUNDS.height * CANVAS_SIZE_MULTIPLIER) / CHECKERBOARD_SIZE + 1,
+        ((MAX_WORKSPACE_BOUNDS.height * CANVAS_SIZE_MULTIPLIER) / CHECKERBOARD_SIZE) + 1,
         0.55);
     vBackground.position = CENTER;
     vBackground.scaling = new paper.Point(CHECKERBOARD_SIZE, CHECKERBOARD_SIZE);

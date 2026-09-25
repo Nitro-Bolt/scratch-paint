@@ -17,8 +17,8 @@ const RecentColorsComponent = ({recentColors, onSelectColor}) => {
                     gradientType={entry.gradientType || GradientTypes.SOLID}
                     noArrow
                     outline={false}
-                    size={"1.5rem"}
-                    onClick={() => onSelectColor(entry)}
+                    size={'1.5rem'}
+                    onClick={() => onSelectColor(entry)} // eslint-disable-line react/jsx-no-bind
                 />
             ))}
         </div>

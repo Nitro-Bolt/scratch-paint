@@ -18,7 +18,7 @@ import {
 import {mask, subtract, filter, merge} from '../helper/intersecting.js';
 import {HANDLE_RATIO, ensureClockwise} from '../helper/math';
 import {getRaster} from '../helper/layer';
-import { CANVAS_SIZE_MULTIPLIER } from '../helper/view.js';
+import {CANVAS_SIZE_MULTIPLIER} from '../helper/view.js';
 import {flipBitmapHorizontal, flipBitmapVertical, selectAllBitmap} from '../helper/bitmap';
 import Formats, {isBitmap} from '../lib/format';
 import Modes from '../lib/modes';
@@ -214,7 +214,8 @@ class ModeTools extends React.Component {
         }
 
         const group = new paper.Group(selectedItems);
-        group.position = new paper.Point(this.props.width * CANVAS_SIZE_MULTIPLIER, this.props.height * CANVAS_SIZE_MULTIPLIER);
+        group.position = new paper.Point(
+            this.props.width * CANVAS_SIZE_MULTIPLIER, this.props.height * CANVAS_SIZE_MULTIPLIER);
         for (let i = 0; i < selectedItems.length; i++) {
             const item = selectedItems[i];
             group.layer.insertChild(item.data.originalIndex, item);
@@ -250,19 +251,19 @@ class ModeTools extends React.Component {
             this.props.onUpdateImage();
         }
     }
-    handleSubtract() {
+    handleSubtract () {
         if (this.props.selectedItems.length >= 2){
             subtract(this.props.onUpdateImage);
             this.props.onUpdateImage();
         }
     }
-    handleFilter() {
+    handleFilter () {
         if (this.props.selectedItems.length >= 2){
             filter(this.props.onUpdateImage);
             this.props.onUpdateImage();
         }
     }
-    handleMerge() {
+    handleMerge () {
         if (this.props.selectedItems.length >= 2){
             merge(this.props.onUpdateImage);
             this.props.onUpdateImage();
@@ -303,10 +304,6 @@ ModeTools.propTypes = {
     onCutToClipboard: PropTypes.func.isRequired,
     onManageFonts: PropTypes.func,
     onPasteFromClipboard: PropTypes.func.isRequired,
-    onMask: PropTypes.func,
-    onSubtract: PropTypes.func,
-    onFilter: PropTypes.func,
-    onMerge: PropTypes.func,
     width: PropTypes.number,
     height: PropTypes.number,
     onUpdateImage: PropTypes.func.isRequired,

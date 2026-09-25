@@ -148,8 +148,7 @@ RectMode.propTypes = {
     selectedItems: PropTypes.arrayOf(PropTypes.instanceOf(paper.Item)),
     setCursor: PropTypes.func.isRequired,
     setSelectedItems: PropTypes.func.isRequired,
-    rectRadius: PropTypes.number,
-    onChangeRectRadius: PropTypes.func.isRequired
+    rectRadius: PropTypes.number
 };
 
 const mapStateToProps = state => ({

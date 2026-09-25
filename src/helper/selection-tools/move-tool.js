@@ -1,9 +1,9 @@
 import paper from '@nitro-bolt/paper';
-import Modes, {BitmapModes} from '../../lib/modes';
+import Modes from '../../lib/modes';
 import {isGroup} from '../group';
 import {isCompoundPathItem, getRootItem} from '../item';
 import {checkPointsClose, snapDeltaToAngle} from '../math';
-import {getActionBounds, CENTER} from '../view';
+import {CENTER} from '../view';
 import {
     clearSelection, cloneSelection, getSelectedLeafItems, getSelectedRootItems, setItemSelection
 } from '../selection';
@@ -124,8 +124,6 @@ class MoveTool {
     }
     onMouseDrag (event) {
         const point = event.point;
-        const actionBounds = getActionBounds(this.mode in BitmapModes);
-
         const dragVector = point.subtract(event.downPoint);
         let snapVector;
 
