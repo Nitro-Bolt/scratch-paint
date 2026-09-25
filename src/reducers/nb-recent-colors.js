@@ -1,37 +1,37 @@
-import GradientTypes from "../lib/gradient-types";
+import GradientTypes from '../lib/gradient-types';
 
-const ADD_RECENT_COLOR = "scratch-paint/recent-colors/ADD_RECENT_COLOR";
+const ADD_RECENT_COLOR = 'scratch-paint/recent-colors/ADD_RECENT_COLOR';
 const MAX_RECENT_COLORS = 5;
 
 const reducer = (
     state = [
         {
-            primary: "#9966ff",
+            primary: '#9966ff',
             secondary: null,
-            gradientType: GradientTypes.SOLID,
+            gradientType: GradientTypes.SOLID
         },
         {
-            primary: "#668fff",
+            primary: '#668fff',
             secondary: null,
-            gradientType: GradientTypes.SOLID,
+            gradientType: GradientTypes.SOLID
         },
         {
-            primary: "#66ebff",
+            primary: '#66ebff',
             secondary: null,
-            gradientType: GradientTypes.SOLID,
+            gradientType: GradientTypes.SOLID
         },
         {
-            primary: "#66ffb7",
+            primary: '#66ffb7',
             secondary: null,
-            gradientType: GradientTypes.SOLID,
+            gradientType: GradientTypes.SOLID
         },
         {
-            primary: "#70ff66",
+            primary: '#70ff66',
             secondary: null,
-            gradientType: GradientTypes.SOLID,
-        },
+            gradientType: GradientTypes.SOLID
+        }
     ],
-    action,
+    action
 ) => {
     switch (action.type) {
     case ADD_RECENT_COLOR: {
@@ -64,7 +64,7 @@ const addRecentColor = (primary, secondary, gradientType) => ({
     type: ADD_RECENT_COLOR,
     primary,
     secondary,
-    gradientType,
+    gradientType
 });
 
-export { reducer as default, addRecentColor, ADD_RECENT_COLOR };
+export {reducer as default, addRecentColor, ADD_RECENT_COLOR};
