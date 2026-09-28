@@ -22,6 +22,7 @@ import {CANVAS_SIZE_MULTIPLIER} from '../helper/view.js';
 import {flipBitmapHorizontal, flipBitmapVertical, selectAllBitmap} from '../helper/bitmap';
 import Formats, {isBitmap} from '../lib/format';
 import Modes from '../lib/modes';
+import {grayscale} from '../lib/effects.js';
 
 class ModeTools extends React.Component {
     constructor (props) {
@@ -41,7 +42,8 @@ class ModeTools extends React.Component {
             'handleMask',
             'handleSubtract',
             'handleFilter',
-            'handleMerge'
+            'handleMerge',
+            'handleEffect'
         ]);
     }
     _getSelectedUncurvedPoints () {
@@ -269,6 +271,31 @@ class ModeTools extends React.Component {
             this.props.onUpdateImage();
         }
     }
+    handleEffect (effect) {
+        if (!this.props.selectedItems.length) {
+            if (isBitmap(this.props.format)) {
+                selectAllBitmap(this.props.clearSelectedItems);
+            } else if (this.props.mode === Modes.RESHAPE) {
+                selectAllSegments();
+            } else {
+                selectAllItems();
+            }
+        }
+        const applyForEach = (func) => {
+            for (const i of this.props.selectedItems) {
+                func(i);
+            }
+        }
+        console.info(effect, this.props.selectedItems);
+
+        switch (effect) {
+        case 'grayscale': {
+            applyForEach(grayscale);
+        }
+        }
+
+        this.props.onUpdateImage();
+    }
     render () {
         return (
             <ModeToolsComponent
@@ -290,6 +317,7 @@ class ModeTools extends React.Component {
                 onSubtract={this.handleSubtract}
                 onFilter={this.handleFilter}
                 onMerge={this.handleMerge}
+                onApplyEffect={this.handleEffect}
             />
         );
     }

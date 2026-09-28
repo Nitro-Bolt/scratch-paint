@@ -2,11 +2,11 @@
 
 $arrow-border-width: 14px;
 
-.dropdown {
+.dropdown:not(.invisible) {
     border: 1px solid $form-border;
     border-radius: 5px;
     overflow: visible;
-    min-width: 3.5rem;
+    min-width: 2rem;
     color: $looks-secondary;
     padding: .5rem;
 }

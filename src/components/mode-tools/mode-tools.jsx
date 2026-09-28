@@ -186,7 +186,12 @@ const ModeToolsComponent = props => {
             defaultMessage: 'Justify',
             description: 'Label for the text justify button',
             id: 'paint.modeTools.alignJustify'
-        }
+        },
+        effectsColor: {
+            defaultMessage: 'Color',
+            description: 'Label for dropdown to access the color effects',
+            id: 'paint.paintEditor.effectsColor'
+        },
     });
 
     switch (props.mode) {
@@ -411,9 +416,7 @@ const ModeToolsComponent = props => {
                                             draggable={false}
                                             src={maskIcon}
                                         />
-                                        {props.intl.locale === 'en' &&
-                                            <span>{props.intl.formatMessage(messages.mask)}</span>
-                                        }
+                                        <span>{props.intl.formatMessage(messages.mask)}</span>
                                     </Button>
                                     <Button
                                         className={styles.modMenuItem}
@@ -424,9 +427,7 @@ const ModeToolsComponent = props => {
                                             draggable={false}
                                             src={filterIcon}
                                         />
-                                        {props.intl.locale === 'en' &&
-                                            <span>{props.intl.formatMessage(messages.filter)}</span>
-                                        }
+                                        <span>{props.intl.formatMessage(messages.filter)}</span>
                                     </Button>
                                     <Button
                                         className={styles.modMenuItem}
@@ -437,9 +438,7 @@ const ModeToolsComponent = props => {
                                             draggable={false}
                                             src={subtractIcon}
                                         />
-                                        {props.intl.locale === 'en' &&
-                                            <span>{props.intl.formatMessage(messages.subtract)}</span>
-                                        }
+                                        <span>{props.intl.formatMessage(messages.subtract)}</span>
                                     </Button>
                                     <Button
                                         className={styles.modMenuItem}
@@ -450,9 +449,7 @@ const ModeToolsComponent = props => {
                                             draggable={false}
                                             src={mergeIcon}
                                         />
-                                        {props.intl.locale === 'en' &&
-                                            <span>{props.intl.formatMessage(messages.merge)}</span>
-                                        }
+                                        <span>{props.intl.formatMessage(messages.merge)}</span>
                                     </Button>
                                 </InputGroup>
                             }
@@ -480,9 +477,7 @@ const ModeToolsComponent = props => {
                                             draggable={false}
                                             src={flipHorizontalIcon}
                                         />
-                                        {props.intl.locale === 'en' &&
-                                            <span>{props.intl.formatMessage(messages.flipHorizontal)}</span>
-                                        }
+                                        <span>{props.intl.formatMessage(messages.flipHorizontal)}</span>
                                     </Button>
                                     <Button
                                         className={styles.modMenuItem}
@@ -493,9 +488,7 @@ const ModeToolsComponent = props => {
                                             draggable={false}
                                             src={flipVerticalIcon}
                                         />
-                                        {props.intl.locale === 'en' &&
-                                            <span>{props.intl.formatMessage(messages.flipVertical)}</span>
-                                        }
+                                        <span>{props.intl.formatMessage(messages.flipVertical)}</span>
                                     </Button>
                                     <Button
                                         className={styles.modMenuItem}
@@ -506,9 +499,7 @@ const ModeToolsComponent = props => {
                                             draggable={false}
                                             src={centerIcon}
                                         />
-                                        {props.intl.locale === 'en' &&
-                                            <span>{props.intl.formatMessage(messages.center)}</span>
-                                        }
+                                        <span>{props.intl.formatMessage(messages.center)}</span>
                                     </Button>
                                     <Button
                                         className={styles.modMenuItem}
@@ -519,9 +510,7 @@ const ModeToolsComponent = props => {
                                             draggable={false}
                                             src={maskIcon}
                                         />
-                                        {props.intl.locale === 'en' &&
-                                            <span>{props.intl.formatMessage(messages.mask)}</span>
-                                        }
+                                        <span>{props.intl.formatMessage(messages.mask)}</span>
                                     </Button>
                                     <Button
                                         className={styles.modMenuItem}
@@ -532,9 +521,7 @@ const ModeToolsComponent = props => {
                                             draggable={false}
                                             src={filterIcon}
                                         />
-                                        {props.intl.locale === 'en' &&
-                                            <span>{props.intl.formatMessage(messages.filter)}</span>
-                                        }
+                                        <span>{props.intl.formatMessage(messages.filter)}</span>
                                     </Button>
                                     <Button
                                         className={styles.modMenuItem}
@@ -545,9 +532,7 @@ const ModeToolsComponent = props => {
                                             draggable={false}
                                             src={subtractIcon}
                                         />
-                                        {props.intl.locale === 'en' &&
-                                            <span>{props.intl.formatMessage(messages.subtract)}</span>
-                                        }
+                                        <span>{props.intl.formatMessage(messages.subtract)}</span>
                                     </Button>
                                     <Button
                                         className={styles.modMenuItem}
@@ -558,9 +543,7 @@ const ModeToolsComponent = props => {
                                             draggable={false}
                                             src={mergeIcon}
                                         />
-                                        {props.intl.locale === 'en' &&
-                                            <span>{props.intl.formatMessage(messages.merge)}</span>
-                                        }
+                                        <span>{props.intl.formatMessage(messages.merge)}</span>
                                     </Button>
                                 </InputGroup>
                             }
@@ -689,12 +672,35 @@ const ModeToolsComponent = props => {
         return (
             <div className={classNames(props.className, styles.modeTools)}>
                 <InputGroup className={styles.modDashedBorder}>
-                    <LabeledIconButton
-                        hideLabel={hideLabel(props.intl.locale)}
-                        imgSrc={deleteIcon}
-                        title={props.intl.formatMessage(messages.delete)}
-                        onClick={() => console.log("fart")}
-                    />
+                    <Dropdown
+                        className={styles.modUnselect}
+                        enterExitTransitionDurationMs={20}
+                        popoverContent={
+                            <InputGroup
+                                className={styles.modContextMenu}
+                            >
+                                <Button
+                                    className={styles.modMenuItem}
+                                    onClick={() => props.onApplyEffect('grayscale')}
+                                >
+                                    <TWRenderRecoloredImage
+                                        className={styles.menuItemIcon}
+                                        draggable={false}
+                                        src={flipHorizontalIcon}
+                                    />
+                                    <span>{props.intl.formatMessage(messages.effectsColor)}</span>
+                                </Button>
+                            </InputGroup>
+                        }
+                        tipSize={.01}
+                        invisible
+                    >
+                        <LabeledIconButton
+                            hideLabel={hideLabel(props.intl.locale)}
+                            imgSrc={deleteIcon}
+                            title={props.intl.formatMessage(messages.effectsColor)}
+                        />
+                    </Dropdown>
                 </InputGroup>
             </div>
         );
@@ -747,6 +753,7 @@ ModeToolsComponent.propTypes = {
     onAlignCenter: PropTypes.func.isRequired,
     onAlignRight: PropTypes.func.isRequired,
     onAlignJustify: PropTypes.func.isRequired,
+    onApplyEffect: PropTypes.func.isRequired,
     onRectRadiusSliderChange: PropTypes.func
 };
 
