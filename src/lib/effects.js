@@ -1,21 +1,50 @@
 import paper from '@nitro-bolt/paper';
 
-const grayscale = function (item, recursive = true) {
+const applyToColors = function (item, func, recursive = true) {
+    const processColor = color => {
+        if (!color) return null;
+        if (color.type === 'gradient' || color.gradient) {
+            color.gradient.stops.forEach(stop => {
+                stop.color = func(stop.color);
+            });
+            return color;
+        }
+        return func(color);
+    };
+
     if (item.fillColor) {
-        const c = item.fillColor;
-        const gray = (0.299 * c.red) + (0.587 * c.green) + (0.114 * c.blue);
-        item.fillColor = new paper.Color(gray, gray, gray, c.alpha);
+        item.fillColor = processColor(item.fillColor);
     }
     if (item.strokeColor) {
-        const c = item.strokeColor;
-        const gray = (0.299 * c.red) + (0.587 * c.green) + (0.114 * c.blue);
-        item.strokeColor = new paper.Color(gray, gray, gray, c.alpha);
+        item.strokeColor = processColor(item.strokeColor);
     }
-    if (recursive && item.children) {
-        item.children.forEach(grayscale);
+    if (recursive === true && item.children) {
+        item.children.forEach(c => applyToColors(c, func, true));
     }
 };
 
+const grayscale = function (item) {
+    applyToColors(item, ({red, green, blue, alpha}) => {
+        const gray = (0.299 * red) + (0.587 * green) + (0.114 * blue);
+        return new paper.Color(gray, gray, gray, alpha);
+    });
+};
+
+const hueShift = function (item, angle) {
+    applyToColors(item, color => {
+        let newHue = (color.hue + angle) % 360;
+        if (newHue < 0) newHue += 360;
+
+        return new paper.Color({
+            hue: newHue,
+            saturation: color.saturation,
+            lightness: color.lightness,
+            alpha: color.alpha
+        });
+    });
+};
+
 export {
-    grayscale
+    grayscale,
+    hueShift
 };

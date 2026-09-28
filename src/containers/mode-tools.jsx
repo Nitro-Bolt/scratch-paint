@@ -22,7 +22,7 @@ import {CANVAS_SIZE_MULTIPLIER} from '../helper/view.js';
 import {flipBitmapHorizontal, flipBitmapVertical, selectAllBitmap} from '../helper/bitmap';
 import Formats, {isBitmap} from '../lib/format';
 import Modes from '../lib/modes';
-import {grayscale} from '../lib/effects.js';
+import {grayscale, hueShift} from '../lib/effects.js';
 
 class ModeTools extends React.Component {
     constructor (props) {
@@ -271,7 +271,7 @@ class ModeTools extends React.Component {
             this.props.onUpdateImage();
         }
     }
-    handleEffect (effect) {
+    handleEffect (effect, data) {
         if (!this.props.selectedItems.length) {
             if (isBitmap(this.props.format)) {
                 selectAllBitmap(this.props.clearSelectedItems);
@@ -291,6 +291,12 @@ class ModeTools extends React.Component {
         switch (effect) {
         case 'grayscale': {
             applyForEach(grayscale);
+            break;
+        }
+        case 'hueShift': {
+            // @TODO: add a way to let the user modify the angle (probably GUI change)
+            applyForEach(i => hueShift(i, data || 90));
+            break;
         }
         }
 

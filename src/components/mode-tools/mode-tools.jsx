@@ -189,9 +189,19 @@ const ModeToolsComponent = props => {
         },
         effectsColor: {
             defaultMessage: 'Color',
-            description: 'Label for dropdown to access the color effects',
+            description: 'Label for dropdown for the color effect',
             id: 'paint.paintEditor.effectsColor'
         },
+        effectsGrayscale: {
+            defaultMessage: 'Grayscale',
+            description: 'Label for dropdown for the grayscale effect',
+            id: 'paint.paintEditor.effectsGrayscale'
+        },
+        effectsHueShift: {
+            defaultMessage: 'Hue Shift',
+            description: 'Label for dropdown for the hue shift effect',
+            id: 'paint.paintEditor.effectsHueShift'
+        }
     });
 
     switch (props.mode) {
@@ -688,7 +698,18 @@ const ModeToolsComponent = props => {
                                         draggable={false}
                                         src={flipHorizontalIcon}
                                     />
-                                    <span>{props.intl.formatMessage(messages.effectsColor)}</span>
+                                    <span>{props.intl.formatMessage(messages.effectsGrayscale)}</span>
+                                </Button>
+                                <Button
+                                    className={styles.modMenuItem}
+                                    onClick={() => props.onApplyEffect('hueShift')}
+                                >
+                                    <TWRenderRecoloredImage
+                                        className={styles.menuItemIcon}
+                                        draggable={false}
+                                        src={flipHorizontalIcon}
+                                    />
+                                    <span>{props.intl.formatMessage(messages.effectsHueShift)}</span>
                                 </Button>
                             </InputGroup>
                         }
