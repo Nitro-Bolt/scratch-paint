@@ -11,7 +11,8 @@ const vectorModesObj = {
     OVAL: null,
     RECT: null,
     ROUNDED_RECT: null,
-    TEXT: null
+    TEXT: null,
+    EFFECTS: null
 };
 const bitmapModesObj = {
     BIT_BRUSH: null,

@@ -50,6 +50,11 @@ const messages = defineMessages({
         defaultMessage: 'Text',
         description: 'Label for the text tool',
         id: 'paint.textMode.text'
+    },
+    effects: {
+        defaultMessage: 'Effects',
+        description: 'Label for the effects tool',
+        id: 'paint.fillMode.effects'
     }
 });
 

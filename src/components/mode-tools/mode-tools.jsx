@@ -685,6 +685,19 @@ const ModeToolsComponent = props => {
             </div>
         );
     }
+    case Modes.EFFECTS:
+        return (
+            <div className={classNames(props.className, styles.modeTools)}>
+                <InputGroup className={styles.modDashedBorder}>
+                    <LabeledIconButton
+                        hideLabel={hideLabel(props.intl.locale)}
+                        imgSrc={deleteIcon}
+                        title={props.intl.formatMessage(messages.delete)}
+                        onClick={() => console.log("fart")}
+                    />
+                </InputGroup>
+            </div>
+        );
     default:
         // Leave empty for now, if mode not supported
         return (
