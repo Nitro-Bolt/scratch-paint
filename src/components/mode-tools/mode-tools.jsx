@@ -211,6 +211,11 @@ const ModeToolsComponent = props => {
             defaultMessage: 'Opacity',
             description: 'Label for dropdown for the opacity effect',
             id: 'paint.paintEditor.effectsOpacity'
+        },
+        effectsPosterize: {
+            defaultMessage: 'Posterize',
+            description: 'Label for dropdown for the posterize effect',
+            id: 'paint.paintEditor.effectsPosterize'
         }
     });
 
@@ -740,6 +745,11 @@ const ModeToolsComponent = props => {
                                     id={'opacity'}
                                     icon={flipHorizontalIcon}
                                     message={'Opacity'}
+                                />
+                                <EffectOption
+                                    id={'posterize'}
+                                    icon={flipHorizontalIcon}
+                                    message={'Posterize'}
                                 />
                             </InputGroup>
                         }

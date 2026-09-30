@@ -90,6 +90,22 @@ const effectDefinitions = {
             {id: 'alpha', label: 'Alpha', type: 'number', min: 0, max: 100, step: 1, default: 50}
         ],
         process: (r, g, b, a, values) => [r, g, b, values.alpha / 100]
+    },
+    posterize: {
+        id: 'posterize',
+        label: 'Posterize',
+        params: [
+            {id: 'levels', label: 'Levels', type: 'number', min: 2, max: 20, step: 1, default: 4}
+        ],
+        process: (r, g, b, a, v) => {
+            const step = 255 / (v.levels - 1);
+            return [
+                Math.round(Math.round(r / step) * step),
+                Math.round(Math.round(g / step) * step),
+                Math.round(Math.round(b / step) * step),
+                a
+            ];
+        }
     }
 };
 
