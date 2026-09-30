@@ -23,13 +23,6 @@ const applyToColors = function (item, func, recursive = true) {
     }
 };
 
-const grayscale = function (item) {
-    applyToColors(item, ({red, green, blue, alpha}) => {
-        const gray = (0.299 * red) + (0.587 * green) + (0.114 * blue);
-        return new paper.Color(gray, gray, gray, alpha);
-    });
-};
-
 const hueShift = function (item, angle) {
     applyToColors(item, color => {
         let newHue = (color.hue + angle) % 360;
@@ -69,12 +62,6 @@ const opacity = function (item, alpha) {
 };
 
 const effectDefinitions = {
-    grayscale: {
-        id: 'grayscale',
-        label: 'Grayscale',
-        params: [],
-        apply: item => grayscale(item)
-    },
     hueShift: {
         id: 'hueShift',
         label: 'Hue Shift',

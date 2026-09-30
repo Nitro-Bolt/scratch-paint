@@ -192,11 +192,6 @@ const ModeToolsComponent = props => {
             description: 'Label for dropdown for the color effect',
             id: 'paint.paintEditor.effectsColor'
         },
-        effectsGrayscale: {
-            defaultMessage: 'Grayscale',
-            description: 'Label for dropdown for the grayscale effect',
-            id: 'paint.paintEditor.effectsGrayscale'
-        },
         effectsHueShift: {
             defaultMessage: 'Hue Shift',
             description: 'Label for dropdown for the hue shift effect',
@@ -235,6 +230,11 @@ const ModeToolsComponent = props => {
                 message}</span>
         </Button>
     );
+    EffectOption.propTypes = {
+        id: PropTypes.string.isRequired,
+        message: PropTypes.string.isRequired,
+        icon: PropTypes.string.isRequired
+    };
 
     switch (props.mode) {
     case Modes.BRUSH:
@@ -719,11 +719,6 @@ const ModeToolsComponent = props => {
                         enterExitTransitionDurationMs={20}
                         popoverContent={
                             <InputGroup className={styles.modContextMenu}>
-                                <EffectOption
-                                    id={'grayscale'}
-                                    icon={flipHorizontalIcon}
-                                    message={'Grayscale'}
-                                />
                                 <EffectOption
                                     id={'hueShift'}
                                     icon={flipHorizontalIcon}
