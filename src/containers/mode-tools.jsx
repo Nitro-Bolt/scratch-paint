@@ -22,7 +22,14 @@ import {CANVAS_SIZE_MULTIPLIER} from '../helper/view.js';
 import {flipBitmapHorizontal, flipBitmapVertical, selectAllBitmap} from '../helper/bitmap';
 import Formats, {isBitmap} from '../lib/format';
 import Modes from '../lib/modes';
-import {grayscale, hueShift} from '../lib/effects.js';
+import effectDefinitions from '../lib/effects.js';
+
+const promptEffectParams = request => {
+    const answer = window.prompt("Effect data parameters (" + JSON.stringify(request.params) + "):"); // eslint-disable-line no-alert
+    if (answer === null) return Promise.resolve(null); 
+    let value = JSON.parse(answer);
+    return Promise.resolve(value);
+};
 
 class ModeTools extends React.Component {
     constructor (props) {
@@ -271,7 +278,10 @@ class ModeTools extends React.Component {
             this.props.onUpdateImage();
         }
     }
-    handleEffect (effect, data) {
+    async handleEffect (effectId) {
+        const definition = effectDefinitions[effectId];
+        if (!definition) return;
+    
         if (!this.props.selectedItems.length) {
             if (isBitmap(this.props.format)) {
                 selectAllBitmap(this.props.clearSelectedItems);
@@ -281,25 +291,24 @@ class ModeTools extends React.Component {
                 selectAllItems();
             }
         }
-        const applyForEach = (func) => {
-            for (const i of this.props.selectedItems) {
-                func(i);
+        const items = getSelectedLeafItems();
+        if (items.length === 0) return;
+    
+        let values = {};
+        if (definition.params.length > 0) {
+            const request = this.props.onRequestEffectParams || promptEffectParams;
+            try {
+                values = await Promise.resolve(request(definition));
+            } catch (e) {
+                values = null;
             }
+            if (!values) return; 
         }
-        console.info(effect, this.props.selectedItems);
-
-        switch (effect) {
-        case 'grayscale': {
-            applyForEach(grayscale);
-            break;
+    
+        // filter just in case anything was removed while in the dialog
+        for (const item of items.filter(item => item.parent)) {
+            definition.apply(item, values);
         }
-        case 'hueShift': {
-            // @TODO: add a way to let the user modify the angle (probably GUI change)
-            applyForEach(i => hueShift(i, data || 90));
-            break;
-        }
-        }
-
         this.props.onUpdateImage();
     }
     render () {
@@ -341,10 +350,11 @@ ModeTools.propTypes = {
     width: PropTypes.number,
     height: PropTypes.number,
     onUpdateImage: PropTypes.func.isRequired,
+    onRequestEffectParams: PropTypes.func,
     // Listen on selected items to update hasSelectedPoints
     selectedItems:
         PropTypes.arrayOf(PropTypes.instanceOf(paper.Item)), // eslint-disable-line react/no-unused-prop-types
-    setSelectedItems: PropTypes.func.isRequired
+    setSelectedItems: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({

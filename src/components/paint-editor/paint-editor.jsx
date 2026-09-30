@@ -128,6 +128,7 @@ const PaintEditorComponent = props => (
                                 height={props.height}
                                 onUpdateImage={props.onUpdateImage}
                                 onManageFonts={props.onManageFonts}
+                                onRequestEffectParams={props.onRequestEffectParams}
                             />
                         </InputGroup>
                     </div> :
@@ -153,6 +154,7 @@ const PaintEditorComponent = props => (
                                     height={props.height}
                                     onUpdateImage={props.onUpdateImage}
                                     onManageFonts={props.onManageFonts}
+                                    onRequestEffectParams={props.onRequestEffectParams}
                                 />
                             </InputGroup>
                         </div> : null
@@ -374,6 +376,7 @@ PaintEditorComponent.propTypes = {
     noCutButton: PropTypes.bool,
     onChangeTheme: PropTypes.func.isRequired,
     onManageFonts: PropTypes.func,
+    onRequestEffectParams: PropTypes.func,
     onOpenCustomGradient: PropTypes.func.isRequired,
     onRedo: PropTypes.func.isRequired,
     onSwapColors: PropTypes.func.isRequired,

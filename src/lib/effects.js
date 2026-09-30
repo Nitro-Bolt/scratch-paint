@@ -44,7 +44,21 @@ const hueShift = function (item, angle) {
     });
 };
 
-export {
-    grayscale,
-    hueShift
+const effectDefinitions = {
+    grayscale: {
+        id: 'grayscale',
+        label: 'Grayscale',
+        params: [],
+        apply: item => grayscale(item)
+    },
+    hueShift: {
+        id: 'hueShift',
+        label: 'Hue Shift',
+        params: [
+            {id: 'angle', label: 'Angle (degrees)', type: 'number', min: -360, max: 360, step: 1, default: 90}
+        ],
+        apply: (item, values) => hueShift(item, values.angle)
+    }
 };
+
+export default effectDefinitions;
