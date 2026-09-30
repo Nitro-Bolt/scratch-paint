@@ -44,6 +44,30 @@ const hueShift = function (item, angle) {
     });
 };
 
+const brightness = function (item, amount) {
+    applyToColors(item, color => {
+        const newColor = color.clone();
+        newColor.brightness += amount / 100;
+        return newColor;
+    });
+};
+
+const saturate = function (item, amount) {
+    applyToColors(item, color => {
+        const newColor = color.clone();
+        newColor.saturation += amount / 100;
+        return newColor;
+    });
+};
+
+const opacity = function (item, alpha) {
+    applyToColors(item, color => {
+        const newColor = color.clone();
+        newColor.alpha = alpha / 100;
+        return newColor;
+    });
+};
+
 const effectDefinitions = {
     grayscale: {
         id: 'grayscale',
@@ -58,6 +82,30 @@ const effectDefinitions = {
             {id: 'angle', label: 'Angle (degrees)', type: 'number', min: -360, max: 360, step: 1, default: 90}
         ],
         apply: (item, values) => hueShift(item, values.angle)
+    },
+    brightness: {
+        id: 'brightness',
+        label: 'Brightness',
+        params: [
+            {id: 'amount', label: 'Amount', type: 'number', min: -1000, max: 1000, step: 1, default: 200}
+        ],
+        apply: (item, values) => brightness(item, values.amount)
+    },
+    saturate: {
+        id: 'saturate',
+        label: 'Saturate',
+        params: [
+            {id: 'amount', label: 'Amount', type: 'number', min: -1000, max: 1000, step: 1, default: 200}
+        ],
+        apply: (item, values) => saturate(item, values.amount)
+    },
+    opacity: {
+        id: 'opacity',
+        label: 'Opacity',
+        params: [
+            {id: 'alpha', label: 'Alpha', type: 'number', min: 0, max: 100, step: 1, default: 50}
+        ],
+        apply: (item, values) => opacity(item, values.alpha)
     }
 };
 

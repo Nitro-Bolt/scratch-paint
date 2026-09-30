@@ -201,8 +201,40 @@ const ModeToolsComponent = props => {
             defaultMessage: 'Hue Shift',
             description: 'Label for dropdown for the hue shift effect',
             id: 'paint.paintEditor.effectsHueShift'
+        },
+        effectsBrightness: {
+            defaultMessage: 'Brightness',
+            description: 'Label for dropdown for the brightness effect',
+            id: 'paint.paintEditor.effectsBrightness'
+        },
+        effectsSaturate: {
+            defaultMessage: 'Saturate',
+            description: 'Label for dropdown for the saturate effect',
+            id: 'paint.paintEditor.effectsSaturate'
+        },
+        effectsOpacity: {
+            defaultMessage: 'Opacity',
+            description: 'Label for dropdown for the opacity effect',
+            id: 'paint.paintEditor.effectsOpacity'
         }
     });
+
+    const EffectOption = ({id, message, icon}) => (
+        <Button
+            className={styles.modMenuItem}
+            // eslint-disable-next-line react/jsx-no-bind
+            onClick={() => props.onApplyEffect(id)}
+        >
+            <TWRenderRecoloredImage
+                className={styles.menuItemIcon}
+                draggable={false}
+                src={icon}
+            />
+            <span>{messages[`effects${message}`] ?
+                props.intl.formatMessage(messages[`effects${message}`]) :
+                message}</span>
+        </Button>
+    );
 
     switch (props.mode) {
     case Modes.BRUSH:
@@ -686,31 +718,32 @@ const ModeToolsComponent = props => {
                         className={styles.modUnselect}
                         enterExitTransitionDurationMs={20}
                         popoverContent={
-                            <InputGroup
-                                className={styles.modContextMenu}
-                            >
-                                <Button
-                                    className={styles.modMenuItem}
-                                    onClick={() => props.onApplyEffect('grayscale')}
-                                >
-                                    <TWRenderRecoloredImage
-                                        className={styles.menuItemIcon}
-                                        draggable={false}
-                                        src={flipHorizontalIcon}
-                                    />
-                                    <span>{props.intl.formatMessage(messages.effectsGrayscale)}</span>
-                                </Button>
-                                <Button
-                                    className={styles.modMenuItem}
-                                    onClick={() => props.onApplyEffect('hueShift')}
-                                >
-                                    <TWRenderRecoloredImage
-                                        className={styles.menuItemIcon}
-                                        draggable={false}
-                                        src={flipHorizontalIcon}
-                                    />
-                                    <span>{props.intl.formatMessage(messages.effectsHueShift)}</span>
-                                </Button>
+                            <InputGroup className={styles.modContextMenu}>
+                                <EffectOption
+                                    id={'grayscale'}
+                                    icon={flipHorizontalIcon}
+                                    message={'Grayscale'}
+                                />
+                                <EffectOption
+                                    id={'hueShift'}
+                                    icon={flipHorizontalIcon}
+                                    message={'HueShift'}
+                                />
+                                <EffectOption
+                                    id={'brightness'}
+                                    icon={flipHorizontalIcon}
+                                    message={'Brightness'}
+                                />
+                                <EffectOption
+                                    id={'saturate'}
+                                    icon={flipHorizontalIcon}
+                                    message={'Saturate'}
+                                />
+                                <EffectOption
+                                    id={'opacity'}
+                                    icon={flipHorizontalIcon}
+                                    message={'Opacity'}
+                                />
                             </InputGroup>
                         }
                         tipSize={.01}
@@ -774,8 +807,9 @@ ModeToolsComponent.propTypes = {
     onAlignCenter: PropTypes.func.isRequired,
     onAlignRight: PropTypes.func.isRequired,
     onAlignJustify: PropTypes.func.isRequired,
-    onApplyEffect: PropTypes.func.isRequired,
-    onRectRadiusSliderChange: PropTypes.func
+    onRectRadiusSliderChange: PropTypes.func,
+    // eslint-disable-next-line react/no-unused-prop-types
+    onApplyEffect: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
