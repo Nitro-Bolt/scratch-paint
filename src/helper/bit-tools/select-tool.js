@@ -25,19 +25,20 @@ class SelectTool extends paper.Tool {
      * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
      * @param {function} setCursor Callback to set the visible mouse cursor
      * @param {!function} onUpdateImage A callback to call when the image visibly changes
+     * @param {?string} mode The Tool name to use this tool as
      */
-    constructor (setSelectedItems, clearSelectedItems, setCursor, onUpdateImage) {
+    constructor (setSelectedItems, clearSelectedItems, setCursor, onUpdateImage, mode = Modes.BIT_SELECT) {
         super();
         this.onUpdateImage = onUpdateImage;
         this.boundingBoxTool = new BoundingBoxTool(
-            Modes.BIT_SELECT,
+            mode,
             setSelectedItems,
             clearSelectedItems,
             setCursor,
             onUpdateImage
         );
-        const nudgeTool = new NudgeTool(Modes.BIT_SELECT, this.boundingBoxTool, onUpdateImage);
-        this.selectionBoxTool = new SelectionBoxTool(Modes.BIT_SELECT, setSelectedItems, clearSelectedItems);
+        const nudgeTool = new NudgeTool(mode, this.boundingBoxTool, onUpdateImage);
+        this.selectionBoxTool = new SelectionBoxTool(mode, setSelectedItems, clearSelectedItems);
         this.selectionBoxMode = false;
         this.selection = null;
         this.active = false;

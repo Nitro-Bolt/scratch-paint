@@ -25,7 +25,8 @@ const VECTOR_KEYBINDINGS = {
     t: Modes.TEXT,
     l: Modes.LINE,
     c: Modes.OVAL,
-    r: Modes.RECT
+    r: Modes.RECT,
+    z: Modes.EFFECTS
 };
 
 const BITMAP_KEYBINDINGS = {
@@ -36,7 +37,8 @@ const BITMAP_KEYBINDINGS = {
     t: Modes.BIT_TEXT,
     f: Modes.BIT_FILL,
     e: Modes.BIT_ERASER,
-    s: Modes.BIT_SELECT
+    s: Modes.BIT_SELECT,
+    z: Modes.BIT_EFFECTS
 };
 
 const KeyboardShortcutsHOC = function (WrappedComponent) {

@@ -710,6 +710,8 @@ const ModeToolsComponent = props => {
             </div>
         );
     }
+    case Modes.BIT_EFFECTS:
+        /* falls through */
     case Modes.EFFECTS:
         return (
             <div className={classNames(props.className, styles.modeTools)}>

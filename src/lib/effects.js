@@ -1,64 +1,49 @@
 import paper from '@nitro-bolt/paper';
+import {hsbToRgb, rgbToHsb} from './tw-color-utils';
 
-const applyToColors = function (item, func, recursive = true) {
-    const processColor = color => {
-        if (!color) return null;
-        if (color.type === 'gradient' || color.gradient) {
-            color.gradient.stops.forEach(stop => {
-                stop.color = func(stop.color);
-            });
-            return color;
-        }
-        return func(color);
-    };
+const colorToRGBA = color => {
+    const rgb = color.components || color.rgb;
+    return [
+        Math.round(rgb[0] * 255),
+        Math.round(rgb[1] * 255),
+        Math.round(rgb[2] * 255),
+        typeof color.alpha === 'undefined' ? 1 : color.alpha
+    ];
+};
+
+export const applyToVector = (item, definition, values) => {
+    if (!definition.process) return;
 
     if (item.fillColor) {
-        item.fillColor = processColor(item.fillColor);
+        const [r, g, b, a] = colorToRGBA(item.fillColor);
+        const [nr, ng, nb, na] = definition.process(r, g, b, a, values);
+        item.fillColor = new paper.Color(nr / 255, ng / 255, nb / 255, na);
     }
     if (item.strokeColor) {
-        item.strokeColor = processColor(item.strokeColor);
+        const [r, g, b, a] = colorToRGBA(item.strokeColor);
+        const [nr, ng, nb, na] = definition.process(r, g, b, a, values);
+        item.strokeColor = new paper.Color(nr / 255, ng / 255, nb / 255, na);
     }
-    if (recursive === true && item.children) {
-        item.children.forEach(c => applyToColors(c, func, true));
+};
+
+export const applyToBitmap = (ctx, definition, values) => {
+    if (!definition.process) return;
+
+    const {width, height} = ctx.canvas;
+    const imageData = ctx.getImageData(0, 0, width, height);
+    const d = imageData.data;
+
+    for (let i = 0; i < d.length; i += 4) {
+        if (d[i + 3] === 0) continue;
+
+        const [nr, ng, nb, na] = definition.process(d[i], d[i + 1], d[i + 2], (d[i + 3] / 255), values);
+
+        d[i] = nr;
+        d[i + 1] = ng;
+        d[i + 2] = nb;
+        d[i + 3] = Math.round(na * 255);
     }
-};
-
-const hueShift = function (item, angle) {
-    applyToColors(item, color => {
-        let newHue = (color.hue + angle) % 360;
-        if (newHue < 0) newHue += 360;
-
-        return new paper.Color({
-            hue: newHue,
-            saturation: color.saturation,
-            lightness: color.lightness,
-            alpha: color.alpha
-        });
-    });
-};
-
-const brightness = function (item, amount) {
-    applyToColors(item, color => {
-        const newColor = color.clone();
-        newColor.brightness += amount / 100;
-        return newColor;
-    });
-};
-
-const saturate = function (item, amount) {
-    applyToColors(item, color => {
-        const newColor = color.clone();
-        newColor.saturation += amount / 100;
-        return newColor;
-    });
-};
-
-const opacity = function (item, alpha) {
-    applyToColors(item, color => {
-        const newColor = color.clone();
-        newColor.alpha = alpha / 100;
-        return newColor;
-    });
+    ctx.putImageData(imageData, 0, 0);
 };
 
 const effectDefinitions = {
@@ -66,25 +51,37 @@ const effectDefinitions = {
         id: 'hueShift',
         label: 'Hue Shift',
         params: [
-            {id: 'angle', label: 'Angle (degrees)', type: 'number', min: -360, max: 360, step: 1, default: 90}
+            {id: 'angle', label: 'Angle', type: 'number', min: -360, max: 360, step: 1, default: 90}
         ],
-        apply: (item, values) => hueShift(item, values.angle)
+        process: (r, g, b, a, values) => {
+            const [h, s, v] = rgbToHsb(r, g, b);
+            const [nr, ng, nb] = hsbToRgb(h + values.angle, s, v);
+            return [nr, ng, nb, a];
+        }
     },
     brightness: {
         id: 'brightness',
         label: 'Brightness',
         params: [
-            {id: 'amount', label: 'Amount', type: 'number', min: -1000, max: 1000, step: 1, default: 200}
+            {id: 'amount', label: 'Amount', type: 'number', min: -100, max: 100, step: 1, default: 20}
         ],
-        apply: (item, values) => brightness(item, values.amount)
+        process: (r, g, b, a, values) => {
+            const [h, s, v] = rgbToHsb(r, g, b);
+            const [nr, ng, nb] = hsbToRgb(h, s, v + (values.amount / 100));
+            return [nr, ng, nb, a];
+        }
     },
     saturate: {
         id: 'saturate',
         label: 'Saturate',
         params: [
-            {id: 'amount', label: 'Amount', type: 'number', min: -1000, max: 1000, step: 1, default: 200}
+            {id: 'amount', label: 'Amount', type: 'number', min: -100, max: 100, step: 1, default: 20}
         ],
-        apply: (item, values) => saturate(item, values.amount)
+        process: (r, g, b, a, values) => {
+            const [h, s, v] = rgbToHsb(r, g, b);
+            const [nr, ng, nb] = hsbToRgb(h, s + (values.amount / 100), v);
+            return [nr, ng, nb, a];
+        }
     },
     opacity: {
         id: 'opacity',
@@ -92,7 +89,7 @@ const effectDefinitions = {
         params: [
             {id: 'alpha', label: 'Alpha', type: 'number', min: 0, max: 100, step: 1, default: 50}
         ],
-        apply: (item, values) => opacity(item, values.alpha)
+        process: (r, g, b, a, values) => [r, g, b, values.alpha / 100]
     }
 };
 

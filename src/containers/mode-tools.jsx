@@ -22,13 +22,14 @@ import {CANVAS_SIZE_MULTIPLIER} from '../helper/view.js';
 import {flipBitmapHorizontal, flipBitmapVertical, selectAllBitmap} from '../helper/bitmap';
 import Formats, {isBitmap} from '../lib/format';
 import Modes from '../lib/modes';
-import effectDefinitions from '../lib/effects.js';
+import effectDefinitions, {applyToVector, applyToBitmap} from '../lib/effects.js';
 
 const promptEffectParams = request => {
-    const answer = window.prompt("Effect data parameters (" + JSON.stringify(request.params) + "):"); // eslint-disable-line no-alert
-    if (answer === null) return Promise.resolve(null); 
-    let value = JSON.parse(answer);
-    return Promise.resolve(value);
+    const answer = window.prompt( // eslint-disable-line no-alert
+        `Effect data parameters (${JSON.stringify(request.params)}):`
+    );
+    if (answer === null) return Promise.resolve(null);
+    return Promise.resolve(JSON.parse(answer));
 };
 
 class ModeTools extends React.Component {
@@ -281,9 +282,11 @@ class ModeTools extends React.Component {
     async handleEffect (effectId) {
         const definition = effectDefinitions[effectId];
         if (!definition) return;
+
+        const bitmap = isBitmap(this.props.format);
     
         if (!this.props.selectedItems.length) {
-            if (isBitmap(this.props.format)) {
+            if (bitmap) {
                 selectAllBitmap(this.props.clearSelectedItems);
             } else if (this.props.mode === Modes.RESHAPE) {
                 selectAllSegments();
@@ -302,13 +305,27 @@ class ModeTools extends React.Component {
             } catch (e) {
                 values = null;
             }
-            if (!values) return; 
+            if (!values) return;
+        }
+
+        // filter just in case something was removed during the dialog
+        const leItems = items.filter(i => i.parent);
+    
+        if (bitmap) {
+            const rasters = leItems.filter(item => item instanceof paper.Raster);
+            for (const raster of rasters) {
+                applyToBitmap(raster.getContext(true), definition, values);
+                
+                if (raster.data && raster.data.expanded instanceof paper.Raster) {
+                    applyToBitmap(raster.data.expanded.getContext(true), definition, values);
+                }
+            }
+        } else {
+            for (const item of leItems) {
+                applyToVector(item, definition, values);
+            }
         }
     
-        // filter just in case anything was removed while in the dialog
-        for (const item of items.filter(item => item.parent)) {
-            definition.apply(item, values);
-        }
         this.props.onUpdateImage();
     }
     render () {

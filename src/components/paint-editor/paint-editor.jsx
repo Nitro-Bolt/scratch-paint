@@ -14,6 +14,7 @@ import BitRectMode from '../../containers/bit-rect-mode.jsx';
 import BitFillMode from '../../containers/bit-fill-mode.jsx';
 import BitEraserMode from '../../containers/bit-eraser-mode.jsx';
 import BitSelectMode from '../../containers/bit-select-mode.jsx';
+import BitEffectsMode from '../../containers/bit-effects-mode.jsx';
 import Box from '../box/box.jsx';
 import Button from '../button/button.jsx';
 import ButtonGroup from '../button-group/button-group.jsx';
@@ -229,6 +230,9 @@ const PaintEditorComponent = props => (
                         onUpdateImage={props.onUpdateImage}
                     />
                     <BitSelectMode
+                        onUpdateImage={props.onUpdateImage}
+                    />
+                    <BitEffectsMode
                         onUpdateImage={props.onUpdateImage}
                     />
                 </div>
