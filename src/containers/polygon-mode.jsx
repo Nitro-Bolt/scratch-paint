@@ -13,13 +13,12 @@ import {changeStrokeColor, clearStrokeGradient} from '../reducers/stroke-style';
 import {changeMode} from '../reducers/modes';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {setCursor} from '../reducers/cursor';
-import {changeRectRadius} from '../reducers/rect-mode';
 
 import {clearSelection, getSelectedLeafItems} from '../helper/selection';
-import RectTool from '../helper/tools/rect-tool';
-import RectModeComponent from '../components/rect-mode/rect-mode.jsx';
+import PolygonTool from '../helper/tools/polygon-tool';
+import PolygonModeComponent from '../components/polygon-mode/polygon-mode.jsx';
 
-class RectMode extends React.Component {
+class PolygonMode extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
@@ -29,7 +28,7 @@ class RectMode extends React.Component {
         ]);
     }
     componentDidMount () {
-        if (this.props.isRectModeActive) {
+        if (this.props.isPolygonModeActive) {
             this.activateTool(this.props);
         }
     }
@@ -40,17 +39,20 @@ class RectMode extends React.Component {
         if (this.tool && nextProps.selectedItems !== this.props.selectedItems) {
             this.tool.onSelectionChanged(nextProps.selectedItems);
         }
-        if (this.tool && nextProps.rectRadius !== this.props.rectRadius) {
-            this.tool.setRectRadius(nextProps.rectRadius);
+        if (this.tool && nextProps.polygonRadius !== this.props.polygonRadius) {
+            this.tool.setPolygonRadius(nextProps.polygonRadius);
         }
-        if (nextProps.isRectModeActive && !this.props.isRectModeActive) {
+        if (this.tool && nextProps.polygonSides !== this.props.polygonSides) {
+            this.tool.setPolygonSides(nextProps.polygonSides);
+        }
+        if (nextProps.isPolygonModeActive && !this.props.isPolygonModeActive) {
             this.activateTool();
-        } else if (!nextProps.isRectModeActive && this.props.isRectModeActive) {
+        } else if (!nextProps.isPolygonModeActive && this.props.isPolygonModeActive) {
             this.deactivateTool();
         }
     }
     shouldComponentUpdate (nextProps) {
-        return nextProps.isRectModeActive !== this.props.isRectModeActive;
+        return nextProps.isPolygonModeActive !== this.props.isPolygonModeActive;
     }
     componentWillUnmount () {
         if (this.tool) {
@@ -61,14 +63,15 @@ class RectMode extends React.Component {
         clearSelection(this.props.clearSelectedItems);
         this.validateColorState();
 
-        this.tool = new RectTool(
+        this.tool = new PolygonTool(
             this.props.setSelectedItems,
             this.props.clearSelectedItems,
             this.props.setCursor,
             this.props.onUpdateImage
         );
         this.tool.setColorState(this.props.colorState);
-        this.tool.setRectRadius(this.props.rectRadius);
+        this.tool.setPolygonRadius(this.props.polygonRadius);
+        this.tool.setPolygonSides(this.props.polygonSides);
         this.tool.activate();
     }
     validateColorState () { // TODO move to shared class
@@ -123,15 +126,15 @@ class RectMode extends React.Component {
     }
     render () {
         return (
-            <RectModeComponent
-                isSelected={this.props.isRectModeActive}
+            <PolygonModeComponent
+                isSelected={this.props.isPolygonModeActive}
                 onMouseDown={this.props.handleMouseDown}
             />
         );
     }
 }
 
-RectMode.propTypes = {
+PolygonMode.propTypes = {
     clearFillGradient: PropTypes.func.isRequired,
     clearStrokeGradient: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
@@ -141,20 +144,22 @@ RectMode.propTypes = {
         strokeWidth: PropTypes.number
     }).isRequired,
     handleMouseDown: PropTypes.func.isRequired,
-    isRectModeActive: PropTypes.bool.isRequired,
+    isPolygonModeActive: PropTypes.bool.isRequired,
     onChangeFillColor: PropTypes.func.isRequired,
     onChangeStrokeColor: PropTypes.func.isRequired,
     onUpdateImage: PropTypes.func.isRequired,
     selectedItems: PropTypes.arrayOf(PropTypes.instanceOf(paper.Item)),
     setCursor: PropTypes.func.isRequired,
     setSelectedItems: PropTypes.func.isRequired,
-    rectRadius: PropTypes.number
+    polygonRadius: PropTypes.number,
+    polygonSides: PropTypes.number
 };
 
 const mapStateToProps = state => ({
     colorState: state.scratchPaint.color,
-    rectRadius: state.scratchPaint.rectMode.rectRadius,
-    isRectModeActive: state.scratchPaint.mode === Modes.RECT,
+    polygonRadius: state.scratchPaint.polygonMode.polygonRadius,
+    polygonSides: state.scratchPaint.polygonMode.polygonSides,
+    isPolygonModeActive: state.scratchPaint.mode === Modes.POLYGON,
     selectedItems: state.scratchPaint.selectedItems
 });
 const mapDispatchToProps = dispatch => ({
@@ -174,20 +179,17 @@ const mapDispatchToProps = dispatch => ({
         dispatch(setCursor(cursorString));
     },
     handleMouseDown: () => {
-        dispatch(changeMode(Modes.RECT));
+        dispatch(changeMode(Modes.POLYGON));
     },
     onChangeFillColor: fillColor => {
         dispatch(changeFillColor(fillColor));
     },
     onChangeStrokeColor: strokeColor => {
         dispatch(changeStrokeColor(strokeColor));
-    },
-    onChangeRectRadius: rectRadius => {
-        dispatch(changeRectRadius(rectRadius));
     }
 });
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(RectMode);
+)(PolygonMode);

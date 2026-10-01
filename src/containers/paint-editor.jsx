@@ -182,7 +182,7 @@ class PaintEditor extends React.Component {
                 this.props.changeMode(Modes.OVAL);
                 break;
             case Modes.BIT_RECT:
-                this.props.changeMode(Modes.RECT);
+                this.props.changeMode(Modes.POLYGON);
                 break;
             case Modes.BIT_TEXT:
                 this.props.changeMode(Modes.TEXT);
@@ -211,7 +211,7 @@ class PaintEditor extends React.Component {
             case Modes.OVAL:
                 this.props.changeMode(Modes.BIT_OVAL);
                 break;
-            case Modes.RECT:
+            case Modes.POLYGON:
                 this.props.changeMode(Modes.BIT_RECT);
                 break;
             case Modes.TEXT:
