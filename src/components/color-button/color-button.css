@@ -3,6 +3,13 @@
 .color-button {
     height: 2rem;
     display: flex;
+    
+    /* 
+    This is a regression from base scratch. 
+    for some unknown reason it was removed in NB, possibly TW?
+    It keeps flex in check.
+    */
+    width: 3rem;
 }
 
 .color-button-swatch {
