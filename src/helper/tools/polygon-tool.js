@@ -103,6 +103,10 @@ class PolygonTool extends paper.Tool {
                 vertex.getDistance(previous) / 2,
                 vertex.getDistance(next) / 2
             );
+            if (cornerRadius <= 0) {
+                path.add(vertex);
+                continue;
+            }
             const incoming = vertex.add(previous.subtract(vertex).normalize(cornerRadius));
             const outgoing = vertex.add(next.subtract(vertex).normalize(cornerRadius));
             if (i === 0) {
@@ -110,11 +114,7 @@ class PolygonTool extends paper.Tool {
             } else {
                 path.lineTo(incoming);
             }
-            if (cornerRadius > 0) {
-                path.quadraticCurveTo(vertex, outgoing);
-            } else {
-                path.lineTo(vertex);
-            }
+            path.quadraticCurveTo(vertex, outgoing);
         }
         path.closePath();
         return path;
