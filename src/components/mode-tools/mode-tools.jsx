@@ -233,7 +233,7 @@ const ModeToolsComponent = props => {
             defaultMessage: 'Mixed',
             description: 'Shown in the blend mode dropdown when selected shapes have different blend modes',
             id: 'paint.modeTools.blendMixed'
-        },
+        }
     });
 
     const EffectOption = ({id, message, icon}) => (
@@ -258,36 +258,39 @@ const ModeToolsComponent = props => {
         icon: PropTypes.string.isRequired
     };
 
-    // eslint-disable-next-line react/jsx-no-bind
-    const handleBlendModeChange = e => props.onChangeBlendMode(e.target.value);
     const blendModeControl = (
         <InputGroup
             className={styles.modDashedBorder}
             disabled={!props.hasSelection}
         >
             <Label text={props.intl.formatMessage(messages.blendMode)}>
-                <select
-                    className={styles.coolDropdown}
-                    value={props.blendMode}
-                    onChange={handleBlendModeChange} // eslint-disable-line react/jsx-no-bind
+                <Dropdown
+                    className={classNames(styles.modUnselect, styles.blendModeDropdown)}
+                    enterExitTransitionDurationMs={20}
+                    popoverContent={
+                        <InputGroup className={styles.modContextMenu}>
+                            {BLEND_MODES.map(mode => (
+                                <Button
+                                    key={mode}
+                                    className={styles.modMenuItem}
+                                    highlighted={props.blendMode === mode}
+                                    // eslint-disable-next-line react/jsx-no-bind
+                                    onClick={() => props.onChangeBlendMode(mode)}
+                                >
+                                    <span>{getBlendModeName(mode)}</span>
+                                </Button>
+                            ))}
+                        </InputGroup>
+                    }
+                    tipSize={.01}
                 >
-                    {props.blendMode === MIXED_BLEND_MODE && (
-                        <option
-                            disabled
-                            value={MIXED_BLEND_MODE}
-                        >
-                            {props.intl.formatMessage(messages.blendMixed)}
-                        </option>
-                    )}
-                    {BLEND_MODES.map(mode => (
-                        <option
-                            key={mode}
-                            value={mode}
-                        >
-                            {getBlendModeName(mode)}
-                        </option>
-                    ))}
-                </select>
+                    <span>
+                        {props.blendMode === MIXED_BLEND_MODE ?
+                            props.intl.formatMessage(messages.blendMixed) :
+                            getBlendModeName(props.blendMode)
+                        }
+                    </span>
+                </Dropdown>
             </Label>
         </InputGroup>
     );

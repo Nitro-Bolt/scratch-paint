@@ -71,22 +71,10 @@
     margin-left: calc(2 * $grid-unit);
 }
 
-.cool-dropdown {
-    height: 2rem;
+.blend-mode-dropdown {
     max-width: 8rem;
-    padding: 0 0.5rem;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    white-space: nowrap;
     font-size: 0.75rem;
     font-weight: bold;
     color: $text-primary;
-    background-color: $input-background;
-    border: 1px solid $form-border;
-    border-radius: 2rem;
-    outline: none;
-    cursor: pointer;
-}
-
-.cool-dropdown:hover,
-.cool-dropdown:focus {
-    border-color: $looks-secondary;
 }
