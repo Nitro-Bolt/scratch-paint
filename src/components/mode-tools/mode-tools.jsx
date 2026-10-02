@@ -58,11 +58,11 @@ import alignCenterIcon from './icons/align-center.svg';
 import alignRightIcon from './icons/align-right.svg';
 import alignJustifyIcon from './icons/align-justify.svg';
 import effectsColorIcon from './icons/effects-color.svg';
-import effectsHueShiftIcon from './icons/effects-hueShift.svg';
-import effectsBrightnessIcon from './icons/effects-brightness.svg';
-import effectsSaturateIcon from './icons/effects-saturate.svg';
-import effectsOpacityIcon from './icons/effects-opacity.svg';
-import effectsPosterizeIcon from './icons/effects-posterize.svg';
+import effectsHueShiftIcon from '!../../tw-recolor/build!./icons/effects-hueShift.svg';
+import effectsBrightnessIcon from '!../../tw-recolor/build!./icons/effects-brightness.svg';
+import effectsSaturateIcon from '!../../tw-recolor/build!./icons/effects-saturate.svg';
+import effectsOpacityIcon from '!../../tw-recolor/build!./icons/effects-opacity.svg';
+import effectsPosterizeIcon from '!../../tw-recolor/build!./icons/effects-posterize.svg';
 
 import {MAX_STROKE_WIDTH} from '../../reducers/stroke-width';
 
@@ -815,6 +815,14 @@ const ModeToolsComponent = props => {
                     </Dropdown>
                 </InputGroup>
                 {isVector(props.format) && blendModeControl}
+                <InputGroup className={classNames(styles.modLabeledIconHeight)}>
+                    <LabeledIconButton
+                        hideLabel={hideLabel(props.intl.locale)}
+                        imgSrc={deleteIcon}
+                        title={props.intl.formatMessage(messages.delete)}
+                        onClick={props.onDelete}
+                    />
+                </InputGroup>
             </div>
         );
     default:
