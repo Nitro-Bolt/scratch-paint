@@ -23,6 +23,7 @@ import {flipBitmapHorizontal, flipBitmapVertical, selectAllBitmap} from '../help
 import Formats, {isBitmap} from '../lib/format';
 import Modes from '../lib/modes';
 import effectDefinitions, {applyToVector, applyToBitmap} from '../lib/effects.js';
+import {applyBlendModeToSelection, getBlendModeFromSelection} from '../helper/blend-mode.js';
 
 const promptEffectParams = request => {
     const answer = window.prompt( // eslint-disable-line no-alert
@@ -51,7 +52,8 @@ class ModeTools extends React.Component {
             'handleSubtract',
             'handleFilter',
             'handleMerge',
-            'handleEffect'
+            'handleEffect',
+            'handleChangeBlendMode'
         ]);
     }
     _getSelectedUncurvedPoints () {
@@ -328,6 +330,12 @@ class ModeTools extends React.Component {
     
         this.props.onUpdateImage();
     }
+    handleChangeBlendMode (mode) {
+        if (applyBlendModeToSelection(mode)) {
+            this.props.setSelectedItems(this.props.format);
+            this.props.onUpdateImage();
+        }
+    }
     render () {
         return (
             <ModeToolsComponent
@@ -350,6 +358,9 @@ class ModeTools extends React.Component {
                 onFilter={this.handleFilter}
                 onMerge={this.handleMerge}
                 onApplyEffect={this.handleEffect}
+                blendMode={getBlendModeFromSelection()}
+                hasSelection={this.props.selectedItems.length > 0}
+                onChangeBlendMode={this.handleChangeBlendMode}
             />
         );
     }

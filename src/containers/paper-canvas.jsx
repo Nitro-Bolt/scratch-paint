@@ -24,6 +24,7 @@ import {saveZoomLevel, setZoomLevelId} from '../reducers/zoom-levels';
 import {setImportingImage} from '../lib/tw-is-importing-image';
 
 import styles from './paper-canvas.css';
+import {readBlendModeFromSvgNode} from '../helper/blend-mode';
 
 class PaperCanvas extends React.Component {
     constructor (props) {
@@ -234,6 +235,7 @@ class PaperCanvas extends React.Component {
         paper.project.importSVG(svg, {
             expandShapes: true,
             insert: false,
+            onImport: readBlendModeFromSvgNode,
             onLoad: function (item) {
                 if (!item) {
                     log.error('SVG import failed:');

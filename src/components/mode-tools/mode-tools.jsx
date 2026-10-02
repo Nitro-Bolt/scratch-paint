@@ -27,6 +27,7 @@ import layout from '../../lib/layout-constants';
 import Dropdown from '../dropdown/dropdown.jsx';
 import Button from '../button/button.jsx';
 import TWRenderRecoloredImage from '../../tw-recolor/render.jsx';
+import {BLEND_MODES, MIXED_BLEND_MODE, getBlendModeName} from '../../lib/blend-modes';
 
 import copyIcon from '!../../tw-recolor/build!./icons/copy.svg';
 import cutIcon from '!../../tw-recolor/build!./icons/cut.svg';
@@ -56,6 +57,12 @@ import alignLeftIcon from './icons/align-left.svg';
 import alignCenterIcon from './icons/align-center.svg';
 import alignRightIcon from './icons/align-right.svg';
 import alignJustifyIcon from './icons/align-justify.svg';
+import effectsColorIcon from './icons/effects-color.svg';
+import effectsHueShiftIcon from './icons/effects-hueShift.svg';
+import effectsBrightnessIcon from './icons/effects-brightness.svg';
+import effectsSaturateIcon from './icons/effects-saturate.svg';
+import effectsOpacityIcon from './icons/effects-opacity.svg';
+import effectsPosterizeIcon from './icons/effects-posterize.svg';
 
 import {MAX_STROKE_WIDTH} from '../../reducers/stroke-width';
 
@@ -216,7 +223,17 @@ const ModeToolsComponent = props => {
             defaultMessage: 'Posterize',
             description: 'Label for dropdown for the posterize effect',
             id: 'paint.paintEditor.effectsPosterize'
-        }
+        },
+        blendMode: {
+            defaultMessage: 'Blend',
+            description: 'Label for the dropdown that sets a shape\'s blending mode',
+            id: 'paint.modeTools.blendMode'
+        },
+        blendMixed: {
+            defaultMessage: 'Mixed',
+            description: 'Shown in the blend mode dropdown when selected shapes have different blend modes',
+            id: 'paint.modeTools.blendMixed'
+        },
     });
 
     const EffectOption = ({id, message, icon}) => (
@@ -240,6 +257,40 @@ const ModeToolsComponent = props => {
         message: PropTypes.string.isRequired,
         icon: PropTypes.string.isRequired
     };
+
+    // eslint-disable-next-line react/jsx-no-bind
+    const handleBlendModeChange = e => props.onChangeBlendMode(e.target.value);
+    const blendModeControl = (
+        <InputGroup
+            className={styles.modDashedBorder}
+            disabled={!props.hasSelection}
+        >
+            <Label text={props.intl.formatMessage(messages.blendMode)}>
+                <select
+                    className={styles.coolDropdown}
+                    value={props.blendMode}
+                    onChange={handleBlendModeChange} // eslint-disable-line react/jsx-no-bind
+                >
+                    {props.blendMode === MIXED_BLEND_MODE && (
+                        <option
+                            disabled
+                            value={MIXED_BLEND_MODE}
+                        >
+                            {props.intl.formatMessage(messages.blendMixed)}
+                        </option>
+                    )}
+                    {BLEND_MODES.map(mode => (
+                        <option
+                            key={mode}
+                            value={mode}
+                        >
+                            {getBlendModeName(mode)}
+                        </option>
+                    ))}
+                </select>
+            </Label>
+        </InputGroup>
+    );
 
     switch (props.mode) {
     case Modes.BRUSH:
@@ -728,27 +779,27 @@ const ModeToolsComponent = props => {
                             <InputGroup className={styles.modContextMenu}>
                                 <EffectOption
                                     id={'hueShift'}
-                                    icon={flipHorizontalIcon}
+                                    icon={effectsHueShiftIcon}
                                     message={'HueShift'}
                                 />
                                 <EffectOption
                                     id={'brightness'}
-                                    icon={flipHorizontalIcon}
+                                    icon={effectsBrightnessIcon}
                                     message={'Brightness'}
                                 />
                                 <EffectOption
                                     id={'saturate'}
-                                    icon={flipHorizontalIcon}
+                                    icon={effectsSaturateIcon}
                                     message={'Saturate'}
                                 />
                                 <EffectOption
                                     id={'opacity'}
-                                    icon={flipHorizontalIcon}
+                                    icon={effectsOpacityIcon}
                                     message={'Opacity'}
                                 />
                                 <EffectOption
                                     id={'posterize'}
-                                    icon={flipHorizontalIcon}
+                                    icon={effectsPosterizeIcon}
                                     message={'Posterize'}
                                 />
                             </InputGroup>
@@ -758,11 +809,12 @@ const ModeToolsComponent = props => {
                     >
                         <LabeledIconButton
                             hideLabel={hideLabel(props.intl.locale)}
-                            imgSrc={deleteIcon}
+                            imgSrc={effectsColorIcon}
                             title={props.intl.formatMessage(messages.effectsColor)}
                         />
                     </Dropdown>
                 </InputGroup>
+                {isVector(props.format) && blendModeControl}
             </div>
         );
     default:
@@ -816,7 +868,10 @@ ModeToolsComponent.propTypes = {
     onAlignJustify: PropTypes.func.isRequired,
     onRectRadiusSliderChange: PropTypes.func,
     // eslint-disable-next-line react/no-unused-prop-types
-    onApplyEffect: PropTypes.func.isRequired
+    onApplyEffect: PropTypes.func.isRequired,
+    blendMode: PropTypes.string,
+    hasSelection: PropTypes.bool,
+    onChangeBlendMode: PropTypes.func
 };
 
 const mapStateToProps = state => ({
