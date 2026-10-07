@@ -51,18 +51,19 @@ class Dropdown extends React.Component {
                 <div
                     className={classNames(styles.dropdown, this.props.className, {
                         [styles.modOpen]: this.state.isOpen,
-                        [styles.modClosed]: !this.state.isOpen
+                        [styles.modClosed]: !this.state.isOpen,
+                        [styles.invisible]: this.props.invisible === true
                     })}
                     onClick={this.handleToggleOpenState}
                 >
                     {this.props.children}
-                    <TWRenderRecoloredImage
+                    {this.props.invisible !== true && <TWRenderRecoloredImage
                         className={classNames(styles.dropdownIcon, {
                             [styles.modCaretUp]: this.state.isOpen
                         })}
                         draggable={false}
                         src={dropdownIcon}
-                    />
+                    />}
                 </div>
             </Popover>
         );
@@ -74,7 +75,8 @@ Dropdown.propTypes = {
     className: PropTypes.string,
     onOpen: PropTypes.func,
     onOuterAction: PropTypes.func,
-    popoverContent: PropTypes.node.isRequired
+    popoverContent: PropTypes.node.isRequired,
+    invisible: PropTypes.bool
 };
 
 export default Dropdown;

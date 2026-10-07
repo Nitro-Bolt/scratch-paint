@@ -22,6 +22,16 @@ import {CANVAS_SIZE_MULTIPLIER} from '../helper/view.js';
 import {flipBitmapHorizontal, flipBitmapVertical, selectAllBitmap} from '../helper/bitmap';
 import Formats, {isBitmap} from '../lib/format';
 import Modes from '../lib/modes';
+import effectDefinitions, {applyToVector, applyToBitmap} from '../lib/effects.js';
+import {applyBlendModeToSelection, getBlendModeFromSelection} from '../helper/blend-mode.js';
+
+const promptEffectParams = request => {
+    const answer = window.prompt( // eslint-disable-line no-alert
+        `Effect data parameters (${JSON.stringify(request.params)}):`
+    );
+    if (answer === null) return Promise.resolve(null);
+    return Promise.resolve(JSON.parse(answer));
+};
 
 class ModeTools extends React.Component {
     constructor (props) {
@@ -41,7 +51,9 @@ class ModeTools extends React.Component {
             'handleMask',
             'handleSubtract',
             'handleFilter',
-            'handleMerge'
+            'handleMerge',
+            'handleEffect',
+            'handleChangeBlendMode'
         ]);
     }
     _getSelectedUncurvedPoints () {
@@ -269,6 +281,61 @@ class ModeTools extends React.Component {
             this.props.onUpdateImage();
         }
     }
+    async handleEffect (effectId) {
+        const definition = effectDefinitions[effectId];
+        if (!definition) return;
+
+        const bitmap = isBitmap(this.props.format);
+    
+        if (!this.props.selectedItems.length) {
+            if (bitmap) {
+                selectAllBitmap(this.props.clearSelectedItems);
+            } else if (this.props.mode === Modes.RESHAPE) {
+                selectAllSegments();
+            } else {
+                selectAllItems();
+            }
+        }
+        const items = getSelectedLeafItems();
+        if (items.length === 0) return;
+    
+        let values = {};
+        if (definition.params.length > 0) {
+            const request = this.props.onRequestEffectParams || promptEffectParams;
+            try {
+                values = await Promise.resolve(request(definition));
+            } catch (e) {
+                values = null;
+            }
+            if (!values) return;
+        }
+
+        // filter just in case something was removed during the dialog
+        const leItems = items.filter(i => i.parent);
+    
+        if (bitmap) {
+            const rasters = leItems.filter(item => item instanceof paper.Raster);
+            for (const raster of rasters) {
+                applyToBitmap(raster.getContext(true), definition, values);
+                
+                if (raster.data && raster.data.expanded instanceof paper.Raster) {
+                    applyToBitmap(raster.data.expanded.getContext(true), definition, values);
+                }
+            }
+        } else {
+            for (const item of leItems) {
+                applyToVector(item, definition, values);
+            }
+        }
+    
+        this.props.onUpdateImage();
+    }
+    handleChangeBlendMode (mode) {
+        if (applyBlendModeToSelection(mode)) {
+            this.props.setSelectedItems(this.props.format);
+            this.props.onUpdateImage();
+        }
+    }
     render () {
         return (
             <ModeToolsComponent
@@ -290,6 +357,10 @@ class ModeTools extends React.Component {
                 onSubtract={this.handleSubtract}
                 onFilter={this.handleFilter}
                 onMerge={this.handleMerge}
+                onApplyEffect={this.handleEffect}
+                blendMode={getBlendModeFromSelection()}
+                hasSelection={this.props.selectedItems.length > 0}
+                onChangeBlendMode={this.handleChangeBlendMode}
             />
         );
     }
@@ -307,10 +378,11 @@ ModeTools.propTypes = {
     width: PropTypes.number,
     height: PropTypes.number,
     onUpdateImage: PropTypes.func.isRequired,
+    onRequestEffectParams: PropTypes.func,
     // Listen on selected items to update hasSelectedPoints
     selectedItems:
         PropTypes.arrayOf(PropTypes.instanceOf(paper.Item)), // eslint-disable-line react/no-unused-prop-types
-    setSelectedItems: PropTypes.func.isRequired
+    setSelectedItems: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({

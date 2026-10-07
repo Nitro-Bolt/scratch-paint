@@ -14,6 +14,7 @@ import BitRectMode from '../../containers/bit-rect-mode.jsx';
 import BitFillMode from '../../containers/bit-fill-mode.jsx';
 import BitEraserMode from '../../containers/bit-eraser-mode.jsx';
 import BitSelectMode from '../../containers/bit-select-mode.jsx';
+import BitEffectsMode from '../../containers/bit-effects-mode.jsx';
 import Box from '../box/box.jsx';
 import Button from '../button/button.jsx';
 import ButtonGroup from '../button-group/button-group.jsx';
@@ -34,6 +35,7 @@ import SelectMode from '../../containers/select-mode.jsx';
 import StrokeColorIndicatorComponent from '../../containers/stroke-color-indicator.jsx';
 import StrokeWidthIndicatorComponent from '../../containers/stroke-width-indicator.jsx';
 import TextMode from '../../containers/text-mode.jsx';
+import EffectsMode from '../../containers/effects-mode.jsx';
 
 import Formats, {isBitmap, isVector} from '../../lib/format';
 import styles from './paint-editor.css';
@@ -127,6 +129,7 @@ const PaintEditorComponent = props => (
                                 height={props.height}
                                 onUpdateImage={props.onUpdateImage}
                                 onManageFonts={props.onManageFonts}
+                                onRequestEffectParams={props.onRequestEffectParams}
                             />
                         </InputGroup>
                     </div> :
@@ -152,6 +155,7 @@ const PaintEditorComponent = props => (
                                     height={props.height}
                                     onUpdateImage={props.onUpdateImage}
                                     onManageFonts={props.onManageFonts}
+                                    onRequestEffectParams={props.onRequestEffectParams}
                                 />
                             </InputGroup>
                         </div> : null
@@ -194,6 +198,9 @@ const PaintEditorComponent = props => (
                     <PolygonMode
                         onUpdateImage={props.onUpdateImage}
                     />
+                    <EffectsMode
+                        onUpdateImage={props.onUpdateImage}
+                    />
                 </div>
             ) : null}
 
@@ -223,6 +230,9 @@ const PaintEditorComponent = props => (
                         onUpdateImage={props.onUpdateImage}
                     />
                     <BitSelectMode
+                        onUpdateImage={props.onUpdateImage}
+                    />
+                    <BitEffectsMode
                         onUpdateImage={props.onUpdateImage}
                     />
                 </div>
@@ -370,6 +380,7 @@ PaintEditorComponent.propTypes = {
     noCutButton: PropTypes.bool,
     onChangeTheme: PropTypes.func.isRequired,
     onManageFonts: PropTypes.func,
+    onRequestEffectParams: PropTypes.func,
     onOpenCustomGradient: PropTypes.func.isRequired,
     onRedo: PropTypes.func.isRequired,
     onSwapColors: PropTypes.func.isRequired,

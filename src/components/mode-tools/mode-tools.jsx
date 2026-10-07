@@ -32,6 +32,7 @@ import layout from '../../lib/layout-constants';
 import Dropdown from '../dropdown/dropdown.jsx';
 import Button from '../button/button.jsx';
 import TWRenderRecoloredImage from '../../tw-recolor/render.jsx';
+import {BLEND_MODES, MIXED_BLEND_MODE, getBlendModeName} from '../../lib/blend-modes';
 
 import copyIcon from '!../../tw-recolor/build!./icons/copy.svg';
 import cutIcon from '!../../tw-recolor/build!./icons/cut.svg';
@@ -62,6 +63,12 @@ import alignLeftIcon from './icons/align-left.svg';
 import alignCenterIcon from './icons/align-center.svg';
 import alignRightIcon from './icons/align-right.svg';
 import alignJustifyIcon from './icons/align-justify.svg';
+import effectsColorIcon from './icons/effects-color.svg';
+import effectsHueShiftIcon from '!../../tw-recolor/build!./icons/effects-hueShift.svg';
+import effectsBrightnessIcon from '!../../tw-recolor/build!./icons/effects-brightness.svg';
+import effectsSaturateIcon from '!../../tw-recolor/build!./icons/effects-saturate.svg';
+import effectsOpacityIcon from '!../../tw-recolor/build!./icons/effects-opacity.svg';
+import effectsPosterizeIcon from '!../../tw-recolor/build!./icons/effects-posterize.svg';
 
 import {MAX_STROKE_WIDTH} from '../../reducers/stroke-width';
 
@@ -197,8 +204,107 @@ const ModeToolsComponent = props => {
             defaultMessage: 'Justify',
             description: 'Label for the text justify button',
             id: 'paint.modeTools.alignJustify'
+        },
+        effectsColor: {
+            defaultMessage: 'Color',
+            description: 'Label for dropdown for the color effect',
+            id: 'paint.paintEditor.effectsColor'
+        },
+        effectsHueShift: {
+            defaultMessage: 'Hue Shift',
+            description: 'Label for dropdown for the hue shift effect',
+            id: 'paint.paintEditor.effectsHueShift'
+        },
+        effectsBrightness: {
+            defaultMessage: 'Brightness',
+            description: 'Label for dropdown for the brightness effect',
+            id: 'paint.paintEditor.effectsBrightness'
+        },
+        effectsSaturate: {
+            defaultMessage: 'Saturate',
+            description: 'Label for dropdown for the saturate effect',
+            id: 'paint.paintEditor.effectsSaturate'
+        },
+        effectsOpacity: {
+            defaultMessage: 'Opacity',
+            description: 'Label for dropdown for the opacity effect',
+            id: 'paint.paintEditor.effectsOpacity'
+        },
+        effectsPosterize: {
+            defaultMessage: 'Posterize',
+            description: 'Label for dropdown for the posterize effect',
+            id: 'paint.paintEditor.effectsPosterize'
+        },
+        blendMode: {
+            defaultMessage: 'Blend',
+            description: 'Label for the dropdown that sets a shape\'s blending mode',
+            id: 'paint.modeTools.blendMode'
+        },
+        blendMixed: {
+            defaultMessage: 'Mixed',
+            description: 'Shown in the blend mode dropdown when selected shapes have different blend modes',
+            id: 'paint.modeTools.blendMixed'
         }
     });
+
+    const EffectOption = ({id, message, icon}) => (
+        <Button
+            className={styles.modMenuItem}
+            // eslint-disable-next-line react/jsx-no-bind
+            onClick={() => props.onApplyEffect(id)}
+        >
+            <TWRenderRecoloredImage
+                className={styles.menuItemIcon}
+                draggable={false}
+                src={icon}
+            />
+            <span>{messages[`effects${message}`] ?
+                props.intl.formatMessage(messages[`effects${message}`]) :
+                message}</span>
+        </Button>
+    );
+    EffectOption.propTypes = {
+        id: PropTypes.string.isRequired,
+        message: PropTypes.string.isRequired,
+        icon: PropTypes.string.isRequired
+    };
+
+    const blendModeControl = (
+        <InputGroup
+            className={styles.modDashedBorder}
+            disabled={!props.hasSelection}
+        >
+            <Label text={props.intl.formatMessage(messages.blendMode)}>
+                <Dropdown
+                    className={classNames(styles.modUnselect, styles.blendModeDropdown)}
+                    enterExitTransitionDurationMs={20}
+                    popoverContent={
+                        <InputGroup className={styles.modContextMenu}>
+                            {BLEND_MODES.map(mode => (
+                                <Button
+                                    key={mode}
+                                    className={styles.modMenuItem}
+                                    highlighted={props.blendMode === mode}
+                                    // eslint-disable-next-line react/jsx-no-bind
+                                    onClick={() => props.onChangeBlendMode(mode)}
+                                >
+                                    <span>{getBlendModeName(mode)}</span>
+                                </Button>
+                            ))}
+                        </InputGroup>
+                    }
+                    tipSize={.01}
+                >
+                    <span>
+                        {props.blendMode === MIXED_BLEND_MODE ?
+                            props.intl.formatMessage(messages.blendMixed) :
+                            getBlendModeName(props.blendMode)
+                        }
+                    </span>
+                </Dropdown>
+            </Label>
+        </InputGroup>
+    );
 
     switch (props.mode) {
     case Modes.BRUSH:
@@ -422,9 +528,7 @@ const ModeToolsComponent = props => {
                                             draggable={false}
                                             src={maskIcon}
                                         />
-                                        {props.intl.locale === 'en' &&
-                                            <span>{props.intl.formatMessage(messages.mask)}</span>
-                                        }
+                                        <span>{props.intl.formatMessage(messages.mask)}</span>
                                     </Button>
                                     <Button
                                         className={styles.modMenuItem}
@@ -435,9 +539,7 @@ const ModeToolsComponent = props => {
                                             draggable={false}
                                             src={filterIcon}
                                         />
-                                        {props.intl.locale === 'en' &&
-                                            <span>{props.intl.formatMessage(messages.filter)}</span>
-                                        }
+                                        <span>{props.intl.formatMessage(messages.filter)}</span>
                                     </Button>
                                     <Button
                                         className={styles.modMenuItem}
@@ -448,9 +550,7 @@ const ModeToolsComponent = props => {
                                             draggable={false}
                                             src={subtractIcon}
                                         />
-                                        {props.intl.locale === 'en' &&
-                                            <span>{props.intl.formatMessage(messages.subtract)}</span>
-                                        }
+                                        <span>{props.intl.formatMessage(messages.subtract)}</span>
                                     </Button>
                                     <Button
                                         className={styles.modMenuItem}
@@ -461,9 +561,7 @@ const ModeToolsComponent = props => {
                                             draggable={false}
                                             src={mergeIcon}
                                         />
-                                        {props.intl.locale === 'en' &&
-                                            <span>{props.intl.formatMessage(messages.merge)}</span>
-                                        }
+                                        <span>{props.intl.formatMessage(messages.merge)}</span>
                                     </Button>
                                 </InputGroup>
                             }
@@ -491,9 +589,7 @@ const ModeToolsComponent = props => {
                                             draggable={false}
                                             src={flipHorizontalIcon}
                                         />
-                                        {props.intl.locale === 'en' &&
-                                            <span>{props.intl.formatMessage(messages.flipHorizontal)}</span>
-                                        }
+                                        <span>{props.intl.formatMessage(messages.flipHorizontal)}</span>
                                     </Button>
                                     <Button
                                         className={styles.modMenuItem}
@@ -504,9 +600,7 @@ const ModeToolsComponent = props => {
                                             draggable={false}
                                             src={flipVerticalIcon}
                                         />
-                                        {props.intl.locale === 'en' &&
-                                            <span>{props.intl.formatMessage(messages.flipVertical)}</span>
-                                        }
+                                        <span>{props.intl.formatMessage(messages.flipVertical)}</span>
                                     </Button>
                                     <Button
                                         className={styles.modMenuItem}
@@ -517,9 +611,7 @@ const ModeToolsComponent = props => {
                                             draggable={false}
                                             src={centerIcon}
                                         />
-                                        {props.intl.locale === 'en' &&
-                                            <span>{props.intl.formatMessage(messages.center)}</span>
-                                        }
+                                        <span>{props.intl.formatMessage(messages.center)}</span>
                                     </Button>
                                     <Button
                                         className={styles.modMenuItem}
@@ -530,9 +622,7 @@ const ModeToolsComponent = props => {
                                             draggable={false}
                                             src={maskIcon}
                                         />
-                                        {props.intl.locale === 'en' &&
-                                            <span>{props.intl.formatMessage(messages.mask)}</span>
-                                        }
+                                        <span>{props.intl.formatMessage(messages.mask)}</span>
                                     </Button>
                                     <Button
                                         className={styles.modMenuItem}
@@ -543,9 +633,7 @@ const ModeToolsComponent = props => {
                                             draggable={false}
                                             src={filterIcon}
                                         />
-                                        {props.intl.locale === 'en' &&
-                                            <span>{props.intl.formatMessage(messages.filter)}</span>
-                                        }
+                                        <span>{props.intl.formatMessage(messages.filter)}</span>
                                     </Button>
                                     <Button
                                         className={styles.modMenuItem}
@@ -556,9 +644,7 @@ const ModeToolsComponent = props => {
                                             draggable={false}
                                             src={subtractIcon}
                                         />
-                                        {props.intl.locale === 'en' &&
-                                            <span>{props.intl.formatMessage(messages.subtract)}</span>
-                                        }
+                                        <span>{props.intl.formatMessage(messages.subtract)}</span>
                                     </Button>
                                     <Button
                                         className={styles.modMenuItem}
@@ -569,9 +655,7 @@ const ModeToolsComponent = props => {
                                             draggable={false}
                                             src={mergeIcon}
                                         />
-                                        {props.intl.locale === 'en' &&
-                                            <span>{props.intl.formatMessage(messages.merge)}</span>
-                                        }
+                                        <span>{props.intl.formatMessage(messages.merge)}</span>
                                     </Button>
                                 </InputGroup>
                             }
@@ -710,6 +794,65 @@ const ModeToolsComponent = props => {
             </div>
         );
     }
+    case Modes.BIT_EFFECTS:
+        /* falls through */
+    case Modes.EFFECTS:
+        return (
+            <div className={classNames(props.className, styles.modeTools)}>
+                <InputGroup className={styles.modDashedBorder}>
+                    <Dropdown
+                        className={styles.modUnselect}
+                        enterExitTransitionDurationMs={20}
+                        popoverContent={
+                            <InputGroup className={styles.modContextMenu}>
+                                <EffectOption
+                                    id={'hueShift'}
+                                    icon={effectsHueShiftIcon}
+                                    message={'HueShift'}
+                                />
+                                <EffectOption
+                                    id={'brightness'}
+                                    icon={effectsBrightnessIcon}
+                                    message={'Brightness'}
+                                />
+                                <EffectOption
+                                    id={'saturate'}
+                                    icon={effectsSaturateIcon}
+                                    message={'Saturate'}
+                                />
+                                <EffectOption
+                                    id={'opacity'}
+                                    icon={effectsOpacityIcon}
+                                    message={'Opacity'}
+                                />
+                                <EffectOption
+                                    id={'posterize'}
+                                    icon={effectsPosterizeIcon}
+                                    message={'Posterize'}
+                                />
+                            </InputGroup>
+                        }
+                        tipSize={.01}
+                        invisible
+                    >
+                        <LabeledIconButton
+                            hideLabel={hideLabel(props.intl.locale)}
+                            imgSrc={effectsColorIcon}
+                            title={props.intl.formatMessage(messages.effectsColor)}
+                        />
+                    </Dropdown>
+                </InputGroup>
+                {isVector(props.format) && blendModeControl}
+                <InputGroup className={classNames(styles.modLabeledIconHeight)}>
+                    <LabeledIconButton
+                        hideLabel={hideLabel(props.intl.locale)}
+                        imgSrc={deleteIcon}
+                        title={props.intl.formatMessage(messages.delete)}
+                        onClick={props.onDelete}
+                    />
+                </InputGroup>
+            </div>
+        );
     default:
         // Leave empty for now, if mode not supported
         return (
@@ -761,6 +904,12 @@ ModeToolsComponent.propTypes = {
     onAlignCenter: PropTypes.func.isRequired,
     onAlignRight: PropTypes.func.isRequired,
     onAlignJustify: PropTypes.func.isRequired,
+    onRectRadiusSliderChange: PropTypes.func,
+    // eslint-disable-next-line react/no-unused-prop-types
+    onApplyEffect: PropTypes.func.isRequired,
+    blendMode: PropTypes.string,
+    hasSelection: PropTypes.bool,
+    onChangeBlendMode: PropTypes.func,
     onPolygonRadiusChange: PropTypes.func
 };
 

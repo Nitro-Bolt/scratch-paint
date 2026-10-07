@@ -5,6 +5,7 @@ import {clearSelection} from './selection';
 import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, CENTER, MAX_WORKSPACE_BOUNDS} from './view';
 import Formats from '../lib/format';
 import log from '../log/log';
+import {writeBlendModeToSvgNode} from './blend-mode';
 
 /**
  * @param {string|CanvasGradient} color The canvas's fillStyle.
@@ -451,7 +452,8 @@ const convertToBitmap = function (clearSelectedItems, onUpdateImage, optFontInli
     const bounds = paper.project.activeLayer.drawnBounds;
     const svg = paper.project.exportSVG({
         bounds: 'content',
-        matrix: new paper.Matrix().translate(-bounds.x, -bounds.y)
+        matrix: new paper.Matrix().translate(-bounds.x, -bounds.y),
+        onExport: writeBlendModeToSvgNode
     });
     showGuideLayers(guideLayers);
 

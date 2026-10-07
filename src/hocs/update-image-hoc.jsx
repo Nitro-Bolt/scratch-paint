@@ -24,6 +24,7 @@ import {
 import Modes, {BitmapModes} from '../lib/modes';
 import Formats, {isBitmap, isVector} from '../lib/format';
 import {isImportingImage} from '../lib/tw-is-importing-image';
+import {writeBlendModeToSvgNode} from '../helper/blend-mode';
 
 const UpdateImageHOC = function (WrappedComponent) {
     class UpdateImageWrapper extends React.Component {
@@ -152,7 +153,8 @@ const UpdateImageHOC = function (WrappedComponent) {
                 paper.project.exportSVG({
                     asString: true,
                     bounds: 'content',
-                    matrix: new paper.Matrix().translate(-bounds.x, -bounds.y)
+                    matrix: new paper.Matrix().translate(-bounds.x, -bounds.y),
+                    onExport: writeBlendModeToSvgNode
                 }),
                 centerX,
                 centerY);

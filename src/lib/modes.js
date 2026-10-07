@@ -10,7 +10,8 @@ const vectorModesObj = {
     RESHAPE: null,
     OVAL: null,
     POLYGON: null,
-    TEXT: null
+    TEXT: null,
+    EFFECTS: null  
 };
 const bitmapModesObj = {
     BIT_BRUSH: null,
@@ -20,7 +21,8 @@ const bitmapModesObj = {
     BIT_TEXT: null,
     BIT_FILL: null,
     BIT_ERASER: null,
-    BIT_SELECT: null
+    BIT_SELECT: null,
+    BIT_EFFECTS: null
 };
 const VectorModes = keyMirror(vectorModesObj);
 const BitmapModes = keyMirror(bitmapModesObj);
