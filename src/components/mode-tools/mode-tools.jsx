@@ -9,7 +9,12 @@ import {changeBrushSize as changeEraserSize} from '../../reducers/eraser-mode';
 import {changeBitBrushSize} from '../../reducers/bit-brush-size';
 import {changeBitEraserSize} from '../../reducers/bit-eraser-size';
 import {setShapesFilled} from '../../reducers/fill-bitmap-shapes';
-import {changeRectRadius} from '../../reducers/rect-mode';
+import {
+    changePolygonSides,
+    changePolygonRadius,
+    MAX_POLYGON_SIDES,
+    MIN_POLYGON_SIDES
+} from '../../reducers/polygon-mode';
 import {changeTextAlignment} from '../../reducers/text-alignment';
 
 import FontDropdown from '../../containers/font-dropdown.jsx';
@@ -48,7 +53,8 @@ import maskIcon from '!../../tw-recolor/build!./icons/mask.svg';
 import subtractIcon from '!../../tw-recolor/build!./icons/subtract.svg';
 import filterIcon from '!../../tw-recolor/build!./icons/filter.svg';
 import mergeIcon from '!../../tw-recolor/build!./icons/merge.svg';
-import roundRectIcon from '../rounded-rect-mode/rounded-rectangle.svg';
+import roundedCornerIcon from './icons/rounded-corner.svg';
+import pentagonIcon from './icons/pentagon.svg';
 import bitOvalIcon from '../bit-oval-mode/oval.svg';
 import bitRectIcon from '../bit-rect-mode/rectangle.svg';
 import bitOvalOutlinedIcon from '../bit-oval-mode/oval-outlined.svg';
@@ -139,10 +145,15 @@ const ModeToolsComponent = props => {
             description: 'Label for the button that sets the bitmap rectangle/oval mode to draw filled-in shapes',
             id: 'paint.modeTools.outlined'
         },
-        rectRadius: {
-            defaultMessage: 'Rectangle Curve',
-            description: 'Label for the rectangle curve input',
-            id: 'paint.modeTools.rectRadius'
+        polygonRadius: {
+            defaultMessage: 'Corner radius',
+            description: 'Label for the polygon corner radius input',
+            id: 'paint.modeTools.polygonRadius'
+        },
+        polygonSides: {
+            defaultMessage: 'Sides',
+            description: 'Label for the polygon side count input',
+            id: 'paint.modeTools.polygonSides'
         },
         mask: {
             defaultMessage: 'Mask',
@@ -743,29 +754,43 @@ const ModeToolsComponent = props => {
             </div>
         );
     }
-    case Modes.RECT: {
-        const currentIcon = roundRectIcon;
-        const currentRadiusValue = props.rectRadius;
-        const changeFunction = props.onRectRadiusSliderChange;
+    case Modes.POLYGON: {
         return (
             <div className={classNames(props.className, styles.modeTools)}>
-                <div>
+                <InputGroup>
                     <img
-                        alt={props.intl.formatMessage(messages.rectRadius)}
+                        alt={props.intl.formatMessage(messages.polygonSides)}
+                        className={styles.polygonSidesIcon}
+                        draggable={false}
+                        src={pentagonIcon}
+                    />
+                    <LiveInput
+                        range
+                        small
+                        max={MAX_POLYGON_SIDES}
+                        min={MIN_POLYGON_SIDES}
+                        type="number"
+                        value={props.polygonSides}
+                        onSubmit={props.onPolygonSidesChange}
+                    />
+                </InputGroup>
+                <InputGroup>
+                    <img
+                        alt={props.intl.formatMessage(messages.polygonRadius)}
                         className={styles.modeToolsIcon}
                         draggable={false}
-                        src={currentIcon}
+                        src={roundedCornerIcon}
                     />
-                </div>
-                <LiveInput
-                    range
-                    small
-                    max={MAX_STROKE_WIDTH}
-                    min="0"
-                    type="number"
-                    value={currentRadiusValue}
-                    onSubmit={changeFunction}
-                />
+                    <LiveInput
+                        range
+                        small
+                        max={MAX_STROKE_WIDTH}
+                        min="0"
+                        type="number"
+                        value={props.polygonRadius}
+                        onSubmit={props.onPolygonRadiusChange}
+                    />
+                </InputGroup>
             </div>
         );
     }
@@ -866,12 +891,14 @@ ModeToolsComponent.propTypes = {
     onOutlineShapes: PropTypes.func.isRequired,
     onPasteFromClipboard: PropTypes.func.isRequired,
     onPointPoints: PropTypes.func.isRequired,
+    onPolygonSidesChange: PropTypes.func.isRequired,
     onUpdateImage: PropTypes.func.isRequired,
     onMask: PropTypes.func,
     onFilter: PropTypes.func,
     onSubtract: PropTypes.func,
     onMerge: PropTypes.func,
-    rectRadius: PropTypes.number,
+    polygonRadius: PropTypes.number,
+    polygonSides: PropTypes.number,
     textAlignment: PropTypes.string.isRequired,
     onAlignLeft: PropTypes.func.isRequired,
     onAlignCenter: PropTypes.func.isRequired,
@@ -882,7 +909,8 @@ ModeToolsComponent.propTypes = {
     onApplyEffect: PropTypes.func.isRequired,
     blendMode: PropTypes.string,
     hasSelection: PropTypes.bool,
-    onChangeBlendMode: PropTypes.func
+    onChangeBlendMode: PropTypes.func,
+    onPolygonRadiusChange: PropTypes.func
 };
 
 const mapStateToProps = state => ({
@@ -894,7 +922,8 @@ const mapStateToProps = state => ({
     brushValue: state.scratchPaint.brushMode.brushSize,
     clipboardItems: state.scratchPaint.clipboard.items,
     eraserValue: state.scratchPaint.eraserMode.brushSize,
-    rectRadius: state.scratchPaint.rectMode.rectRadius,
+    polygonRadius: state.scratchPaint.polygonMode.polygonRadius,
+    polygonSides: state.scratchPaint.polygonMode.polygonSides,
     textAlignment: state.scratchPaint.textAlignment
 });
 const mapDispatchToProps = dispatch => ({
@@ -928,8 +957,11 @@ const mapDispatchToProps = dispatch => ({
     onOutlineShapes: () => {
         dispatch(setShapesFilled(false));
     },
-    onRectRadiusSliderChange: rectRadius => {
-        dispatch(changeRectRadius(rectRadius));
+    onPolygonRadiusChange: polygonRadius => {
+        dispatch(changePolygonRadius(polygonRadius));
+    },
+    onPolygonSidesChange: polygonSides => {
+        dispatch(changePolygonSides(polygonSides));
     }
 });
 

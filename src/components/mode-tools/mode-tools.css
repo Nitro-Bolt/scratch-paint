@@ -15,6 +15,13 @@
     filter: $filter-icon-gray;
 }
 
+.polygon-sides-icon {
+    margin-right: calc(2 * $grid-unit);
+    width: 1.5rem;
+    height: 1.5rem;
+    filter: $filter-icon-gray;
+}
+
 [dir="ltr"] .mod-dashed-border {
     border-right: 1px dashed $ui-pane-border;
     padding-right: calc(3 * $grid-unit);

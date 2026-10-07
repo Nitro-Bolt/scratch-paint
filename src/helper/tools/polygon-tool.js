@@ -7,9 +7,9 @@ import BoundingBoxTool from '../selection-tools/bounding-box-tool';
 import NudgeTool from '../selection-tools/nudge-tool';
 
 /**
- * Tool for drawing rectangles.
+ * Tool for drawing regular polygons within a dragged bounding box.
  */
-class RectTool extends paper.Tool {
+class PolygonTool extends paper.Tool {
     static get TOLERANCE () {
         return 2;
     }
@@ -25,13 +25,13 @@ class RectTool extends paper.Tool {
         this.clearSelectedItems = clearSelectedItems;
         this.onUpdateImage = onUpdateImage;
         this.boundingBoxTool = new BoundingBoxTool(
-            Modes.RECT,
+            Modes.POLYGON,
             setSelectedItems,
             clearSelectedItems,
             setCursor,
             onUpdateImage
         );
-        const nudgeTool = new NudgeTool(Modes.RECT, this.boundingBoxTool, onUpdateImage);
+        const nudgeTool = new NudgeTool(Modes.POLYGON, this.boundingBoxTool, onUpdateImage);
 
         // We have to set these functions instead of just declaring them because
         // paper.js tools hook up the listeners in the setter functions.
@@ -42,8 +42,9 @@ class RectTool extends paper.Tool {
         this.onKeyUp = nudgeTool.onKeyUp;
         this.onKeyDown = nudgeTool.onKeyDown;
 
-        this.rect = null;
-        this.rectRadius = 16;
+        this.polygon = null;
+        this.polygonRadius = 16;
+        this.polygonSides = 4;
         this.colorState = null;
         this.isBoundingBoxMode = null;
         this.active = false;
@@ -58,11 +59,65 @@ class RectTool extends paper.Tool {
             match: hitResult =>
                 (hitResult.item.data && (hitResult.item.data.isScaleHandle || hitResult.item.data.isRotHandle)) ||
                 hitResult.item.selected, // Allow hits on bounding box and selected only
-            tolerance: RectTool.TOLERANCE / paper.view.zoom
+            tolerance: PolygonTool.TOLERANCE / paper.view.zoom
         };
     }
-    setRectRadius (rectRadius) {
-        this.rectRadius = rectRadius;
+    setPolygonRadius (polygonRadius) {
+        this.polygonRadius = polygonRadius;
+    }
+    setPolygonSides (polygonSides) {
+        this.polygonSides = polygonSides;
+    }
+    createPolygon (rect) {
+        const center = rect.center;
+        const radiusX = rect.width / 2;
+        const radiusY = rect.height / 2;
+        const startAngle = this.polygonSides % 2 ?
+            -Math.PI / 2 :
+            (-Math.PI / 2) + (Math.PI / this.polygonSides);
+        const angles = [];
+        let maxCos = 0;
+        let maxSin = 0;
+        for (let i = 0; i < this.polygonSides; i++) {
+            const angle = startAngle + (2 * Math.PI * i / this.polygonSides);
+            angles.push(angle);
+            maxCos = Math.max(maxCos, Math.abs(Math.cos(angle)));
+            maxSin = Math.max(maxSin, Math.abs(Math.sin(angle)));
+        }
+        const vertices = [];
+        for (let i = 0; i < angles.length; i++) {
+            const angle = angles[i];
+            vertices.push(new paper.Point(
+                center.x + (radiusX * Math.cos(angle) / maxCos),
+                center.y + (radiusY * Math.sin(angle) / maxSin)
+            ));
+        }
+
+        const path = new paper.Path({closed: true});
+        for (let i = 0; i < vertices.length; i++) {
+            const previous = vertices[(i + vertices.length - 1) % vertices.length];
+            const vertex = vertices[i];
+            const next = vertices[(i + 1) % vertices.length];
+            const cornerRadius = Math.min(
+                this.polygonRadius,
+                vertex.getDistance(previous) / 2,
+                vertex.getDistance(next) / 2
+            );
+            if (cornerRadius <= 0) {
+                path.add(vertex);
+                continue;
+            }
+            const incoming = vertex.add(previous.subtract(vertex).normalize(cornerRadius));
+            const outgoing = vertex.add(next.subtract(vertex).normalize(cornerRadius));
+            if (i === 0) {
+                path.moveTo(incoming);
+            } else {
+                path.lineTo(incoming);
+            }
+            path.quadraticCurveTo(vertex, outgoing);
+        }
+        path.closePath();
+        return path;
     }
     /**
      * Should be called if the selection changes to update the bounds of the bounding box.
@@ -94,8 +149,8 @@ class RectTool extends paper.Tool {
             return;
         }
 
-        if (this.rect) {
-            this.rect.remove();
+        if (this.polygon) {
+            this.polygon.remove();
         }
 
         const rect = new paper.Rectangle(event.downPoint, event.point);
@@ -104,17 +159,17 @@ class RectTool extends paper.Tool {
             rect.size = squareDimensions.size.abs();
         }
 
-        this.rect = new paper.Path.Rectangle(rect, this.rectRadius);
+        this.polygon = this.createPolygon(rect);
         if (event.modifiers.alt) {
-            this.rect.position = event.downPoint;
+            this.polygon.position = event.downPoint;
         } else if (event.modifiers.shift) {
-            this.rect.position = squareDimensions.position;
+            this.polygon.position = squareDimensions.position;
         } else {
             const dimensions = event.point.subtract(event.downPoint);
-            this.rect.position = event.downPoint.add(dimensions.multiply(0.5));
+            this.polygon.position = event.downPoint.add(dimensions.multiply(0.5));
         }
 
-        styleShape(this.rect, this.colorState);
+        styleShape(this.polygon, this.colorState);
     }
     handleMouseUp (event) {
         if (event.event.button > 0 || !this.active) return; // only first mouse button
@@ -125,16 +180,16 @@ class RectTool extends paper.Tool {
             return;
         }
 
-        if (this.rect) {
-            if (this.rect.area < RectTool.TOLERANCE / paper.view.zoom) {
+        if (this.polygon) {
+            if (this.polygon.area < PolygonTool.TOLERANCE / paper.view.zoom) {
                 // Tiny rectangle created unintentionally?
-                this.rect.remove();
-                this.rect = null;
+                this.polygon.remove();
+                this.polygon = null;
             } else {
-                this.rect.selected = true;
+                this.polygon.selected = true;
                 this.setSelectedItems();
                 this.onUpdateImage();
-                this.rect = null;
+                this.polygon = null;
             }
         }
         this.active = false;
@@ -147,4 +202,4 @@ class RectTool extends paper.Tool {
     }
 }
 
-export default RectTool;
+export default PolygonTool;

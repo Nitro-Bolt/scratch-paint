@@ -31,15 +31,15 @@ const messages = defineMessages({
         description: 'Label for the rectangle tool',
         id: 'paint.rectMode.rect'
     },
+    polygon: {
+        defaultMessage: 'Polygon',
+        description: 'Label for the polygon tool',
+        id: 'paint.polygonMode.polygon'
+    },
     reshape: {
         defaultMessage: 'Reshape',
         description: 'Label for the reshape tool, which allows changing the points in the lines of the vectors',
         id: 'paint.reshapeMode.reshape'
-    },
-    roundedRect: {
-        defaultMessage: 'Rounded Rectangle',
-        description: 'Label for the rounded rectangle tool',
-        id: 'paint.roundedRectMode.roundedRect'
     },
     select: {
         defaultMessage: 'Select',

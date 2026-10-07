@@ -29,7 +29,7 @@ import Loupe from '../loupe/loupe.jsx';
 import FixedToolsContainer from '../../containers/fixed-tools.jsx';
 import ModeToolsContainer from '../../containers/mode-tools.jsx';
 import OvalMode from '../../containers/oval-mode.jsx';
-import RectMode from '../../containers/rect-mode.jsx';
+import PolygonMode from '../../containers/polygon-mode.jsx';
 import ReshapeMode from '../../containers/reshape-mode.jsx';
 import SelectMode from '../../containers/select-mode.jsx';
 import StrokeColorIndicatorComponent from '../../containers/stroke-color-indicator.jsx';
@@ -195,7 +195,7 @@ const PaintEditorComponent = props => (
                     <OvalMode
                         onUpdateImage={props.onUpdateImage}
                     />
-                    <RectMode
+                    <PolygonMode
                         onUpdateImage={props.onUpdateImage}
                     />
                     <EffectsMode
