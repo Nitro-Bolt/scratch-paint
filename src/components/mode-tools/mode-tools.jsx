@@ -430,8 +430,7 @@ const ModeToolsComponent = props => {
                         onClick={props.onDelete}
                     />
                 </InputGroup>
-                <MediaQuery minWidth={layout.fullSizeEditorMinWidth}>
-                    <InputGroup className={classNames(styles.modDashedBorder)}>
+                <InputGroup className={classNames(styles.modDashedBorder, styles.modLabeledIconHeight)}>
                         <LabeledIconButton
                             hideLabel={props.intl.locale !== 'en'}
                             imgSrc={flipHorizontalIcon}
@@ -450,8 +449,7 @@ const ModeToolsComponent = props => {
                             title={props.intl.formatMessage(messages.center)}
                             onClick={props.onCenterSelection}
                         />
-                    </InputGroup>
-                </MediaQuery>
+                </InputGroup>
             </div>
         );
     case Modes.SELECT:
