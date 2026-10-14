@@ -16,9 +16,9 @@ module.exports = {
         'import/no-amd': 'error',
         'import/no-nodejs-modules': 'error',
 
-        // TW: ignore errors importing things from custom webpack loaders
+        // Recolored SVGs use an Rspack resource query handled by the custom recolor loader.
         'import/no-unresolved': ['error', {
-            ignore: ['^!']
+            ignore: ['\\?recolor$']
         }],
         'linebreak-style': 'off'
     },

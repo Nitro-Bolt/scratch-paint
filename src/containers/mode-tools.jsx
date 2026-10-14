@@ -382,7 +382,7 @@ ModeTools.propTypes = {
     // Listen on selected items to update hasSelectedPoints
     selectedItems:
         PropTypes.arrayOf(PropTypes.instanceOf(paper.Item)), // eslint-disable-line react/no-unused-prop-types
-    setSelectedItems: PropTypes.func.isRequired,
+    setSelectedItems: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({

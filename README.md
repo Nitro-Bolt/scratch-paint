@@ -4,9 +4,9 @@ Modified version of `scratch-paint` for NitroBolt
 
 ```bash
 git clone https://github.com/Nitro-Bolt/scratch-paint.git
-npm ci
-npm start
-npm run build
+pnpm install --frozen-lockfile
+pnpm start
+pnpm run build
 ```
 
 Development playground runs on http://localhost:8078/playground/. Note that http://localhost:8078/ gives you the **built** playground, not the development playground.
@@ -72,7 +72,7 @@ If you want to edit scratch-paint, or help contribute to our open-source project
 ```bash
 git clone https://github.com/<YOUR_GITHUB_USERNAME>/scratch-paint.git
 cd scratch-paint
-npm install
+pnpm install
 ```
 
 ### Running locally (stand-alone)
@@ -80,13 +80,13 @@ You can try out your own copy of the paint editor by running the development ser
 
 In the cloned `scratch-paint` directory, run:
 ```bash
-npm run build
-npm start
+pnpm run build
+pnpm start
 ```
 
 Then go to [http://localhost:8078/playground/](http://localhost:8078/playground/). 8078 is BLOB upside-down. The True Name of this repo is scratch-blobs.
 
-*(Note that the `npm run build` step above seems like it's only necessary for some user and environments, and not others; check for yourself if the server that `npm start` starts is hot-reloading correctly.)*
+*(Note that the `pnpm run build` step above seems like it's only necessary for some users and environments; check whether the server started by `pnpm start` is hot-reloading correctly.)*
 
 ### Running locally (as part of Scratch)
 So you've tried out your edits in the playground and they look good. You should now test with the rest of Scratch, to make sure that everything hooks up right, and so that you can use your custom paint editor to make costumes and sprites!
@@ -97,21 +97,21 @@ git clone https://github.com/LLK/scratch-gui.git
 ```
 Go to your `scratch-paint` folder and run:
 ```bash
-npm link
+pnpm link --global
 ```
 
 Now in another terminal, go back to the `scratch-gui` folder and run
 ```bash
-npm install
-npm link scratch-paint
-npm start
+pnpm install
+pnpm link --global scratch-paint
+pnpm start
 ```
 Then go to [http://localhost:8601](http://localhost:8601). 601 is supposed to look like GUI (it's okay, I don't really see it either.) The Costumes tab should be running your local copy of scratch-paint!
 
 ### How to include in your own Node.js App
 If you want to use scratch-paint in your own Node environment/application, add it with:
 ```bash
-npm install --save scratch-paint
+pnpm add scratch-paint
 ```
 
 For an example of how to use scratch-paint as a library, check out the `scratch-paint/src/playground` directory.
@@ -175,12 +175,12 @@ We use React and Redux. If you're just getting started with them, here are some 
 
 ### Testing
 ```bash
-npm run test
+pnpm test
 ```
 
 Just unit tests:
 ```bash
-npm run unit
+pnpm run unit
 ```
 
 An individual unit test: (run from `scratch-paint` directory)

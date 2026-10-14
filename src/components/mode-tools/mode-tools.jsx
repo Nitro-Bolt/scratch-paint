@@ -34,25 +34,25 @@ import Button from '../button/button.jsx';
 import TWRenderRecoloredImage from '../../tw-recolor/render.jsx';
 import {BLEND_MODES, MIXED_BLEND_MODE, getBlendModeName} from '../../lib/blend-modes';
 
-import copyIcon from '!../../tw-recolor/build!./icons/copy.svg';
-import cutIcon from '!../../tw-recolor/build!./icons/cut.svg';
-import pasteIcon from '!../../tw-recolor/build!./icons/paste.svg';
-import deleteIcon from '!../../tw-recolor/build!./icons/delete.svg';
+import copyIcon from './icons/copy.svg?recolor';
+import cutIcon from './icons/cut.svg?recolor';
+import pasteIcon from './icons/paste.svg?recolor';
+import deleteIcon from './icons/delete.svg?recolor';
 
 import bitBrushIcon from '../bit-brush-mode/brush.svg';
 import bitEraserIcon from '../bit-eraser-mode/eraser.svg';
 import bitLineIcon from '../bit-line-mode/line.svg';
 import brushIcon from '../brush-mode/brush.svg';
-import curvedPointIcon from '!../../tw-recolor/build!./icons/curved-point.svg';
+import curvedPointIcon from './icons/curved-point.svg?recolor';
 import eraserIcon from '../eraser-mode/eraser.svg';
-import flipHorizontalIcon from '!../../tw-recolor/build!./icons/flip-horizontal.svg';
-import flipVerticalIcon from '!../../tw-recolor/build!./icons/flip-vertical.svg';
-import centerIcon from '!../../tw-recolor/build!./icons/center.svg';
-import straightPointIcon from '!../../tw-recolor/build!./icons/straight-point.svg';
-import maskIcon from '!../../tw-recolor/build!./icons/mask.svg';
-import subtractIcon from '!../../tw-recolor/build!./icons/subtract.svg';
-import filterIcon from '!../../tw-recolor/build!./icons/filter.svg';
-import mergeIcon from '!../../tw-recolor/build!./icons/merge.svg';
+import flipHorizontalIcon from './icons/flip-horizontal.svg?recolor';
+import flipVerticalIcon from './icons/flip-vertical.svg?recolor';
+import centerIcon from './icons/center.svg?recolor';
+import straightPointIcon from './icons/straight-point.svg?recolor';
+import maskIcon from './icons/mask.svg?recolor';
+import subtractIcon from './icons/subtract.svg?recolor';
+import filterIcon from './icons/filter.svg?recolor';
+import mergeIcon from './icons/merge.svg?recolor';
 import roundedCornerIcon from './icons/rounded-corner.svg';
 import pentagonIcon from './icons/pentagon.svg';
 import bitOvalIcon from '../bit-oval-mode/oval.svg';
@@ -64,11 +64,11 @@ import alignCenterIcon from './icons/align-center.svg';
 import alignRightIcon from './icons/align-right.svg';
 import alignJustifyIcon from './icons/align-justify.svg';
 import effectsColorIcon from './icons/effects-color.svg';
-import effectsHueShiftIcon from '!../../tw-recolor/build!./icons/effects-hueShift.svg';
-import effectsBrightnessIcon from '!../../tw-recolor/build!./icons/effects-brightness.svg';
-import effectsSaturateIcon from '!../../tw-recolor/build!./icons/effects-saturate.svg';
-import effectsOpacityIcon from '!../../tw-recolor/build!./icons/effects-opacity.svg';
-import effectsPosterizeIcon from '!../../tw-recolor/build!./icons/effects-posterize.svg';
+import effectsHueShiftIcon from './icons/effects-hueShift.svg?recolor';
+import effectsBrightnessIcon from './icons/effects-brightness.svg?recolor';
+import effectsSaturateIcon from './icons/effects-saturate.svg?recolor';
+import effectsOpacityIcon from './icons/effects-opacity.svg?recolor';
+import effectsPosterizeIcon from './icons/effects-posterize.svg?recolor';
 
 import {MAX_STROKE_WIDTH} from '../../reducers/stroke-width';
 
@@ -431,24 +431,24 @@ const ModeToolsComponent = props => {
                     />
                 </InputGroup>
                 <InputGroup className={classNames(styles.modDashedBorder, styles.modLabeledIconHeight)}>
-                        <LabeledIconButton
-                            hideLabel={props.intl.locale !== 'en'}
-                            imgSrc={flipHorizontalIcon}
-                            title={props.intl.formatMessage(messages.flipHorizontal)}
-                            onClick={props.onFlipHorizontal}
-                        />
-                        <LabeledIconButton
-                            hideLabel={props.intl.locale !== 'en'}
-                            imgSrc={flipVerticalIcon}
-                            title={props.intl.formatMessage(messages.flipVertical)}
-                            onClick={props.onFlipVertical}
-                        />
-                        <LabeledIconButton
-                            hideLabel={props.intl.locale !== 'en'}
-                            imgSrc={centerIcon}
-                            title={props.intl.formatMessage(messages.center)}
-                            onClick={props.onCenterSelection}
-                        />
+                    <LabeledIconButton
+                        hideLabel={props.intl.locale !== 'en'}
+                        imgSrc={flipHorizontalIcon}
+                        title={props.intl.formatMessage(messages.flipHorizontal)}
+                        onClick={props.onFlipHorizontal}
+                    />
+                    <LabeledIconButton
+                        hideLabel={props.intl.locale !== 'en'}
+                        imgSrc={flipVerticalIcon}
+                        title={props.intl.formatMessage(messages.flipVertical)}
+                        onClick={props.onFlipVertical}
+                    />
+                    <LabeledIconButton
+                        hideLabel={props.intl.locale !== 'en'}
+                        imgSrc={centerIcon}
+                        title={props.intl.formatMessage(messages.center)}
+                        onClick={props.onCenterSelection}
+                    />
                 </InputGroup>
             </div>
         );
@@ -902,7 +902,6 @@ ModeToolsComponent.propTypes = {
     onAlignCenter: PropTypes.func.isRequired,
     onAlignRight: PropTypes.func.isRequired,
     onAlignJustify: PropTypes.func.isRequired,
-    onRectRadiusSliderChange: PropTypes.func,
     // eslint-disable-next-line react/no-unused-prop-types
     onApplyEffect: PropTypes.func.isRequired,
     blendMode: PropTypes.string,

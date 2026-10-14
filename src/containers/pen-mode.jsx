@@ -3,6 +3,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
 import Modes from '../lib/modes';
+import ColorStyleProptype from '../lib/color-style-proptype';
 
 import {changeStrokeColor} from '../reducers/stroke-style';
 import {changeStrokeWidth} from '../reducers/stroke-width';
@@ -82,8 +83,8 @@ class PenMode extends React.Component {
 PenMode.propTypes = {
     clearSelectedItems: PropTypes.func.isRequired,
     colorState: PropTypes.shape({
-        fillStyle: PropTypes.string,
-        strokeColor: PropTypes.string,
+        fillColor: ColorStyleProptype,
+        strokeColor: ColorStyleProptype,
         strokeWidth: PropTypes.number
     }).isRequired,
     handleMouseDown: PropTypes.func.isRequired,

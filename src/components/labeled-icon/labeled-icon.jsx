@@ -15,7 +15,11 @@ const LabeledIcon = ({
     gray,
     ...props
 }) => (
-    <div className={styles.center} {...props}>
+    <div
+        className={styles.center}
+        onClick={onClick}
+        {...props}
+    >
         <TWRenderRecoloredImage
             alt={imgAlt || title}
             className={classNames(styles.editFieldIcon, {[styles.gray]: gray})}
@@ -33,6 +37,7 @@ LabeledIcon.propTypes = {
     highlighted: PropTypes.bool,
     imgAlt: PropTypes.string,
     imgSrc: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
+    onClick: PropTypes.func,
     title: PropTypes.string.isRequired,
     gray: PropTypes.bool
 };
