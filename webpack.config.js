@@ -19,7 +19,6 @@ const base = {
             loader: 'babel-loader',
             include: path.resolve(__dirname, 'src'),
             options: {
-                plugins: ['transform-object-rest-spread'],
                 presets: [
                     ['@babel/preset-env', {
                         targets: ['last 3 versions', 'Safari >= 8', 'iOS >= 8']}],
