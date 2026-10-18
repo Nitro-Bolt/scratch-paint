@@ -117,6 +117,7 @@ class PolygonTool extends paper.Tool {
             path.quadraticCurveTo(vertex, outgoing);
         }
         path.closePath();
+        path.setBounds(rect);
         return path;
     }
     /**
