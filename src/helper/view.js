@@ -1,5 +1,7 @@
 import paper from '@nitro-bolt/paper';
-import {CROSSHAIR_SIZE, getBackgroundGuideLayer, getDragCrosshairLayer, getRaster} from './layer';
+import {
+    CROSSHAIR_SIZE, getBackgroundGuideLayer, getDragCrosshairLayer, getRaster, updateBackgroundGuideLayer
+} from './layer';
 import {getAllRootItems, getSelectedRootItems} from './selection';
 import {getHitBounds} from './bitmap';
 import log from '../log/log';
@@ -73,8 +75,6 @@ const setWorkspaceBounds = clipEmpty => {
     for (const item of items) {
         bounds = bounds.unite(item.bounds.expand(BUFFER));
     }
-    // Limit to max workspace bounds
-    bounds = bounds.intersect(MAX_WORKSPACE_BOUNDS.expand(BUFFER));
     let top = bounds.top;
     let left = bounds.left;
     let bottom = bounds.bottom;
@@ -97,10 +97,11 @@ const setWorkspaceBounds = clipEmpty => {
     _workspaceBounds = new paper.Rectangle(left, top, right - left, bottom - top);
 };
 
-// this is exported and I'm too lazy to fix it everywhere, so it just doesn't clamp anymore
-const clampViewBounds = () => null;
+// Keep existing callers unrestricted while updating the paper visible behind the artwork.
+const clampViewBounds = () => updateBackgroundGuideLayer();
 
 const resizeCrosshair = () => {
+    updateBackgroundGuideLayer();
     if (getDragCrosshairLayer() && getDragCrosshairLayer().dragCrosshair) {
         getDragCrosshairLayer().dragCrosshair.scale(
             CROSSHAIR_SIZE / getDragCrosshairLayer().dragCrosshair.bounds.width / paper.view.zoom);
@@ -171,7 +172,7 @@ const getActionBounds = isBitmap => {
     if (isBitmap) {
         return ART_BOARD_BOUNDS;
     }
-    return paper.view.bounds.unite(ART_BOARD_BOUNDS).intersect(MAX_WORKSPACE_BOUNDS);
+    return paper.view.bounds.unite(ART_BOARD_BOUNDS);
 };
 
 const zoomToFit = isBitmap => {

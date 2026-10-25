@@ -2,7 +2,7 @@ import paper from '@nitro-bolt/paper';
 import {createCanvas, clearRaster, getRaster, hideGuideLayers, showGuideLayers} from './layer';
 import {getGuideColor} from './guides';
 import {clearSelection} from './selection';
-import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, CENTER, MAX_WORKSPACE_BOUNDS} from './view';
+import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, CENTER} from './view';
 import Formats from '../lib/format';
 import log from '../log/log';
 import {writeBlendModeToSvgNode} from './blend-mode';
@@ -507,14 +507,12 @@ const convertToBitmap = function (clearSelectedItems, onUpdateImage, optFontInli
 
 const convertToVector = function (clearSelectedItems, onUpdateImage) {
     clearSelection(clearSelectedItems);
-    for (const item of paper.project.activeLayer.children) {
+    for (const item of paper.project.activeLayer.children.slice()) {
         if (item.clipMask === true && item.guide) {
-            // Resize mask for vector bounds
-            item.size.height = MAX_WORKSPACE_BOUNDS.height;
-            item.size.width = MAX_WORKSPACE_BOUNDS.width;
-            item.setPosition(CENTER);
+            item.remove();
         }
     }
+    paper.project.activeLayer.clipped = false;
     getTrimmedRaster(true /* shouldInsert */);
 
     clearRaster();

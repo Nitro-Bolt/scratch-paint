@@ -122,17 +122,15 @@ const UpdateImageHOC = function (WrappedComponent) {
             }
         }
         handleUpdateVector (skipSnapshot) {
-            // Remove viewbox (this would make it export at MAX_WORKSPACE_BOUNDS)
-            let workspaceMask;
+            // Remove workspace clipping left by older undo snapshots.
             if (paper.project.activeLayer.clipped) {
                 for (const child of paper.project.activeLayer.children) {
                     if (child.isClipMask()) {
-                        workspaceMask = child;
+                        child.remove();
                         break;
                     }
                 }
                 paper.project.activeLayer.clipped = false;
-                workspaceMask.remove();
             }
             const guideLayers = hideGuideLayers(true /* includeRaster */);
 
@@ -162,12 +160,6 @@ const UpdateImageHOC = function (WrappedComponent) {
             paper.project.activeLayer.applyMatrix = true;
 
             showGuideLayers(guideLayers);
-
-            // Add back viewbox
-            if (workspaceMask) {
-                paper.project.activeLayer.addChild(workspaceMask);
-                workspaceMask.clipMask = true;
-            }
 
             if (!skipSnapshot) {
                 performSnapshot(this.props.undoSnapshot, Formats.VECTOR);

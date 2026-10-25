@@ -1,7 +1,8 @@
 import paper from '@nitro-bolt/paper';
 import log from '../log/log';
 import {
-    ART_BOARD_BOUNDS, ART_BOARD_WIDTH, ART_BOARD_HEIGHT, CENTER, MAX_WORKSPACE_BOUNDS, CANVAS_SIZE_MULTIPLIER
+    ART_BOARD_BOUNDS, ART_BOARD_WIDTH, ART_BOARD_HEIGHT, CENTER, MAX_WORKSPACE_BOUNDS, CANVAS_SIZE_MULTIPLIER,
+    OUTERMOST_ZOOM_LEVEL
 } from './view';
 import {isGroupItem} from './item';
 import {isBitmap, isVector} from '../lib/format';
@@ -301,11 +302,54 @@ const _makeOutlineLayer = function () {
     blueRect.opacity = 0.25;
     setGuideItem(blueRect);
     outlineLayer.data.isOutlineLayer = true;
+    outlineLayer.visible = false;
     return outlineLayer;
 };
 
 const WORKSPACE_BOUNDS_LIGHT = '#ECF1F9';
 const WORKSPACE_BOUNDS_DARK = '#333';
+
+const _makeVectorBackground = function () {
+    const tileSize = CHECKERBOARD_SIZE * 2;
+    const zoom = Math.min(OUTERMOST_ZOOM_LEVEL, paper.view.zoom);
+    const width = (Math.ceil(paper.view.viewSize.width / zoom / tileSize) + 1) * 2;
+    const height = (Math.ceil(paper.view.viewSize.height / zoom / tileSize) + 1) * 2;
+    const background = _makeBackgroundPaper(width, height, 0.55);
+    background.children[0].size = new paper.Size(width, height);
+    background.children[2].matrix = new paper.Matrix();
+    background.children[2].size = new paper.Size(width, height);
+    background.children[2].position = CENTER;
+    background.applyMatrix = false;
+    background.scaling = new paper.Point(CHECKERBOARD_SIZE, CHECKERBOARD_SIZE);
+    setGuideItem(background);
+    return background;
+};
+
+const updateBackgroundGuideLayer = function () {
+    const layer = getBackgroundGuideLayer();
+    if (!layer) {
+        return;
+    }
+    const bounds = paper.view.bounds;
+    const vectorBackground = layer.vectorBackground;
+    const tileSize = CHECKERBOARD_SIZE * 2;
+    let background = vectorBackground.children[1];
+    // Cache enough paper for the outermost zoom; only grow it when the viewport needs more room.
+    if (background.bounds.width < bounds.width + tileSize ||
+        background.bounds.height < bounds.height + tileSize) {
+        const previous = background;
+        background = _makeVectorBackground();
+        background.children[0].fillColor = previous.children[0].fillColor;
+        background.children[1].fillColor = previous.children[1].fillColor;
+        previous.remove();
+        vectorBackground.addChild(background);
+    }
+    // Move whole tiles so the checkerboard stays anchored to the costume center.
+    background.position = new paper.Point(
+        CENTER.x + (Math.floor((bounds.left - CENTER.x) / tileSize) * tileSize) + (background.bounds.width / 2),
+        CENTER.y + (Math.floor((bounds.top - CENTER.y) / tileSize) * tileSize) + (background.bounds.height / 2));
+    vectorBackground.children[0].bounds = bounds;
+};
 
 const _makeBackgroundGuideLayer = function (format) {
     const guideLayer = new paper.Layer();
@@ -316,14 +360,7 @@ const _makeBackgroundGuideLayer = function (format) {
     vWorkspaceBounds.position = CENTER;
     vWorkspaceBounds.scaling = new paper.Point(CANVAS_SIZE_MULTIPLIER, CANVAS_SIZE_MULTIPLIER);
 
-    // Add 1 to the height because it's an odd number otherwise, and we want it to be even
-    // so the corner of the checkerboard to line up with the center crosshair
-    const vBackground = _makeBackgroundPaper(
-        (MAX_WORKSPACE_BOUNDS.width * CANVAS_SIZE_MULTIPLIER) / CHECKERBOARD_SIZE,
-        ((MAX_WORKSPACE_BOUNDS.height * CANVAS_SIZE_MULTIPLIER) / CHECKERBOARD_SIZE) + 1,
-        0.55);
-    vBackground.position = CENTER;
-    vBackground.scaling = new paper.Point(CHECKERBOARD_SIZE, CHECKERBOARD_SIZE);
+    const vBackground = _makeVectorBackground();
 
     const vectorBackground = new paper.Group();
     vectorBackground.addChild(vWorkspaceBounds);
@@ -368,6 +405,7 @@ const updateTheme = function (theme) {
 
 const setupLayers = function (format) {
     const backgroundGuideLayer = _makeBackgroundGuideLayer(format);
+    updateBackgroundGuideLayer();
     _makeRasterLayer();
     const paintLayer = _makePaintingLayer();
     const dragCrosshairLayer = _makeDragCrosshairLayer();
@@ -394,5 +432,6 @@ export {
     getRaster,
     setGuideItem,
     updateTheme,
+    updateBackgroundGuideLayer,
     setupLayers
 };

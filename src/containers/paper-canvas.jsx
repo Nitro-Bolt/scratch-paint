@@ -12,7 +12,7 @@ import {isGroup, ungroupItems} from '../helper/group';
 import {clearRaster, convertBackgroundGuideLayer, getRaster, setupLayers, updateTheme} from '../helper/layer';
 import {clearSelectedItems} from '../reducers/selected-items';
 import {
-    ART_BOARD_WIDTH, ART_BOARD_HEIGHT, CENTER, MAX_WORKSPACE_BOUNDS, CANVAS_SIZE_MULTIPLIER,
+    ART_BOARD_WIDTH, ART_BOARD_HEIGHT, CENTER,
     clampViewBounds, resetZoom, setWorkspaceBounds, zoomToFit, resizeCrosshair
 } from '../helper/view';
 import {ensureClockwise, scaleWithStrokes} from '../helper/math';
@@ -263,28 +263,16 @@ class PaperCanvas extends React.Component {
         const itemWidth = item.bounds.width;
         const itemHeight = item.bounds.height;
 
-        // Get reference to viewbox
-        let mask;
+        // Remove the SVG viewbox clip so the artwork can extend beyond its imported bounds.
         if (item.clipped) {
             for (const child of item.children) {
                 if (child.isClipMask()) {
-                    mask = child;
+                    child.remove();
                     break;
                 }
             }
-            mask.clipMask = false;
-        } else {
-            mask = new paper.Shape.Rectangle(item.bounds);
+            item.clipped = false;
         }
-        mask.guide = true;
-        mask.locked = true;
-        mask.matrix = new paper.Matrix(); // Identity
-        // Set the artwork to get clipped at the max costume size
-        mask.size.height = MAX_WORKSPACE_BOUNDS.height * CANVAS_SIZE_MULTIPLIER;
-        mask.size.width = MAX_WORKSPACE_BOUNDS.width * CANVAS_SIZE_MULTIPLIER;
-        mask.setPosition(CENTER);
-        paper.project.activeLayer.addChild(mask);
-        mask.clipMask = true;
 
         // Reduce single item nested in groups
         if (item instanceof paper.Group && item.children.length === 1) {
