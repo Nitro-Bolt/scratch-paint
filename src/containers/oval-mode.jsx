@@ -47,7 +47,8 @@ class OvalMode extends React.Component {
         }
     }
     shouldComponentUpdate (nextProps) {
-        return nextProps.isOvalModeActive !== this.props.isOvalModeActive;
+        return nextProps.isOvalModeActive !== this.props.isOvalModeActive ||
+            nextProps.keybinding !== this.props.keybinding;
     }
     componentWillUnmount () {
         if (this.tool) {
@@ -122,6 +123,7 @@ class OvalMode extends React.Component {
             <OvalModeComponent
                 isSelected={this.props.isOvalModeActive}
                 onMouseDown={this.props.handleMouseDown}
+                keybinding={this.props.keybinding}
             />
         );
     }

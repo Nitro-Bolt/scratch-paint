@@ -20,6 +20,7 @@ const VECTOR_KEYBINDINGS = {
     s: Modes.SELECT,
     a: Modes.RESHAPE,
     b: Modes.BRUSH,
+    p: Modes.PEN,
     e: Modes.ERASER,
     f: Modes.FILL,
     t: Modes.TEXT,
@@ -42,12 +43,38 @@ const BITMAP_KEYBINDINGS = {
 };
 
 const KeyboardShortcutsHOC = function (WrappedComponent) {
+    const RegisterAllKeybinds = props => {
+        const setMode = mode => {
+            if (isVector(props.format)) {
+                if (Object.prototype.hasOwnProperty.call(VECTOR_KEYBINDINGS, mode)) {
+                    props.changeMode(VECTOR_KEYBINDINGS[mode]);
+                }
+            } else if (isBitmap(props.format)) {
+                if (Object.prototype.hasOwnProperty.call(BITMAP_KEYBINDINGS, mode)) {
+                    props.changeMode(BITMAP_KEYBINDINGS[mode]);
+                }
+            }
+        }
+
+        props.registerKeybind(props.preferences['keybind-paint-select'] ?? props.defaultKeybinds['paint-select'], () => setMode("s"));
+        props.registerKeybind(props.preferences['keybind-paint-reshape'] ?? props.defaultKeybinds['paint-reshape'], () => setMode("a"));
+        props.registerKeybind(props.preferences['keybind-paint-pen'] ?? props.defaultKeybinds['paint-pen'], () => setMode("p"));
+        props.registerKeybind(props.preferences['keybind-paint-brush'] ?? props.defaultKeybinds['paint-brush'], () => setMode("b"));
+        props.registerKeybind(props.preferences['keybind-paint-eraser'] ?? props.defaultKeybinds['paint-eraser'], () => setMode("e"));
+        props.registerKeybind(props.preferences['keybind-paint-fill'] ?? props.defaultKeybinds['paint-fill'], () => setMode("f"));
+        props.registerKeybind(props.preferences['keybind-paint-text'] ?? props.defaultKeybinds['paint-text'], () => setMode("t"));
+        props.registerKeybind(props.preferences['keybind-paint-line'] ?? props.defaultKeybinds['paint-line'], () => setMode("l"));
+        props.registerKeybind(props.preferences['keybind-paint-oval'] ?? props.defaultKeybinds['paint-oval'], () => setMode("c"));
+        props.registerKeybind(props.preferences['keybind-paint-effect'] ?? props.defaultKeybinds['paint-effect'], () => setMode("z"));
+        props.registerKeybind(props.preferences['keybind-paint-polygon'] ?? props.defaultKeybinds['paint-polygon'], () => setMode("r"));
+
+        return props.children;
+    };
     class KeyboardShortcutsWrapper extends React.Component {
         constructor (props) {
             super(props);
             bindAll(this, [
                 'handleKeyPress',
-                'changeToASelectMode',
                 'selectAll'
             ]);
         }
@@ -68,64 +95,56 @@ const KeyboardShortcutsHOC = function (WrappedComponent) {
                 if (deleteSelection(this.props.mode, this.props.onUpdateImage)) {
                     this.props.setSelectedItems(this.props.format);
                 }
-            } else if (event.metaKey || event.ctrlKey) {
-                if ((event.shiftKey && lowercaseKey === 'z') || lowercaseKey === 'y') {
-                    event.preventDefault();
-                    this.props.onRedo();
-                } else if (lowercaseKey === 'z') {
-                    event.preventDefault();
-                    this.props.onUndo();
-                } else if (event.shiftKey && lowercaseKey === 'g') {
-                    if (shouldShowUngroup()) {
-                        ungroupSelection(clearSelectedItems, setSelectedItems, this.props.onUpdateImage);
-                    }
-                    event.preventDefault();
-                } else if (lowercaseKey === 'g') {
-                    if (shouldShowGroup()) {
-                        groupSelection(clearSelectedItems, setSelectedItems, this.props.onUpdateImage);
-                    }
-                    event.preventDefault();
-                } else if (lowercaseKey === 'c') {
-                    this.props.onCopyToClipboard();
-                } else if (lowercaseKey === 'v') {
-                    this.changeToASelectMode();
-                    this.props.onPasteFromClipboard();
-                } else if (lowercaseKey === 'x') {
-                    const selectedItems = getSelectedRootItems();
-                    if (selectedItems.length > 0) {
-                        this.props.onCopyToClipboard();
-                        if (deleteSelection(this.props.mode, this.props.onUpdateImage)) {
-                            this.props.setSelectedItems(this.props.format);
-                        }
-                    }
-                    event.preventDefault();
-                } else if (lowercaseKey === 'a') {
-                    this.changeToASelectMode();
-                    event.preventDefault();
-                    this.selectAll();
-                }
-            } else if (!event.ctrlKey && !event.metaKey && !event.altKey) {
-                if (isVector(this.props.format)) {
-                    if (Object.prototype.hasOwnProperty.call(VECTOR_KEYBINDINGS, lowercaseKey)) {
-                        this.props.changeMode(VECTOR_KEYBINDINGS[lowercaseKey]);
-                        event.preventDefault();
-                    }
-                } else if (isBitmap(this.props.format)) {
-                    if (Object.prototype.hasOwnProperty.call(BITMAP_KEYBINDINGS, lowercaseKey)) {
-                        this.props.changeMode(BITMAP_KEYBINDINGS[lowercaseKey]);
-                        event.preventDefault();
-                    }
-                }
             }
-        }
-        changeToASelectMode () {
-            if (isBitmap(this.props.format)) {
-                if (this.props.mode !== Modes.BIT_SELECT) {
-                    this.props.changeMode(Modes.BIT_SELECT);
-                }
-            } else if (this.props.mode !== Modes.SELECT && this.props.mode !== Modes.RESHAPE) {
-                this.props.changeMode(Modes.SELECT);
-            }
+            // else if (event.metaKey || event.ctrlKey) {
+            //     if ((event.shiftKey && lowercaseKey === 'z') || lowercaseKey === 'y') {
+            //         event.preventDefault();
+            //         this.props.onRedo();
+            //     } else if (lowercaseKey === 'z') {
+            //         event.preventDefault();
+            //         this.props.onUndo();
+            //     } else if (event.shiftKey && lowercaseKey === 'g') {
+            //         if (shouldShowUngroup()) {
+            //             ungroupSelection(clearSelectedItems, setSelectedItems, this.props.onUpdateImage);
+            //         }
+            //         event.preventDefault();
+            //     } else if (lowercaseKey === 'g') {
+            //         if (shouldShowGroup()) {
+            //             groupSelection(clearSelectedItems, setSelectedItems, this.props.onUpdateImage);
+            //         }
+            //         event.preventDefault();
+            //     } else if (lowercaseKey === 'c') {
+            //         this.props.onCopyToClipboard();
+            //     } else if (lowercaseKey === 'v') {
+            //         this.changeToASelectMode();
+            //         this.props.onPasteFromClipboard();
+            //     } else if (lowercaseKey === 'x') {
+            //         const selectedItems = getSelectedRootItems();
+            //         if (selectedItems.length > 0) {
+            //             this.props.onCopyToClipboard();
+            //             if (deleteSelection(this.props.mode, this.props.onUpdateImage)) {
+            //                 this.props.setSelectedItems(this.props.format);
+            //             }
+            //         }
+            //         event.preventDefault();
+            //     } else if (lowercaseKey === 'a') {
+            //         this.changeToASelectMode();
+            //         event.preventDefault();
+            //         this.selectAll();
+            //     }
+            // } else if (!event.ctrlKey && !event.metaKey && !event.altKey) {
+            //     if (isVector(this.props.format)) {
+            //         if (Object.prototype.hasOwnProperty.call(VECTOR_KEYBINDINGS, lowercaseKey)) {
+            //             this.props.changeMode(VECTOR_KEYBINDINGS[lowercaseKey]);
+            //             event.preventDefault();
+            //         }
+            //     } else if (isBitmap(this.props.format)) {
+            //         if (Object.prototype.hasOwnProperty.call(BITMAP_KEYBINDINGS, lowercaseKey)) {
+            //             this.props.changeMode(BITMAP_KEYBINDINGS[lowercaseKey]);
+            //             event.preventDefault();
+            //         }
+            //     }
+            // }
         }
         selectAll () {
             if (isBitmap(this.props.format)) {
@@ -148,10 +167,14 @@ const KeyboardShortcutsHOC = function (WrappedComponent) {
                 'setSelectedItems',
                 'textEditing']);
             return (
-                <WrappedComponent
-                    onKeyPress={this.handleKeyPress}
-                    {...componentProps}
-                />
+                <RegisterAllKeybinds
+                    {...this.props}
+                >
+                    <WrappedComponent
+                        onKeyPress={this.handleKeyPress}
+                        {...componentProps}
+                    />
+                </RegisterAllKeybinds>
             );
         }
     }
@@ -167,7 +190,10 @@ const KeyboardShortcutsHOC = function (WrappedComponent) {
         onUndo: PropTypes.func.isRequired,
         onUpdateImage: PropTypes.func.isRequired,
         setSelectedItems: PropTypes.func.isRequired,
-        textEditing: PropTypes.bool.isRequired
+        textEditing: PropTypes.bool.isRequired,
+        defaultKeybinds: PropTypes.object.isRequired,
+        preferences: PropTypes.object.isRequired,
+        registerKeybind: PropTypes.func.isRequired
     };
 
     const mapStateToProps = state => ({
@@ -175,6 +201,7 @@ const KeyboardShortcutsHOC = function (WrappedComponent) {
         format: state.scratchPaint.format,
         textEditing: state.scratchPaint.textEditTarget !== null
     });
+
     const mapDispatchToProps = dispatch => ({
         changeMode: mode => {
             dispatch(changeMode(mode));

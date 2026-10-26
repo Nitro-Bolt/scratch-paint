@@ -399,6 +399,8 @@ class PaintEditor extends React.Component {
                 onZoomOut={this.handleZoomOut}
                 onZoomReset={this.handleZoomReset}
                 onRequestEffectParams={this.props.onRequestEffectParams}
+                defaultKeybinds={this.props.defaultKeybinds}
+                preferences={this.props.preferences}
             />
         );
     }
@@ -408,6 +410,7 @@ PaintEditor.propTypes = {
     changeColorToEyeDropper: PropTypes.func,
     changeMode: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
+    defaultKeybinds: PropTypes.object.isRequired,
     fillColor: PropTypes.shape({
         primary: PropTypes.string,
         secondary: PropTypes.string,
@@ -454,6 +457,7 @@ PaintEditor.propTypes = {
     onUndo: PropTypes.func.isRequired,
     onUpdateImage: PropTypes.func.isRequired,
     onUpdateName: PropTypes.func.isRequired,
+    preferences: PropTypes.object.isRequired,
     previousTool: PropTypes.shape({ // paper.Tool
         activate: PropTypes.func.isRequired,
         remove: PropTypes.func.isRequired

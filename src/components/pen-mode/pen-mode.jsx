@@ -14,6 +14,7 @@ const PenModeComponent = props => (
         imgSrc={penIcon}
         isSelected={props.isSelected}
         onMouseDown={props.onMouseDown}
+        keybinding={props.keybinding}
     />
 );
 

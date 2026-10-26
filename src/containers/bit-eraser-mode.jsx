@@ -28,7 +28,7 @@ class BitEraserMode extends React.Component {
         if (this.tool && nextProps.bitEraserSize !== this.props.bitEraserSize) {
             this.tool.setBrushSize(nextProps.bitEraserSize);
         }
-        
+
         if (nextProps.isBitEraserModeActive && !this.props.isBitEraserModeActive) {
             this.activateTool();
         } else if (!nextProps.isBitEraserModeActive && this.props.isBitEraserModeActive) {
@@ -36,7 +36,8 @@ class BitEraserMode extends React.Component {
         }
     }
     shouldComponentUpdate (nextProps) {
-        return nextProps.isBitEraserModeActive !== this.props.isBitEraserModeActive;
+        return nextProps.isBitEraserModeActive !== this.props.isBitEraserModeActive ||
+            nextProps.keybinding !== this.props.keybinding;
     }
     componentWillUnmount () {
         if (this.tool) {
@@ -63,6 +64,7 @@ class BitEraserMode extends React.Component {
             <BitEraserModeComponent
                 isSelected={this.props.isBitEraserModeActive}
                 onMouseDown={this.props.handleMouseDown}
+                keybinding={this.props.keybinding}
             />
         );
     }

@@ -10,7 +10,7 @@ const BitSelectComponent = props => (
         imgSrc={selectIcon}
         isSelected={props.isSelected}
         onMouseDown={props.onMouseDown}
-        keybinding="S"
+        keybinding={props.keybinding}
     />
 );
 

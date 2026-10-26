@@ -46,7 +46,8 @@ class BrushMode extends React.Component {
         }
     }
     shouldComponentUpdate (nextProps) {
-        return nextProps.isBrushModeActive !== this.props.isBrushModeActive;
+        return nextProps.isBrushModeActive !== this.props.isBrushModeActive ||
+            nextProps.keybinding !== this.props.keybinding;
     }
     componentWillUnmount () {
         if (this.blob.tool) {
@@ -77,6 +78,7 @@ class BrushMode extends React.Component {
             <BrushModeComponent
                 isSelected={this.props.isBrushModeActive}
                 onMouseDown={this.props.handleMouseDown}
+                keybinding={this.props.keybinding}
             />
         );
     }

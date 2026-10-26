@@ -49,7 +49,8 @@ class LineMode extends React.Component {
         }
     }
     shouldComponentUpdate (nextProps) {
-        return nextProps.isLineModeActive !== this.props.isLineModeActive;
+        return nextProps.isLineModeActive !== this.props.isLineModeActive ||
+            nextProps.keybinding !== this.props.keybinding;
     }
     componentWillUnmount () {
         if (this.tool) {
@@ -272,6 +273,7 @@ class LineMode extends React.Component {
             <LineModeComponent
                 isSelected={this.props.isLineModeActive}
                 onMouseDown={this.props.handleMouseDown}
+                keybinding={this.props.keybinding}
             />
         );
     }

@@ -8,10 +8,20 @@ import Button from '../button/button.jsx';
 import styles from './tool-select-base.css';
 
 const formatWithKeyBinding = (description, keybinding) => {
-    if (!keybinding) {
+    if (keybinding?.disabled) {
         return description;
     }
-    return `${description} (${keybinding})`;
+
+    const keybind = [
+        keybinding.ctrl ? 'Ctrl' : false,
+        keybinding.shift ? 'Shift' : false,
+        keybinding.alt ? 'Alt' : false,
+        keybinding.key?.toUpperCase()
+            .replace('ENTER', 'Enter')
+            .replace(' ', 'Space')
+    ].filter(v => v).join('+');
+
+    return `${description} (${keybind})`;
 };
 
 const ToolSelectComponent = props => (
@@ -42,7 +52,7 @@ ToolSelectComponent.propTypes = {
         description: PropTypes.string,
         id: PropTypes.string
     }).isRequired,
-    keybinding: PropTypes.string,
+    keybinding: PropTypes.object,
     imgSrc: PropTypes.string.isRequired,
     intl: intlShape.isRequired,
     isSelected: PropTypes.bool.isRequired,

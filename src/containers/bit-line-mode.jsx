@@ -41,7 +41,8 @@ class BitLineMode extends React.Component {
         }
     }
     shouldComponentUpdate (nextProps) {
-        return nextProps.isBitLineModeActive !== this.props.isBitLineModeActive;
+        return nextProps.isBitLineModeActive !== this.props.isBitLineModeActive ||
+            nextProps.keybinding !== this.props.keybinding;
     }
     componentWillUnmount () {
         if (this.tool) {
@@ -75,6 +76,7 @@ class BitLineMode extends React.Component {
             <BitLineModeComponent
                 isSelected={this.props.isBitLineModeActive}
                 onMouseDown={this.props.handleMouseDown}
+                keybinding={this.props.keybinding}
             />
         );
     }

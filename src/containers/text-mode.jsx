@@ -67,7 +67,8 @@ class TextMode extends React.Component {
         }
     }
     shouldComponentUpdate (nextProps) {
-        return nextProps.isTextModeActive !== this.props.isTextModeActive;
+        return nextProps.isTextModeActive !== this.props.isTextModeActive ||
+            nextProps.keybinding !== this.props.keybinding;
     }
     componentWillUnmount () {
         if (this.tool) {
@@ -136,10 +137,12 @@ class TextMode extends React.Component {
                 <BitTextModeComponent
                     isSelected={this.props.isTextModeActive}
                     onMouseDown={this.props.handleChangeModeBitText}
+                    keybinding={this.props.keybinding}
                 /> :
                 <TextModeComponent
                     isSelected={this.props.isTextModeActive}
                     onMouseDown={this.props.handleChangeModeText}
+                    keybinding={this.props.keybinding}
                 />
         );
     }

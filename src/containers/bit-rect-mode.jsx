@@ -53,7 +53,8 @@ class BitRectMode extends React.Component {
         }
     }
     shouldComponentUpdate (nextProps) {
-        return nextProps.isRectModeActive !== this.props.isRectModeActive;
+        return nextProps.isRectModeActive !== this.props.isRectModeActive ||
+            nextProps.keybinding !== this.props.keybinding;
     }
     componentWillUnmount () {
         if (this.tool) {
@@ -88,6 +89,7 @@ class BitRectMode extends React.Component {
             <RectModeComponent
                 isSelected={this.props.isRectModeActive}
                 onMouseDown={this.props.handleMouseDown}
+                keybinding={this.props.keybinding}
             />
         );
     }

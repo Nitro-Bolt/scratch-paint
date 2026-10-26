@@ -10,7 +10,7 @@ const BitOvalComponent = props => (
         imgSrc={ovalIcon}
         isSelected={props.isSelected}
         onMouseDown={props.onMouseDown}
-        keybinding="C"
+        keybinding={props.keybinding}
     />
 );
 

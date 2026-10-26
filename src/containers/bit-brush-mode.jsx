@@ -41,7 +41,8 @@ class BitBrushMode extends React.Component {
         }
     }
     shouldComponentUpdate (nextProps) {
-        return nextProps.isBitBrushModeActive !== this.props.isBitBrushModeActive;
+        return nextProps.isBitBrushModeActive !== this.props.isBitBrushModeActive ||
+            nextProps.keybinding !== this.props.keybinding;
     }
     componentWillUnmount () {
         if (this.tool) {
@@ -75,6 +76,7 @@ class BitBrushMode extends React.Component {
             <BitBrushModeComponent
                 isSelected={this.props.isBitBrushModeActive}
                 onMouseDown={this.props.handleMouseDown}
+                keybinding={this.props.keybinding}
             />
         );
     }

@@ -11,7 +11,7 @@ const TextModeComponent = props => (
         imgSrc={textIcon}
         isSelected={props.isSelected}
         onMouseDown={props.onMouseDown}
-        keybinding="T"
+        keybinding={props.keybinding}
     />
 );
 

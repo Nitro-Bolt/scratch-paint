@@ -37,7 +37,8 @@ class EraserMode extends React.Component {
         }
     }
     shouldComponentUpdate (nextProps) {
-        return nextProps.isEraserModeActive !== this.props.isEraserModeActive;
+        return nextProps.isEraserModeActive !== this.props.isEraserModeActive ||
+            nextProps.keybinding !== this.props.keybinding;
     }
     componentWillUnmount () {
         if (this.blob.tool) {
@@ -55,6 +56,7 @@ class EraserMode extends React.Component {
             <EraserModeComponent
                 isSelected={this.props.isEraserModeActive}
                 onMouseDown={this.props.handleMouseDown}
+                keybinding={this.props.keybinding}
             />
         );
     }

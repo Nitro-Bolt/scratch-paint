@@ -10,7 +10,7 @@ const FillModeComponent = props => (
         imgSrc={fillIcon}
         isSelected={props.isSelected}
         onMouseDown={props.onMouseDown}
-        keybinding="F"
+        keybinding={props.keybinding}
     />
 );
 

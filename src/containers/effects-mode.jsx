@@ -42,7 +42,8 @@ class EffectsMode extends React.Component {
         }
     }
     shouldComponentUpdate (nextProps) {
-        return nextProps.isEffectsModeActive !== this.props.isEffectsModeActive;
+        return nextProps.isEffectsModeActive !== this.props.isEffectsModeActive ||
+            nextProps.keybinding !== this.props.keybinding;
     }
     componentWillUnmount () {
         if (this.tool) {
@@ -71,6 +72,7 @@ class EffectsMode extends React.Component {
             <EffectsModeComponent
                 isSelected={this.props.isEffectsModeActive}
                 onMouseDown={this.props.handleMouseDown}
+                keybinding={this.props.keybinding}
             />
         );
     }
