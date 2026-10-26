@@ -8,7 +8,7 @@ import Button from '../button/button.jsx';
 import styles from './tool-select-base.css';
 
 const formatWithKeyBinding = (description, keybinding) => {
-    if (keybinding?.disabled) {
+    if (!keybinding || keybinding.disabled) {
         return description;
     }
 
