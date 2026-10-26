@@ -219,32 +219,41 @@ const PaintEditorComponent = props => (
                 <div className={styles.modeSelector}>
                     <BitBrushMode
                         onUpdateImage={props.onUpdateImage}
+                        keybinding={props.preferences['keybind-paint-brush'] ?? props.defaultKeybinds['paint-brush']}
                     />
                     <BitLineMode
                         onUpdateImage={props.onUpdateImage}
+                        keybinding={props.preferences['keybind-paint-line'] ?? props.defaultKeybinds['paint-line']}
                     />
                     <BitOvalMode
                         onUpdateImage={props.onUpdateImage}
+                        keybinding={props.preferences['keybind-paint-oval'] ?? props.defaultKeybinds['paint-oval']}
                     />
                     <BitRectMode
                         onUpdateImage={props.onUpdateImage}
+                        keybinding={props.preferences['keybind-paint-polygon'] ?? props.defaultKeybinds['paint-polygon']}
                     />
                     <TextMode
                         isBitmap
                         textArea={props.textArea}
                         onUpdateImage={props.onUpdateImage}
+                        keybinding={props.preferences['keybind-paint-text'] ?? props.defaultKeybinds['paint-text']}
                     />
                     <BitFillMode
                         onUpdateImage={props.onUpdateImage}
+                        keybinding={props.preferences['keybind-paint-fill'] ?? props.defaultKeybinds['paint-fill']}
                     />
                     <BitEraserMode
                         onUpdateImage={props.onUpdateImage}
+                        keybinding={props.preferences['keybind-paint-eraser'] ?? props.defaultKeybinds['paint-eraser']}
                     />
                     <BitSelectMode
                         onUpdateImage={props.onUpdateImage}
+                        keybinding={props.preferences['keybind-paint-select'] ?? props.defaultKeybinds['paint-select']}
                     />
                     <BitEffectsMode
                         onUpdateImage={props.onUpdateImage}
+                        keybinding={props.preferences['keybind-paint-effect'] ?? props.defaultKeybinds['paint-effect']}
                     />
                 </div>
             ) : null}
