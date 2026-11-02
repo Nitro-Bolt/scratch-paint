@@ -103,10 +103,7 @@
   "pnpm": {
     "onlyBuiltDependencies": [
       "core-js"
-    ],
-    "overrides": {
-      "scratch-paint": "link:../../../.local/share/pnpm/global/5/node_modules/scratch-paint"
-    }
+    ]
   },
   "jest": {
     "setupFiles": [
