@@ -107,7 +107,8 @@ BitOvalMode.propTypes = {
     setCursor: PropTypes.func.isRequired,
     setSelectedItems: PropTypes.func.isRequired,
     thickness: PropTypes.number.isRequired,
-    zoom: PropTypes.number.isRequired
+    zoom: PropTypes.number.isRequired,
+    keybinding: PropTypes.object
 };
 
 const mapStateToProps = state => ({

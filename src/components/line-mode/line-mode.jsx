@@ -16,7 +16,8 @@ const LineModeComponent = props => (
 
 LineModeComponent.propTypes = {
     isSelected: PropTypes.bool.isRequired,
-    onMouseDown: PropTypes.func.isRequired
+    onMouseDown: PropTypes.func.isRequired,
+    keybinding: PropTypes.object
 };
 
 export default LineModeComponent;

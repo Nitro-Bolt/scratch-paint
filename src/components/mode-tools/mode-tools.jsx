@@ -431,24 +431,24 @@ const ModeToolsComponent = props => {
                     />
                 </InputGroup>
                 <InputGroup className={classNames(styles.modDashedBorder, styles.modLabeledIconHeight)}>
-                        <LabeledIconButton
-                            hideLabel={props.intl.locale !== 'en'}
-                            imgSrc={flipHorizontalIcon}
-                            title={props.intl.formatMessage(messages.flipHorizontal)}
-                            onClick={props.onFlipHorizontal}
-                        />
-                        <LabeledIconButton
-                            hideLabel={props.intl.locale !== 'en'}
-                            imgSrc={flipVerticalIcon}
-                            title={props.intl.formatMessage(messages.flipVertical)}
-                            onClick={props.onFlipVertical}
-                        />
-                        <LabeledIconButton
-                            hideLabel={props.intl.locale !== 'en'}
-                            imgSrc={centerIcon}
-                            title={props.intl.formatMessage(messages.center)}
-                            onClick={props.onCenterSelection}
-                        />
+                    <LabeledIconButton
+                        hideLabel={props.intl.locale !== 'en'}
+                        imgSrc={flipHorizontalIcon}
+                        title={props.intl.formatMessage(messages.flipHorizontal)}
+                        onClick={props.onFlipHorizontal}
+                    />
+                    <LabeledIconButton
+                        hideLabel={props.intl.locale !== 'en'}
+                        imgSrc={flipVerticalIcon}
+                        title={props.intl.formatMessage(messages.flipVertical)}
+                        onClick={props.onFlipVertical}
+                    />
+                    <LabeledIconButton
+                        hideLabel={props.intl.locale !== 'en'}
+                        imgSrc={centerIcon}
+                        title={props.intl.formatMessage(messages.center)}
+                        onClick={props.onCenterSelection}
+                    />
                 </InputGroup>
             </div>
         );
@@ -902,7 +902,6 @@ ModeToolsComponent.propTypes = {
     onAlignCenter: PropTypes.func.isRequired,
     onAlignRight: PropTypes.func.isRequired,
     onAlignJustify: PropTypes.func.isRequired,
-    onRectRadiusSliderChange: PropTypes.func,
     // eslint-disable-next-line react/no-unused-prop-types
     onApplyEffect: PropTypes.func.isRequired,
     blendMode: PropTypes.string,

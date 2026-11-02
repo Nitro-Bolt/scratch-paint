@@ -286,7 +286,7 @@ class ModeTools extends React.Component {
         if (!definition) return;
 
         const bitmap = isBitmap(this.props.format);
-    
+
         if (!this.props.selectedItems.length) {
             if (bitmap) {
                 selectAllBitmap(this.props.clearSelectedItems);
@@ -298,7 +298,7 @@ class ModeTools extends React.Component {
         }
         const items = getSelectedLeafItems();
         if (items.length === 0) return;
-    
+
         let values = {};
         if (definition.params.length > 0) {
             const request = this.props.onRequestEffectParams || promptEffectParams;
@@ -312,12 +312,12 @@ class ModeTools extends React.Component {
 
         // filter just in case something was removed during the dialog
         const leItems = items.filter(i => i.parent);
-    
+
         if (bitmap) {
             const rasters = leItems.filter(item => item instanceof paper.Raster);
             for (const raster of rasters) {
                 applyToBitmap(raster.getContext(true), definition, values);
-                
+
                 if (raster.data && raster.data.expanded instanceof paper.Raster) {
                     applyToBitmap(raster.data.expanded.getContext(true), definition, values);
                 }
@@ -327,7 +327,7 @@ class ModeTools extends React.Component {
                 applyToVector(item, definition, values);
             }
         }
-    
+
         this.props.onUpdateImage();
     }
     handleChangeBlendMode (mode) {
@@ -382,7 +382,7 @@ ModeTools.propTypes = {
     // Listen on selected items to update hasSelectedPoints
     selectedItems:
         PropTypes.arrayOf(PropTypes.instanceOf(paper.Item)), // eslint-disable-line react/no-unused-prop-types
-    setSelectedItems: PropTypes.func.isRequired,
+    setSelectedItems: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({

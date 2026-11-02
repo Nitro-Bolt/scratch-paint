@@ -11,7 +11,7 @@ const vectorModesObj = {
     OVAL: null,
     POLYGON: null,
     TEXT: null,
-    EFFECTS: null  
+    EFFECTS: null
 };
 const bitmapModesObj = {
     BIT_BRUSH: null,

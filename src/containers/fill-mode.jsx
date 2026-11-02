@@ -131,7 +131,8 @@ FillMode.propTypes = {
     onChangeFillColor: PropTypes.func.isRequired,
     onAddRecentColor: PropTypes.func.isRequired,
     onUpdateImage: PropTypes.func.isRequired,
-    setHoveredItem: PropTypes.func.isRequired
+    setHoveredItem: PropTypes.func.isRequired,
+    keybinding: PropTypes.object
 };
 
 const mapStateToProps = state => ({

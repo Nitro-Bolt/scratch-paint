@@ -8,8 +8,7 @@ import CopyPasteHOC from './copy-paste-hoc.jsx';
 
 import {selectAllBitmap} from '../helper/bitmap';
 import {clearSelection, deleteSelection, getSelectedLeafItems,
-    selectAllItems, selectAllSegments, getSelectedRootItems} from '../helper/selection';
-import {groupSelection, shouldShowGroup, ungroupSelection, shouldShowUngroup} from '../helper/group';
+    selectAllItems, selectAllSegments} from '../helper/selection';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {changeMode} from '../reducers/modes';
 
@@ -54,19 +53,63 @@ const KeyboardShortcutsHOC = function (WrappedComponent) {
                     props.changeMode(BITMAP_KEYBINDINGS[mode]);
                 }
             }
-        }
+        };
 
-        props.registerKeybind(props.preferences['keybind-paint-select'] ?? props.defaultKeybinds['paint-select'], () => setMode("s"));
-        props.registerKeybind(props.preferences['keybind-paint-reshape'] ?? props.defaultKeybinds['paint-reshape'], () => setMode("a"));
-        props.registerKeybind(props.preferences['keybind-paint-pen'] ?? props.defaultKeybinds['paint-pen'], () => setMode("p"));
-        props.registerKeybind(props.preferences['keybind-paint-brush'] ?? props.defaultKeybinds['paint-brush'], () => setMode("b"));
-        props.registerKeybind(props.preferences['keybind-paint-eraser'] ?? props.defaultKeybinds['paint-eraser'], () => setMode("e"));
-        props.registerKeybind(props.preferences['keybind-paint-fill'] ?? props.defaultKeybinds['paint-fill'], () => setMode("f"));
-        props.registerKeybind(props.preferences['keybind-paint-text'] ?? props.defaultKeybinds['paint-text'], () => setMode("t"));
-        props.registerKeybind(props.preferences['keybind-paint-line'] ?? props.defaultKeybinds['paint-line'], () => setMode("l"));
-        props.registerKeybind(props.preferences['keybind-paint-oval'] ?? props.defaultKeybinds['paint-oval'], () => setMode("c"));
-        props.registerKeybind(props.preferences['keybind-paint-effect'] ?? props.defaultKeybinds['paint-effect'], () => setMode("z"));
-        props.registerKeybind(props.preferences['keybind-paint-polygon'] ?? props.defaultKeybinds['paint-polygon'], () => setMode("r"));
+        props.registerKeybind(
+            props.preferences['keybind-paint-select'] ??
+            props.defaultKeybinds['paint-select'],
+            () => setMode('s')
+        );
+        props.registerKeybind(
+            props.preferences['keybind-paint-reshape'] ??
+            props.defaultKeybinds['paint-reshape'],
+            () => setMode('a')
+        );
+        props.registerKeybind(
+            props.preferences['keybind-paint-pen'] ??
+            props.defaultKeybinds['paint-pen'],
+            () => setMode('p')
+        );
+        props.registerKeybind(
+            props.preferences['keybind-paint-brush'] ??
+            props.defaultKeybinds['paint-brush'],
+            () => setMode('b')
+        );
+        props.registerKeybind(
+            props.preferences['keybind-paint-eraser'] ??
+            props.defaultKeybinds['paint-eraser'],
+            () => setMode('e')
+        );
+        props.registerKeybind(
+            props.preferences['keybind-paint-fill'] ??
+            props.defaultKeybinds['paint-fill'],
+            () => setMode('f')
+        );
+        props.registerKeybind(
+            props.preferences['keybind-paint-text'] ??
+            props.defaultKeybinds['paint-text'],
+            () => setMode('t')
+        );
+        props.registerKeybind(
+            props.preferences['keybind-paint-line'] ??
+            props.defaultKeybinds['paint-line'],
+            () => setMode('l')
+        );
+        props.registerKeybind(
+            props.preferences['keybind-paint-oval'] ??
+            props.defaultKeybinds['paint-oval'],
+            () => setMode('c')
+        );
+        props.registerKeybind(
+            props.preferences['keybind-paint-effect'] ??
+            props.defaultKeybinds['paint-effect'],
+            () => setMode('z')
+        );
+        props.registerKeybind(
+            props.preferences['keybind-paint-polygon'] ??
+            props.defaultKeybinds['paint-polygon'],
+            () => setMode('r')
+        );
 
         return props.children;
     };
@@ -86,7 +129,6 @@ const KeyboardShortcutsHOC = function (WrappedComponent) {
             // Don't activate keyboard shortcuts during text editing
             if (this.props.textEditing) return;
 
-            const lowercaseKey = event.key.toLowerCase();
             if (event.key === 'Escape') {
                 event.preventDefault();
                 clearSelection(this.props.clearSelectedItems);

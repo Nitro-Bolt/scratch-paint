@@ -83,7 +83,8 @@ ReshapeMode.propTypes = {
     onUpdateImage: PropTypes.func.isRequired,
     setHoveredItem: PropTypes.func.isRequired,
     setSelectedItems: PropTypes.func.isRequired,
-    switchToTextTool: PropTypes.func.isRequired
+    switchToTextTool: PropTypes.func.isRequired,
+    keybinding: PropTypes.object
 };
 
 const mapStateToProps = state => ({

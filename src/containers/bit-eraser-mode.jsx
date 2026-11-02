@@ -75,7 +75,8 @@ BitEraserMode.propTypes = {
     clearSelectedItems: PropTypes.func.isRequired,
     handleMouseDown: PropTypes.func.isRequired,
     isBitEraserModeActive: PropTypes.bool.isRequired,
-    onUpdateImage: PropTypes.func.isRequired
+    onUpdateImage: PropTypes.func.isRequired,
+    keybinding: PropTypes.object
 };
 
 const mapStateToProps = state => ({

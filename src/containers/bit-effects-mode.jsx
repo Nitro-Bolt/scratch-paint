@@ -74,7 +74,8 @@ BitEffectsMode.propTypes = {
     onUpdateImage: PropTypes.func.isRequired,
     selectedItems: PropTypes.arrayOf(PropTypes.instanceOf(paper.Item)),
     setCursor: PropTypes.func.isRequired,
-    setSelectedItems: PropTypes.func.isRequired
+    setSelectedItems: PropTypes.func.isRequired,
+    keybinding: PropTypes.object
 };
 
 const mapStateToProps = state => ({

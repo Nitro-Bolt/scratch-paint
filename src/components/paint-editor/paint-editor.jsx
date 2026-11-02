@@ -169,48 +169,81 @@ const PaintEditorComponent = props => (
                 <div className={styles.modeSelector}>
                     <SelectMode
                         onUpdateImage={props.onUpdateImage}
-                        keybinding={props.preferences['keybind-paint-select'] ?? props.defaultKeybinds['paint-select']}
+                        keybinding={
+                            props.preferences['keybind-paint-select'] ??
+                            props.defaultKeybinds['paint-select']
+                        }
                     />
                     <ReshapeMode
                         onUpdateImage={props.onUpdateImage}
-                        keybinding={props.preferences['keybind-paint-reshape'] ?? props.defaultKeybinds['paint-reshape']}
+                        keybinding={
+                            props.preferences['keybind-paint-reshape'] ??
+                            props.defaultKeybinds['paint-reshape']
+                        }
                     />
                     <BrushMode
                         onUpdateImage={props.onUpdateImage}
-                        keybinding={props.preferences['keybind-paint-brush'] ?? props.defaultKeybinds['paint-brush']}
+                        keybinding={
+                            props.preferences['keybind-paint-brush'] ??
+                            props.defaultKeybinds['paint-brush']
+                        }
                     />
                     <PenMode
                         onUpdateImage={props.onUpdateImage}
-                        keybinding={props.preferences['keybind-paint-pen'] ?? props.defaultKeybinds['paint-pen']}
+                        keybinding={
+                            props.preferences['keybind-paint-pen'] ??
+                            props.defaultKeybinds['paint-pen']
+                        }
                     />
                     <EraserMode
                         onUpdateImage={props.onUpdateImage}
-                        keybinding={props.preferences['keybind-paint-eraser'] ?? props.defaultKeybinds['paint-eraser']}
+                        keybinding={
+                            props.preferences['keybind-paint-eraser'] ??
+                            props.defaultKeybinds['paint-eraser']
+                        }
                     />
                     <FillMode
                         onUpdateImage={props.onUpdateImage}
-                        keybinding={props.preferences['keybind-paint-fill'] ?? props.defaultKeybinds['paint-fill']}
+                        keybinding={
+                            props.preferences['keybind-paint-fill'] ??
+                            props.defaultKeybinds['paint-fill']
+                        }
                     />
                     <TextMode
                         textArea={props.textArea}
                         onUpdateImage={props.onUpdateImage}
-                        keybinding={props.preferences['keybind-paint-text'] ?? props.defaultKeybinds['paint-text']}
+                        keybinding={
+                            props.preferences['keybind-paint-text'] ??
+                            props.defaultKeybinds['paint-text']
+                        }
                     />
                     <LineMode
                         onUpdateImage={props.onUpdateImage}
-                        keybinding={props.preferences['keybind-paint-line'] ?? props.defaultKeybinds['paint-line']}
+                        keybinding={
+                            props.preferences['keybind-paint-line'] ??
+                            props.defaultKeybinds['paint-line']
+                        }
                     />
                     <OvalMode
                         onUpdateImage={props.onUpdateImage}
-                        keybinding={props.preferences['keybind-paint-oval'] ?? props.defaultKeybinds['paint-oval']}
+                        keybinding={
+                            props.preferences['keybind-paint-oval'] ??
+                            props.defaultKeybinds['paint-oval']
+                        }
                     />
                     <PolygonMode
                         onUpdateImage={props.onUpdateImage}
-                        keybinding={props.preferences['keybind-paint-polygon'] ?? props.defaultKeybinds['paint-polygon']}
+                        keybinding={
+                            props.preferences['keybind-paint-polygon'] ??
+                            props.defaultKeybinds['paint-polygon']
+                        }
                     />
                     <EffectsMode
                         onUpdateImage={props.onUpdateImage}
-                        keybinding={props.preferences['keybind-paint-effect'] ?? props.defaultKeybinds['paint-effect']}
+                        keybinding={
+                            props.preferences['keybind-paint-effect'] ??
+                            props.defaultKeybinds['paint-effect']
+                        }
                     />
                 </div>
             ) : null}
@@ -219,41 +252,68 @@ const PaintEditorComponent = props => (
                 <div className={styles.modeSelector}>
                     <BitBrushMode
                         onUpdateImage={props.onUpdateImage}
-                        keybinding={props.preferences['keybind-paint-brush'] ?? props.defaultKeybinds['paint-brush']}
+                        keybinding={
+                            props.preferences['keybind-paint-brush'] ??
+                            props.defaultKeybinds['paint-brush']
+                        }
                     />
                     <BitLineMode
                         onUpdateImage={props.onUpdateImage}
-                        keybinding={props.preferences['keybind-paint-line'] ?? props.defaultKeybinds['paint-line']}
+                        keybinding={
+                            props.preferences['keybind-paint-line'] ??
+                            props.defaultKeybinds['paint-line']
+                        }
                     />
                     <BitOvalMode
                         onUpdateImage={props.onUpdateImage}
-                        keybinding={props.preferences['keybind-paint-oval'] ?? props.defaultKeybinds['paint-oval']}
+                        keybinding={
+                            props.preferences['keybind-paint-oval'] ??
+                            props.defaultKeybinds['paint-oval']
+                        }
                     />
                     <BitRectMode
                         onUpdateImage={props.onUpdateImage}
-                        keybinding={props.preferences['keybind-paint-polygon'] ?? props.defaultKeybinds['paint-polygon']}
+                        keybinding={
+                            props.preferences['keybind-paint-polygon'] ??
+                            props.defaultKeybinds['paint-polygon']
+                        }
                     />
                     <TextMode
                         isBitmap
                         textArea={props.textArea}
                         onUpdateImage={props.onUpdateImage}
-                        keybinding={props.preferences['keybind-paint-text'] ?? props.defaultKeybinds['paint-text']}
+                        keybinding={
+                            props.preferences['keybind-paint-text'] ??
+                            props.defaultKeybinds['paint-text']
+                        }
                     />
                     <BitFillMode
                         onUpdateImage={props.onUpdateImage}
-                        keybinding={props.preferences['keybind-paint-fill'] ?? props.defaultKeybinds['paint-fill']}
+                        keybinding={
+                            props.preferences['keybind-paint-fill'] ??
+                            props.defaultKeybinds['paint-fill']
+                        }
                     />
                     <BitEraserMode
                         onUpdateImage={props.onUpdateImage}
-                        keybinding={props.preferences['keybind-paint-eraser'] ?? props.defaultKeybinds['paint-eraser']}
+                        keybinding={
+                            props.preferences['keybind-paint-eraser'] ??
+                            props.defaultKeybinds['paint-eraser']
+                        }
                     />
                     <BitSelectMode
                         onUpdateImage={props.onUpdateImage}
-                        keybinding={props.preferences['keybind-paint-select'] ?? props.defaultKeybinds['paint-select']}
+                        keybinding={
+                            props.preferences['keybind-paint-select'] ??
+                            props.defaultKeybinds['paint-select']
+                        }
                     />
                     <BitEffectsMode
                         onUpdateImage={props.onUpdateImage}
-                        keybinding={props.preferences['keybind-paint-effect'] ?? props.defaultKeybinds['paint-effect']}
+                        keybinding={
+                            props.preferences['keybind-paint-effect'] ??
+                            props.defaultKeybinds['paint-effect']
+                        }
                     />
                 </div>
             ) : null}

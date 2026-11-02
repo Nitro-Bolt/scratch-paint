@@ -10,12 +10,14 @@ const LabeledIcon = ({
     hideLabel,
     imgAlt,
     imgSrc,
-    onClick,
     title,
     gray,
     ...props
 }) => (
-    <div className={styles.center} {...props}>
+    <div
+        className={styles.center}
+        {...props}
+    >
         <TWRenderRecoloredImage
             alt={imgAlt || title}
             className={classNames(styles.editFieldIcon, {[styles.gray]: gray})}

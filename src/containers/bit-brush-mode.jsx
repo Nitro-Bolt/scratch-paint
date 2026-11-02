@@ -90,7 +90,8 @@ BitBrushMode.propTypes = {
     handleMouseDown: PropTypes.func.isRequired,
     isBitBrushModeActive: PropTypes.bool.isRequired,
     onChangeFillColor: PropTypes.func.isRequired,
-    onUpdateImage: PropTypes.func.isRequired
+    onUpdateImage: PropTypes.func.isRequired,
+    keybinding: PropTypes.object
 };
 
 const mapStateToProps = state => ({

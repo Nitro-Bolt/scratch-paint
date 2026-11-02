@@ -92,7 +92,8 @@ PenMode.propTypes = {
     isPenModeActive: PropTypes.bool.isRequired,
     onChangeStrokeColor: PropTypes.func.isRequired,
     onChangeStrokeWidth: PropTypes.func.isRequired,
-    onUpdateImage: PropTypes.func.isRequired
+    onUpdateImage: PropTypes.func.isRequired,
+    keybinding: PropTypes.object
 };
 
 const mapStateToProps = state => ({

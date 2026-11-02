@@ -69,7 +69,8 @@ EraserMode.propTypes = {
     }),
     handleMouseDown: PropTypes.func.isRequired,
     isEraserModeActive: PropTypes.bool.isRequired,
-    onUpdateImage: PropTypes.func.isRequired
+    onUpdateImage: PropTypes.func.isRequired,
+    keybinding: PropTypes.object
 };
 
 const mapStateToProps = state => ({

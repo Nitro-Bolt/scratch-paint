@@ -174,7 +174,8 @@ TextMode.propTypes = {
     textArea: PropTypes.instanceOf(Element),
     textAlignment: PropTypes.string.isRequired,
     textEditTarget: PropTypes.number,
-    viewBounds: PropTypes.instanceOf(paper.Matrix).isRequired
+    viewBounds: PropTypes.instanceOf(paper.Matrix).isRequired,
+    keybinding: PropTypes.object
 };
 
 const mapStateToProps = (state, ownProps) => ({

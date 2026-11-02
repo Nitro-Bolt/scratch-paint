@@ -154,7 +154,8 @@ PolygonMode.propTypes = {
     setCursor: PropTypes.func.isRequired,
     setSelectedItems: PropTypes.func.isRequired,
     polygonRadius: PropTypes.number,
-    polygonSides: PropTypes.number
+    polygonSides: PropTypes.number,
+    keybinding: PropTypes.object
 };
 
 const mapStateToProps = state => ({
