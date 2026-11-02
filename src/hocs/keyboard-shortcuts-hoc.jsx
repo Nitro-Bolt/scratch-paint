@@ -11,6 +11,7 @@ import {clearSelection, deleteSelection, getSelectedLeafItems,
     selectAllItems, selectAllSegments} from '../helper/selection';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {changeMode} from '../reducers/modes';
+import {groupSelection, ungroupSelection} from '../helper/group.js';
 
 import Formats, {isBitmap, isVector} from '../lib/format';
 import Modes from '../lib/modes';
@@ -110,6 +111,34 @@ const KeyboardShortcutsHOC = function (WrappedComponent) {
             props.defaultKeybinds['paint-polygon'],
             () => setMode('r')
         );
+        props.registerKeybind(
+            props.preferences['keybind-undo'] ??
+            props.defaultKeybinds['undo'],
+            () => props.onUndo()
+        );
+        props.registerKeybind(
+            props.preferences['keybind-redo'] ??
+            props.defaultKeybinds['redo'],
+            () => props.onRedo()
+        );
+        props.registerKeybind(
+            props.preferences['keybind-paint-group'] ??
+            props.defaultKeybinds['paint-group'],
+            () => {
+                if (shouldShowGroup()) {
+                    groupSelection(clearSelectedItems, setSelectedItems, props.onUpdateImage);
+                }
+            }
+        );
+        props.registerKeybind(
+            props.preferences['keybind-paint-ungroup'] ??
+            props.defaultKeybinds['paint-ungroup'],
+            () => {
+                if (shouldShowUngroup()) {
+                    ungroupSelection(clearSelectedItems, setSelectedItems, props.onUpdateImage);
+                }
+            }
+        );
 
         return props.children;
     };
@@ -138,55 +167,28 @@ const KeyboardShortcutsHOC = function (WrappedComponent) {
                     this.props.setSelectedItems(this.props.format);
                 }
             }
-            // else if (event.metaKey || event.ctrlKey) {
-            //     if ((event.shiftKey && lowercaseKey === 'z') || lowercaseKey === 'y') {
-            //         event.preventDefault();
-            //         this.props.onRedo();
-            //     } else if (lowercaseKey === 'z') {
-            //         event.preventDefault();
-            //         this.props.onUndo();
-            //     } else if (event.shiftKey && lowercaseKey === 'g') {
-            //         if (shouldShowUngroup()) {
-            //             ungroupSelection(clearSelectedItems, setSelectedItems, this.props.onUpdateImage);
-            //         }
-            //         event.preventDefault();
-            //     } else if (lowercaseKey === 'g') {
-            //         if (shouldShowGroup()) {
-            //             groupSelection(clearSelectedItems, setSelectedItems, this.props.onUpdateImage);
-            //         }
-            //         event.preventDefault();
-            //     } else if (lowercaseKey === 'c') {
-            //         this.props.onCopyToClipboard();
-            //     } else if (lowercaseKey === 'v') {
-            //         this.changeToASelectMode();
-            //         this.props.onPasteFromClipboard();
-            //     } else if (lowercaseKey === 'x') {
-            //         const selectedItems = getSelectedRootItems();
-            //         if (selectedItems.length > 0) {
-            //             this.props.onCopyToClipboard();
-            //             if (deleteSelection(this.props.mode, this.props.onUpdateImage)) {
-            //                 this.props.setSelectedItems(this.props.format);
-            //             }
-            //         }
-            //         event.preventDefault();
-            //     } else if (lowercaseKey === 'a') {
-            //         this.changeToASelectMode();
-            //         event.preventDefault();
-            //         this.selectAll();
-            //     }
-            // } else if (!event.ctrlKey && !event.metaKey && !event.altKey) {
-            //     if (isVector(this.props.format)) {
-            //         if (Object.prototype.hasOwnProperty.call(VECTOR_KEYBINDINGS, lowercaseKey)) {
-            //             this.props.changeMode(VECTOR_KEYBINDINGS[lowercaseKey]);
-            //             event.preventDefault();
-            //         }
-            //     } else if (isBitmap(this.props.format)) {
-            //         if (Object.prototype.hasOwnProperty.call(BITMAP_KEYBINDINGS, lowercaseKey)) {
-            //             this.props.changeMode(BITMAP_KEYBINDINGS[lowercaseKey]);
-            //             event.preventDefault();
-            //         }
-            //     }
-            // }
+            const lowercaseKey = event.key.toLowerCase();
+            if (event.metaKey || event.ctrlKey) {
+                if (lowercaseKey === 'c') {
+                    this.props.onCopyToClipboard();
+                } else if (lowercaseKey === 'v') {
+                    this.changeToASelectMode();
+                    this.props.onPasteFromClipboard();
+                } else if (lowercaseKey === 'x') {
+                    const selectedItems = getSelectedRootItems();
+                    if (selectedItems.length > 0) {
+                        this.props.onCopyToClipboard();
+                        if (deleteSelection(this.props.mode, this.props.onUpdateImage)) {
+                            this.props.setSelectedItems(this.props.format);
+                        }
+                    }
+                    event.preventDefault();
+                } else if (lowercaseKey === 'a') {
+                    this.changeToASelectMode();
+                    event.preventDefault();
+                    this.selectAll();
+                }
+            }
         }
         selectAll () {
             if (isBitmap(this.props.format)) {
