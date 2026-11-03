@@ -68,7 +68,7 @@ class PolygonTool extends paper.Tool {
     setPolygonSides (polygonSides) {
         this.polygonSides = polygonSides;
     }
-    createPolygon (rect) {
+    createPolygon (rect, regular) {
         const center = rect.center;
         const radiusX = rect.width / 2;
         const radiusY = rect.height / 2;
@@ -85,11 +85,14 @@ class PolygonTool extends paper.Tool {
             maxSin = Math.max(maxSin, Math.abs(Math.sin(angle)));
         }
         const vertices = [];
+        const radius = regular ? Math.min(radiusX / maxCos, radiusY / maxSin) : null;
+        const vertexRadiusX = regular ? radius : radiusX / maxCos;
+        const vertexRadiusY = regular ? radius : radiusY / maxSin;
         for (let i = 0; i < angles.length; i++) {
             const angle = angles[i];
             vertices.push(new paper.Point(
-                center.x + (radiusX * Math.cos(angle) / maxCos),
-                center.y + (radiusY * Math.sin(angle) / maxSin)
+                center.x + (vertexRadiusX * Math.cos(angle)),
+                center.y + (vertexRadiusY * Math.sin(angle))
             ));
         }
 
@@ -117,7 +120,7 @@ class PolygonTool extends paper.Tool {
             path.quadraticCurveTo(vertex, outgoing);
         }
         path.closePath();
-        path.setBounds(rect);
+        if (!regular) path.setBounds(rect);
         return path;
     }
     /**
@@ -160,7 +163,7 @@ class PolygonTool extends paper.Tool {
             rect.size = squareDimensions.size.abs();
         }
 
-        this.polygon = this.createPolygon(rect);
+        this.polygon = this.createPolygon(rect, event.modifiers.shift);
         if (event.modifiers.alt) {
             this.polygon.position = event.downPoint;
         } else if (event.modifiers.shift) {
