@@ -147,6 +147,7 @@ const KeyboardShortcutsHOC = function (WrappedComponent) {
             super(props);
             bindAll(this, [
                 'handleKeyPress',
+                'changeToASelectMode',
                 'selectAll'
             ]);
         }
@@ -188,6 +189,15 @@ const KeyboardShortcutsHOC = function (WrappedComponent) {
                     event.preventDefault();
                     this.selectAll();
                 }
+            }
+        }
+        changeToASelectMode () {
+            if (isBitmap(this.props.format)) {
+                if (this.props.mode !== Modes.BIT_SELECT) {
+                    this.props.changeMode(Modes.BIT_SELECT);
+                }
+            } else if (this.props.mode !== Modes.SELECT && this.props.mode !== Modes.RESHAPE) {
+                this.props.changeMode(Modes.SELECT);
             }
         }
         selectAll () {
