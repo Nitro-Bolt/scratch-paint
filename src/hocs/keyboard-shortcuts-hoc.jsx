@@ -11,7 +11,7 @@ import {clearSelection, deleteSelection, getSelectedLeafItems,
     selectAllItems, selectAllSegments} from '../helper/selection';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {changeMode} from '../reducers/modes';
-import {groupSelection, ungroupSelection} from '../helper/group.js';
+import {groupSelection, ungroupSelection, shouldShowGroup, shouldShowUngroup} from '../helper/group.js';
 
 import Formats, {isBitmap, isVector} from '../lib/format';
 import Modes from '../lib/modes';
