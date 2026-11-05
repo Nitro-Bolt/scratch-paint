@@ -49,7 +49,8 @@ class LineMode extends React.Component {
         }
     }
     shouldComponentUpdate (nextProps) {
-        return nextProps.isLineModeActive !== this.props.isLineModeActive;
+        return nextProps.isLineModeActive !== this.props.isLineModeActive ||
+            nextProps.keybinding !== this.props.keybinding;
     }
     componentWillUnmount () {
         if (this.tool) {
@@ -272,6 +273,7 @@ class LineMode extends React.Component {
             <LineModeComponent
                 isSelected={this.props.isLineModeActive}
                 onMouseDown={this.props.handleMouseDown}
+                keybinding={this.props.keybinding}
             />
         );
     }
@@ -289,7 +291,8 @@ LineMode.propTypes = {
     isLineModeActive: PropTypes.bool.isRequired,
     onChangeStrokeColor: PropTypes.func.isRequired,
     onChangeStrokeWidth: PropTypes.func.isRequired,
-    onUpdateImage: PropTypes.func.isRequired
+    onUpdateImage: PropTypes.func.isRequired,
+    keybinding: PropTypes.object
 };
 
 const mapStateToProps = state => ({

@@ -10,13 +10,14 @@ const FillModeComponent = props => (
         imgSrc={fillIcon}
         isSelected={props.isSelected}
         onMouseDown={props.onMouseDown}
-        keybinding="F"
+        keybinding={props.keybinding}
     />
 );
 
 FillModeComponent.propTypes = {
     isSelected: PropTypes.bool.isRequired,
-    onMouseDown: PropTypes.func.isRequired
+    onMouseDown: PropTypes.func.isRequired,
+    keybinding: PropTypes.object
 };
 
 export default FillModeComponent;

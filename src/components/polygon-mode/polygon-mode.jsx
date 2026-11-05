@@ -10,13 +10,14 @@ const PolygonModeComponent = props => (
         imgSrc={polygonIcon}
         isSelected={props.isSelected}
         onMouseDown={props.onMouseDown}
-        keybinding="R"
+        keybinding={props.keybinding}
     />
 );
 
 PolygonModeComponent.propTypes = {
     isSelected: PropTypes.bool.isRequired,
-    onMouseDown: PropTypes.func.isRequired
+    onMouseDown: PropTypes.func.isRequired,
+    keybinding: PropTypes.object
 };
 
 export default PolygonModeComponent;

@@ -11,13 +11,14 @@ const BitBrushModeComponent = props => (
         imgSrc={brushIcon}
         isSelected={props.isSelected}
         onMouseDown={props.onMouseDown}
-        keybinding="B"
+        keybinding={props.keybinding}
     />
 );
 
 BitBrushModeComponent.propTypes = {
     isSelected: PropTypes.bool.isRequired,
-    onMouseDown: PropTypes.func.isRequired
+    onMouseDown: PropTypes.func.isRequired,
+    keybinding: PropTypes.object
 };
 
 export default BitBrushModeComponent;

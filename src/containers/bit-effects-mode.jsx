@@ -33,7 +33,8 @@ class BitEffectsMode extends React.Component {
         }
     }
     shouldComponentUpdate (nextProps) {
-        return nextProps.isEffectsModeActive !== this.props.isEffectsModeActive;
+        return nextProps.isEffectsModeActive !== this.props.isEffectsModeActive ||
+            nextProps.keybinding !== this.props.keybinding;
     }
     componentWillUnmount () {
         if (this.tool) this.deactivateTool();
@@ -59,6 +60,7 @@ class BitEffectsMode extends React.Component {
             <BitEffectsModeComponent
                 isSelected={this.props.isEffectsModeActive}
                 onMouseDown={this.props.handleMouseDown}
+                keybinding={this.props.keybinding}
             />
         );
     }
@@ -72,7 +74,8 @@ BitEffectsMode.propTypes = {
     onUpdateImage: PropTypes.func.isRequired,
     selectedItems: PropTypes.arrayOf(PropTypes.instanceOf(paper.Item)),
     setCursor: PropTypes.func.isRequired,
-    setSelectedItems: PropTypes.func.isRequired
+    setSelectedItems: PropTypes.func.isRequired,
+    keybinding: PropTypes.object
 };
 
 const mapStateToProps = state => ({

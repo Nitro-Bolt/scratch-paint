@@ -37,7 +37,8 @@ class ReshapeMode extends React.Component {
         }
     }
     shouldComponentUpdate (nextProps) {
-        return nextProps.isReshapeModeActive !== this.props.isReshapeModeActive;
+        return nextProps.isReshapeModeActive !== this.props.isReshapeModeActive ||
+            nextProps.keybinding !== this.props.keybinding;
     }
     componentWillUnmount () {
         if (this.tool) {
@@ -67,6 +68,7 @@ class ReshapeMode extends React.Component {
             <ReshapeModeComponent
                 isSelected={this.props.isReshapeModeActive}
                 onMouseDown={this.props.handleMouseDown}
+                keybinding={this.props.keybinding}
             />
         );
     }
@@ -81,7 +83,8 @@ ReshapeMode.propTypes = {
     onUpdateImage: PropTypes.func.isRequired,
     setHoveredItem: PropTypes.func.isRequired,
     setSelectedItems: PropTypes.func.isRequired,
-    switchToTextTool: PropTypes.func.isRequired
+    switchToTextTool: PropTypes.func.isRequired,
+    keybinding: PropTypes.object
 };
 
 const mapStateToProps = state => ({

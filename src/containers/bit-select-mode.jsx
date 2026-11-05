@@ -39,7 +39,8 @@ class BitSelectMode extends React.Component {
         }
     }
     shouldComponentUpdate (nextProps) {
-        return nextProps.isSelectModeActive !== this.props.isSelectModeActive;
+        return nextProps.isSelectModeActive !== this.props.isSelectModeActive ||
+            nextProps.keybinding !== this.props.keybinding;
     }
     componentWillUnmount () {
         if (this.tool) {
@@ -66,6 +67,7 @@ class BitSelectMode extends React.Component {
             <SelectModeComponent
                 isSelected={this.props.isSelectModeActive}
                 onMouseDown={this.props.handleMouseDown}
+                keybinding={this.props.keybinding}
             />
         );
     }
@@ -79,7 +81,8 @@ BitSelectMode.propTypes = {
     onUpdateImage: PropTypes.func.isRequired,
     selectedItems: PropTypes.arrayOf(PropTypes.instanceOf(paper.Item)),
     setCursor: PropTypes.func.isRequired,
-    setSelectedItems: PropTypes.func.isRequired
+    setSelectedItems: PropTypes.func.isRequired,
+    keybinding: PropTypes.object
 };
 
 const mapStateToProps = state => ({

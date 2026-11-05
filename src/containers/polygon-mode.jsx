@@ -52,7 +52,8 @@ class PolygonMode extends React.Component {
         }
     }
     shouldComponentUpdate (nextProps) {
-        return nextProps.isPolygonModeActive !== this.props.isPolygonModeActive;
+        return nextProps.isPolygonModeActive !== this.props.isPolygonModeActive ||
+            nextProps.keybinding !== this.props.keybinding;
     }
     componentWillUnmount () {
         if (this.tool) {
@@ -129,6 +130,7 @@ class PolygonMode extends React.Component {
             <PolygonModeComponent
                 isSelected={this.props.isPolygonModeActive}
                 onMouseDown={this.props.handleMouseDown}
+                keybinding={this.props.keybinding}
             />
         );
     }
@@ -152,7 +154,8 @@ PolygonMode.propTypes = {
     setCursor: PropTypes.func.isRequired,
     setSelectedItems: PropTypes.func.isRequired,
     polygonRadius: PropTypes.number,
-    polygonSides: PropTypes.number
+    polygonSides: PropTypes.number,
+    keybinding: PropTypes.object
 };
 
 const mapStateToProps = state => ({

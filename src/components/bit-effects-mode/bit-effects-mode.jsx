@@ -10,13 +10,14 @@ const BitEffectsModeComponent = props => (
         imgSrc={effectsIcon}
         isSelected={props.isSelected}
         onMouseDown={props.onMouseDown}
-        keybinding="Z"
+        keybinding={props.keybinding}
     />
 );
 
 BitEffectsModeComponent.propTypes = {
     isSelected: PropTypes.bool.isRequired,
-    onMouseDown: PropTypes.func.isRequired
+    onMouseDown: PropTypes.func.isRequired,
+    keybinding: PropTypes.object
 };
 
 export default BitEffectsModeComponent;

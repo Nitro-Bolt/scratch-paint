@@ -10,13 +10,14 @@ const OvalModeComponent = props => (
         imgSrc={ovalIcon}
         isSelected={props.isSelected}
         onMouseDown={props.onMouseDown}
-        keybinding="C"
+        keybinding={props.keybinding}
     />
 );
 
 OvalModeComponent.propTypes = {
     isSelected: PropTypes.bool.isRequired,
-    onMouseDown: PropTypes.func.isRequired
+    onMouseDown: PropTypes.func.isRequired,
+    keybinding: PropTypes.object
 };
 
 export default OvalModeComponent;

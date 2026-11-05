@@ -44,7 +44,8 @@ class PenMode extends React.Component {
         }
     }
     shouldComponentUpdate (nextProps) {
-        return nextProps.isPenModeActive !== this.props.isPenModeActive;
+        return nextProps.isPenModeActive !== this.props.isPenModeActive ||
+            nextProps.keybinding !== this.props.keybinding;
     }
     activateTool () {
         clearSelection(this.props.clearSelectedItems);
@@ -74,6 +75,7 @@ class PenMode extends React.Component {
             <PenModeComponent
                 isSelected={this.props.isPenModeActive}
                 onMouseDown={this.props.handleMouseDown}
+                keybinding={this.props.keybinding}
             />
         );
     }
@@ -90,7 +92,8 @@ PenMode.propTypes = {
     isPenModeActive: PropTypes.bool.isRequired,
     onChangeStrokeColor: PropTypes.func.isRequired,
     onChangeStrokeWidth: PropTypes.func.isRequired,
-    onUpdateImage: PropTypes.func.isRequired
+    onUpdateImage: PropTypes.func.isRequired,
+    keybinding: PropTypes.object
 };
 
 const mapStateToProps = state => ({

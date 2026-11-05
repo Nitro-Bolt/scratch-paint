@@ -51,7 +51,8 @@ class BitFillMode extends React.Component {
         }
     }
     shouldComponentUpdate (nextProps) {
-        return nextProps.isFillModeActive !== this.props.isFillModeActive;
+        return nextProps.isFillModeActive !== this.props.isFillModeActive ||
+            nextProps.keybinding !== this.props.keybinding;
     }
     componentWillUnmount () {
         if (this.tool) {
@@ -98,6 +99,7 @@ class BitFillMode extends React.Component {
             <FillModeComponent
                 isSelected={this.props.isFillModeActive}
                 onMouseDown={this.props.handleMouseDown}
+                keybinding={this.props.keybinding}
             />
         );
     }
@@ -114,7 +116,8 @@ BitFillMode.propTypes = {
     handleMouseDown: PropTypes.func.isRequired,
     isFillModeActive: PropTypes.bool.isRequired,
     onChangeFillColor: PropTypes.func.isRequired,
-    onUpdateImage: PropTypes.func.isRequired
+    onUpdateImage: PropTypes.func.isRequired,
+    keybinding: PropTypes.object
 };
 
 const mapStateToProps = state => ({

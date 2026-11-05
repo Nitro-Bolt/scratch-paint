@@ -11,13 +11,14 @@ const BitFillComponent = props => (
         imgSrc={fillIcon}
         isSelected={props.isSelected}
         onMouseDown={props.onMouseDown}
-        keybinding="F"
+        keybinding={props.keybinding}
     />
 );
 
 BitFillComponent.propTypes = {
     isSelected: PropTypes.bool.isRequired,
-    onMouseDown: PropTypes.func.isRequired
+    onMouseDown: PropTypes.func.isRequired,
+    keybinding: PropTypes.object
 };
 
 export default BitFillComponent;

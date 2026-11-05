@@ -11,13 +11,14 @@ const TextModeComponent = props => (
         imgSrc={textIcon}
         isSelected={props.isSelected}
         onMouseDown={props.onMouseDown}
-        keybinding="T"
+        keybinding={props.keybinding}
     />
 );
 
 TextModeComponent.propTypes = {
     isSelected: PropTypes.bool.isRequired,
-    onMouseDown: PropTypes.func.isRequired
+    onMouseDown: PropTypes.func.isRequired,
+    keybinding: PropTypes.object
 };
 
 export default TextModeComponent;

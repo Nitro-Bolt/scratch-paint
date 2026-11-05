@@ -42,7 +42,8 @@ class SelectMode extends React.Component {
         }
     }
     shouldComponentUpdate (nextProps) {
-        return nextProps.isSelectModeActive !== this.props.isSelectModeActive;
+        return nextProps.isSelectModeActive !== this.props.isSelectModeActive ||
+            nextProps.keybinding !== this.props.keybinding;
     }
     componentWillUnmount () {
         if (this.tool) {
@@ -71,6 +72,7 @@ class SelectMode extends React.Component {
             <SelectModeComponent
                 isSelected={this.props.isSelectModeActive}
                 onMouseDown={this.props.handleMouseDown}
+                keybinding={this.props.keybinding}
             />
         );
     }
@@ -87,7 +89,8 @@ SelectMode.propTypes = {
     setCursor: PropTypes.func.isRequired,
     setHoveredItem: PropTypes.func.isRequired,
     setSelectedItems: PropTypes.func.isRequired,
-    switchToTextTool: PropTypes.func.isRequired
+    switchToTextTool: PropTypes.func.isRequired,
+    keybinding: PropTypes.object
 };
 
 const mapStateToProps = state => ({

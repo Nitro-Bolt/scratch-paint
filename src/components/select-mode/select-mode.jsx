@@ -11,13 +11,14 @@ const SelectModeComponent = props => (
         imgSrc={selectIcon}
         isSelected={props.isSelected}
         onMouseDown={props.onMouseDown}
-        keybinding="S"
+        keybinding={props.keybinding}
     />
 );
 
 SelectModeComponent.propTypes = {
     isSelected: PropTypes.bool.isRequired,
-    onMouseDown: PropTypes.func.isRequired
+    onMouseDown: PropTypes.func.isRequired,
+    keybinding: PropTypes.object
 };
 
 export default SelectModeComponent;
