@@ -8,7 +8,7 @@ import CopyPasteHOC from './copy-paste-hoc.jsx';
 
 import {selectAllBitmap} from '../helper/bitmap';
 import {clearSelection, deleteSelection, getSelectedLeafItems,
-    selectAllItems, selectAllSegments} from '../helper/selection';
+    selectAllItems, selectAllSegments, getSelectedRootItems} from '../helper/selection';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {changeMode} from '../reducers/modes';
 import {groupSelection, ungroupSelection, shouldShowGroup, shouldShowUngroup} from '../helper/group.js';
