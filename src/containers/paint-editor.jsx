@@ -25,6 +25,7 @@ import {setCustomFonts} from '../reducers/custom-fonts';
 import {getSelectedLeafItems} from '../helper/selection';
 import {convertToBitmap, convertToVector} from '../helper/bitmap';
 import {resizeView, setCanvasSizeMultiplier, resetZoom, zoomOnSelection, OUTERMOST_ZOOM_LEVEL} from '../helper/view';
+import {rebuildBackgroundGuideLayer} from '../helper/layer';
 import EyeDropperTool from '../helper/tools/eye-dropper';
 import {setNudgeMultiplier} from '../helper/selection-tools/nudge-tool';
 
@@ -137,6 +138,7 @@ class PaintEditor extends React.Component {
         if (newProps.canvasSizeMultiplier !== this.props.canvasSizeMultiplier) {
             setCanvasSizeMultiplier(newProps.canvasSizeMultiplier || 2);
             resizeView(newProps.width, newProps.height);
+            rebuildBackgroundGuideLayer(newProps.format, newProps.theme);
         }
     }
     componentDidUpdate (prevProps) {
