@@ -113,12 +113,12 @@ const KeyboardShortcutsHOC = function (WrappedComponent) {
         );
         props.registerKeybind(
             props.preferences['keybind-undo'] ??
-            props.defaultKeybinds['undo'],
+            props.defaultKeybinds.undo,
             () => props.onUndo()
         );
         props.registerKeybind(
             props.preferences['keybind-redo'] ??
-            props.defaultKeybinds['redo'],
+            props.defaultKeybinds.redo,
             () => props.onRedo()
         );
         props.registerKeybind(
