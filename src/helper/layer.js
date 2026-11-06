@@ -1,7 +1,7 @@
 import paper from '@nitro-bolt/paper';
 import log from '../log/log';
 import {
-    ART_BOARD_BOUNDS, ART_BOARD_WIDTH, ART_BOARD_HEIGHT, CENTER, MAX_WORKSPACE_BOUNDS
+    ART_BOARD_BOUNDS, ART_BOARD_WIDTH, ART_BOARD_HEIGHT, CENTER, MAX_WORKSPACE_BOUNDS, CANVAS_SIZE_MULTIPLIER
 } from './view';
 import {isGroupItem} from './item';
 import {isBitmap, isVector} from '../lib/format';
@@ -222,6 +222,7 @@ const _makeBackgroundPaper = function (width, height, opacity) {
     vPath.position = CENTER;
     const mask = new paper.Shape.Rectangle(MAX_WORKSPACE_BOUNDS);
     mask.position = CENTER;
+    mask.scale(CANVAS_SIZE_MULTIPLIER * CHECKERBOARD_SIZE);
     mask.guide = true;
     mask.locked = true;
     mask.scale(1 / CHECKERBOARD_SIZE);
@@ -313,12 +314,13 @@ const _makeBackgroundGuideLayer = function (format) {
     const vWorkspaceBounds = new paper.Shape.Rectangle(MAX_WORKSPACE_BOUNDS);
     vWorkspaceBounds.fillColor = WORKSPACE_BOUNDS_LIGHT;
     vWorkspaceBounds.position = CENTER;
+    vWorkspaceBounds.scaling = new paper.Point(CANVAS_SIZE_MULTIPLIER, CANVAS_SIZE_MULTIPLIER);
 
     // Add 1 to the height because it's an odd number otherwise, and we want it to be even
     // so the corner of the checkerboard to line up with the center crosshair
     const vBackground = _makeBackgroundPaper(
-        MAX_WORKSPACE_BOUNDS.width / CHECKERBOARD_SIZE,
-        (MAX_WORKSPACE_BOUNDS.height / CHECKERBOARD_SIZE) + 1,
+        (MAX_WORKSPACE_BOUNDS.width * CANVAS_SIZE_MULTIPLIER) / CHECKERBOARD_SIZE,
+        ((MAX_WORKSPACE_BOUNDS.height * CANVAS_SIZE_MULTIPLIER) / CHECKERBOARD_SIZE) + 1,
         0.55);
     vBackground.position = CENTER;
     vBackground.scaling = new paper.Point(CHECKERBOARD_SIZE, CHECKERBOARD_SIZE);
@@ -330,8 +332,8 @@ const _makeBackgroundGuideLayer = function (format) {
     guideLayer.vectorBackground = vectorBackground;
 
     const bitmapBackground = _makeBackgroundPaper(
-        ART_BOARD_WIDTH / CHECKERBOARD_SIZE,
-        ART_BOARD_HEIGHT / CHECKERBOARD_SIZE,
+        (ART_BOARD_WIDTH * CANVAS_SIZE_MULTIPLIER) / CHECKERBOARD_SIZE,
+        (ART_BOARD_HEIGHT * CANVAS_SIZE_MULTIPLIER) / CHECKERBOARD_SIZE,
         0.55);
     bitmapBackground.position = CENTER;
     bitmapBackground.scaling = new paper.Point(CHECKERBOARD_SIZE, CHECKERBOARD_SIZE);
@@ -364,17 +366,6 @@ const updateTheme = function (theme) {
     outlineLayer.children[0].strokeColor = isDark ? OUTLINE_INNER_DARK : OUTLINE_INNER_LIGHT;
 };
 
-const rebuildBackgroundGuideLayer = function (format, theme) {
-    const oldLayer = getBackgroundGuideLayer();
-    if (!oldLayer) return;
-    const activeLayer = paper.project.activeLayer;
-    oldLayer.remove();
-    const newLayer = _makeBackgroundGuideLayer(format);
-    newLayer.sendToBack();
-    updateTheme(theme);
-    activeLayer.activate();
-};
-
 const setupLayers = function (format) {
     const backgroundGuideLayer = _makeBackgroundGuideLayer(format);
     _makeRasterLayer();
@@ -403,6 +394,5 @@ export {
     getRaster,
     setGuideItem,
     updateTheme,
-    rebuildBackgroundGuideLayer,
     setupLayers
 };
