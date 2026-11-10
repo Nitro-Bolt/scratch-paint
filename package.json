@@ -24,7 +24,7 @@
     "url": "https://github.com/LLK/scratch-paint.git"
   },
   "dependencies": {
-    "@nitro-bolt/paper": "^0.13.1",
+    "@nitro-bolt/paper": "0.13.2",
     "@turbowarp/nanolog": "^0.2.0",
     "classnames": "2.2.5",
     "keymirror": "0.1.1",

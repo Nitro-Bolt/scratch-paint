@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@nitro-bolt/paper':
-        specifier: ^0.13.1
-        version: 0.13.1
+        specifier: 0.13.2
+        version: 0.13.2
       '@turbowarp/nanolog':
         specifier: ^0.2.0
         version: 0.2.0
@@ -976,8 +976,8 @@ packages:
   '@nicolo-ribaudo/eslint-scope-5-internals@5.1.1-v1':
     resolution: {integrity: sha512-54/JRvkLIzzDWshCWfuhadfrfZVPiElY8Fcgmg1HroEly/EDSszzhBAsarCux+D/kOslTRquNzuyGSmUSTTHGg==}
 
-  '@nitro-bolt/paper@0.13.1':
-    resolution: {integrity: sha512-Tw1SKBg4gg+FF3C6Y5xXLNHJTsHE6woygr+chKC0x/cSRWBEKZgfZ3AjnDwQcFVgOUMt5/AGQRw1YeyV25kgsg==}
+  '@nitro-bolt/paper@0.13.2':
+    resolution: {integrity: sha512-Pm8ttiMOYzHow6Z70XntdbSBJcH1SR7EmhjyZUMsq0WU1egK8ygHXZD9tcfYlloeaoc13VDQARPNwtUjWbziDg==}
     engines: {node: '>=20.0.0'}
 
   '@nodelib/fs.scandir@2.1.5':
@@ -6957,7 +6957,7 @@ snapshots:
     dependencies:
       eslint-scope: 5.1.1
 
-  '@nitro-bolt/paper@0.13.1': {}
+  '@nitro-bolt/paper@0.13.2': {}
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
