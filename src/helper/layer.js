@@ -182,6 +182,15 @@ const _makeRasterLayer = function () {
     return rasterLayer;
 };
 
+const _scaledRectangle = function () {
+    return new paper.Rectangle(
+        (ART_BOARD_WIDTH - 960) / 2,
+        (ART_BOARD_HEIGHT - 720) / 2,
+        960,
+        720
+    );
+}
+
 const BACKGROUND_LIGHT = '#FFFFFF';
 const BACKGROUND_TILE_LIGHT = '#D9E3F2';
 const BACKGROUND_DARK = '#111';
@@ -290,12 +299,13 @@ const OUTLINE_OUTER_LIGHT = '#4280D7';
 const OUTLINE_INNER_DARK = '#555555';
 
 const _makeOutlineLayer = function () {
+    const scaledRect = _scaledRectangle();
     const outlineLayer = new paper.Layer();
-    const whiteRect = new paper.Shape.Rectangle(ART_BOARD_BOUNDS.expand(1));
+    const whiteRect = new paper.Shape.Rectangle(scaledRect.expand(1));
     whiteRect.strokeWidth = 2;
     whiteRect.strokeColor = OUTLINE_INNER_LIGHT;
     setGuideItem(whiteRect);
-    const blueRect = new paper.Shape.Rectangle(ART_BOARD_BOUNDS.expand(5));
+    const blueRect = new paper.Shape.Rectangle(scaledRect.expand(5));
     blueRect.strokeWidth = 2;
     blueRect.strokeColor = OUTLINE_OUTER_LIGHT;
     blueRect.opacity = 0.25;
@@ -324,6 +334,7 @@ const _makeBackgroundGuideLayer = function (format) {
         0.55);
     vBackground.position = CENTER;
     vBackground.scaling = new paper.Point(CHECKERBOARD_SIZE, CHECKERBOARD_SIZE);
+    vBackground.children[0] = new paper.Shape.Rectangle(_scaledRectangle());
 
     const vectorBackground = new paper.Group();
     vectorBackground.addChild(vWorkspaceBounds);
