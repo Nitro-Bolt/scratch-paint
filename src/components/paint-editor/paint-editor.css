@@ -108,6 +108,10 @@ $border-radius: 0.25rem;
     filter: $filter-icon-gray;
 }
 
+.coordinates-text {
+    text-align: center;
+}
+
 .mod-mode-tools {
     margin-left: calc(2 * $grid-unit);
 }
