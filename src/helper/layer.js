@@ -183,10 +183,10 @@ const _makeRasterLayer = function () {
 };
 
 const _scaledRectangle = function () {
-    let { width, height } = window.ReduxStore.getState().scratchGui.customStageSize;
+    const {width, height} = window.ReduxStore.getState().scratchGui.customStageSize;
     return new paper.Rectangle(
-        (MAX_WORKSPACE_BOUNDS.width / 1.5 - width * 2) / 2,
-        (MAX_WORKSPACE_BOUNDS.height / 1.5 - height * 2) / 2,
+        ((MAX_WORKSPACE_BOUNDS.width / 1.5) - (width * 2)) / 2,
+        ((MAX_WORKSPACE_BOUNDS.height / 1.5) - (height * 2)) / 2,
         width * 2,
         height * 2
     );
