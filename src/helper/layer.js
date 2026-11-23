@@ -1,7 +1,7 @@
 import paper from '@nitro-bolt/paper';
 import log from '../log/log';
 import {
-    ART_BOARD_BOUNDS, ART_BOARD_WIDTH, ART_BOARD_HEIGHT, CENTER, MAX_WORKSPACE_BOUNDS, CANVAS_SIZE_MULTIPLIER
+    ART_BOARD_WIDTH, ART_BOARD_HEIGHT, CENTER, MAX_WORKSPACE_BOUNDS, CANVAS_SIZE_MULTIPLIER
 } from './view';
 import {isGroupItem} from './item';
 import {isBitmap, isVector} from '../lib/format';
@@ -189,7 +189,7 @@ const _scaledRectangle = function () {
         960,
         720
     );
-}
+};
 
 const BACKGROUND_LIGHT = '#FFFFFF';
 const BACKGROUND_TILE_LIGHT = '#D9E3F2';
