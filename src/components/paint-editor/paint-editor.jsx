@@ -384,6 +384,23 @@ const PaintEditorComponent = props => (
                                 </span>
                             </Button> : null
                     }
+                    {/* Canvas coordinates and zoom */}
+                    <span className={styles.coordinatesText}>
+                        {(() => {
+                            const {width, height} = window.ReduxStore.getState().scratchGui.customStageSize;
+
+                            const x = Math.round(paper.view?.center.x) - (width * 2);
+                            const y = Math.round(paper.view?.center.y) - (height * 2);
+
+                            return (
+                                <>
+                                    {`${x}, ${y}`}
+                                    <br />
+                                    {Math.round(paper.view?.zoom * 100)}% Zoom
+                                </>
+                            );
+                        })()}
+                    </span>
                     {/* Zoom controls */}
                     <InputGroup className={styles.zoomControls}>
                         <ButtonGroup>
